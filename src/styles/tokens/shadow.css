@@ -1,0 +1,14 @@
+/**
+ * Elevation tokens.
+ *
+ * Kept deliberately subtle — cool-toned, low-opacity shadows rather than
+ * heavy drop shadows, in line with an Apple/Linear/Stripe visual language.
+ */
+
+:root {
+  --ri-shadow-none: none;
+  --ri-shadow-sm: 0 1px 2px rgb(20 22 26 / 4%), 0 1px 1px rgb(20 22 26 / 3%);
+  --ri-shadow-md: 0 4px 10px rgb(20 22 26 / 6%), 0 2px 4px rgb(20 22 26 / 4%);
+  --ri-shadow-lg: 0 12px 24px rgb(20 22 26 / 8%), 0 4px 8px rgb(20 22 26 / 4%);
+  --ri-shadow-overlay: 0 20px 40px rgb(20 22 26 / 14%), 0 8px 16px rgb(20 22 26 / 8%);
+}

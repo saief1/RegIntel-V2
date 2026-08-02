@@ -1,0 +1,17 @@
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+}
+
+.start {
+  justify-content: flex-start;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.between {
+  justify-content: space-between;
+}

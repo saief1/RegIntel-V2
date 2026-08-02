@@ -1,0 +1,15 @@
+.panel {
+  flex: none;
+  width: var(--ri-ai-panel-width);
+  height: 100%;
+  border-left: 1px solid var(--ri-color-divider);
+}
+
+.header {
+  height: var(--ri-header-height);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+}

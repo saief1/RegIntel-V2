@@ -1,0 +1,16 @@
+.divider {
+  border: none;
+  background-color: var(--ri-color-divider);
+  margin: 0;
+  flex: none;
+}
+
+.horizontal {
+  width: 100%;
+  height: 1px;
+}
+
+.vertical {
+  width: 1px;
+  height: 100%;
+}

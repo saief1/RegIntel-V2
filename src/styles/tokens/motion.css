@@ -1,0 +1,39 @@
+/**
+ * Motion tokens.
+ *
+ * Durations and easings are combined into semantic transition tokens so
+ * every interactive surface animates consistently. Motion should always be
+ * quick and understated — never decorative.
+ */
+
+:root {
+  --ri-duration-fast: 120ms;
+  --ri-duration-normal: 180ms;
+  --ri-duration-slow: 260ms;
+
+  --ri-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ri-easing-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --ri-transition-hover: background-color var(--ri-duration-fast) var(--ri-easing-standard),
+    border-color var(--ri-duration-fast) var(--ri-easing-standard),
+    color var(--ri-duration-fast) var(--ri-easing-standard);
+  --ri-transition-press: transform 80ms var(--ri-easing-standard);
+  --ri-transition-focus: outline-color var(--ri-duration-fast) var(--ri-easing-standard);
+  --ri-transition-sidebar: background-color var(--ri-duration-normal) var(--ri-easing-standard),
+    color var(--ri-duration-normal) var(--ri-easing-standard);
+  --ri-transition-dropdown: opacity var(--ri-duration-normal) var(--ri-easing-emphasized),
+    transform var(--ri-duration-normal) var(--ri-easing-emphasized);
+  --ri-transition-card: box-shadow var(--ri-duration-normal) var(--ri-easing-standard),
+    border-color var(--ri-duration-normal) var(--ri-easing-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

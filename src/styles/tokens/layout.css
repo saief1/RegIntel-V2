@@ -1,0 +1,24 @@
+/**
+ * Layout tokens.
+ *
+ * Breakpoints are expressed as tokens for documentation and any JS-based
+ * responsive logic, but CSS custom properties cannot be referenced inside
+ * @media conditions — media queries must hardcode the matching pixel value
+ * (768px / 1280px) until the project adopts a preprocessor or container
+ * queries.
+ */
+
+:root {
+  --ri-header-height: 64px;
+  --ri-sidebar-width: 260px;
+  --ri-ai-panel-width: 380px;
+
+  --ri-content-max-width: 1120px;
+  --ri-content-padding: var(--ri-space-8);
+  --ri-panel-padding: var(--ri-space-6);
+
+  /* Reference only — see comment above. */
+  --ri-breakpoint-mobile: 0px;
+  --ri-breakpoint-tablet: 768px;
+  --ri-breakpoint-desktop: 1280px;
+}

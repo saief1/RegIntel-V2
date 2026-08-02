@@ -1,0 +1,20 @@
+.workspace {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  overflow-y: auto;
+  background-color: var(--ri-color-surface-sunken);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ri-space-2);
+  max-width: var(--ri-content-max-width);
+  text-align: center;
+  padding: var(--ri-content-padding);
+}

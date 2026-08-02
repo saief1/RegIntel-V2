@@ -1,0 +1,35 @@
+.input {
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--ri-space-3);
+  background-color: var(--ri-color-surface);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-primary);
+  transition: var(--ri-transition-hover);
+}
+
+.input::placeholder {
+  color: var(--ri-color-text-muted);
+}
+
+.input:hover {
+  border-color: var(--ri-color-text-muted);
+}
+
+.input:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--ri-color-accent);
+}
+
+.input:disabled {
+  background-color: var(--ri-color-surface-sunken);
+  color: var(--ri-color-text-muted);
+  cursor: not-allowed;
+}
+
+.invalid {
+  border-color: var(--ri-color-error);
+}

@@ -1,0 +1,22 @@
+/**
+ * Spacing tokens.
+ *
+ * Naming follows an 4px-multiple scale (space-N == N * 4px) so values stay
+ * predictable as the scale grows. Always prefer a token over a literal
+ * pixel value in component styles.
+ */
+
+:root {
+  --ri-space-1: 4px;
+  --ri-space-2: 8px;
+  --ri-space-3: 12px;
+  --ri-space-4: 16px;
+  --ri-space-5: 20px;
+  --ri-space-6: 24px;
+  --ri-space-8: 32px;
+  --ri-space-10: 40px;
+  --ri-space-12: 48px;
+  --ri-space-16: 64px;
+  --ri-space-20: 80px;
+  --ri-space-24: 96px;
+}
