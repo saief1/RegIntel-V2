@@ -1,4 +1,5 @@
 import type { SelectHTMLAttributes } from 'react'
+import { cx } from '../../../lib/classNames'
 import { ChevronDownIcon } from '../../icons'
 import styles from './Select.module.css'
 
@@ -8,9 +9,9 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ invalid = false, className, children, ...rest }: SelectProps) {
   return (
-    <div className={[styles.wrapper, className].filter(Boolean).join(' ')}>
+    <div className={cx(styles.wrapper, className)}>
       <select
-        className={[styles.select, invalid ? styles.invalid : ''].filter(Boolean).join(' ')}
+        className={cx(styles.select, invalid && styles.invalid)}
         aria-invalid={invalid || undefined}
         {...rest}
       >

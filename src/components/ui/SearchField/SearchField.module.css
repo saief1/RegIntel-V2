@@ -15,6 +15,8 @@
 .field:focus-within {
   background-color: var(--ri-color-surface);
   border-color: var(--ri-color-border);
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 1px;
 }
 
 .icon {

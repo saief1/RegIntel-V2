@@ -19,7 +19,7 @@
   --ri-palette-gray-200: #dde1e6;
   --ri-palette-gray-300: #c3c9d1;
   --ri-palette-gray-400: #9aa1ac;
-  --ri-palette-gray-500: #717784;
+  --ri-palette-gray-500: #6b7280;
   --ri-palette-gray-600: #565c68;
   --ri-palette-gray-700: #3d424c;
   --ri-palette-gray-800: #24272e;
@@ -53,7 +53,9 @@
   /* --- Semantic: text --- */
   --ri-color-text-primary: var(--ri-palette-gray-900);
   --ri-color-text-secondary: var(--ri-palette-gray-600);
-  --ri-color-text-muted: var(--ri-palette-gray-400);
+  /* gray-500, not gray-400 — gray-400 falls below the 4.5:1 AA contrast ratio
+     required for real text content (e.g. EmptyState descriptions). */
+  --ri-color-text-muted: var(--ri-palette-gray-500);
   --ri-color-text-on-accent: var(--ri-palette-white);
 
   /* --- Semantic: accent --- */
@@ -74,5 +76,7 @@
   --ri-color-hover: var(--ri-palette-gray-100);
   --ri-color-active: var(--ri-palette-gray-150);
   --ri-color-selection: var(--ri-palette-blue-50);
-  --ri-color-focus-ring: rgb(47 95 237 / 45%);
+  /* 80% opacity keeps a soft "halo" look while still clearing the 3:1 non-text
+     contrast minimum for focus indicators against light surfaces. */
+  --ri-color-focus-ring: rgb(47 95 237 / 80%);
 }

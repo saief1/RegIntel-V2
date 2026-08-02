@@ -5,6 +5,10 @@
   gap: var(--ri-space-4);
 }
 
+.start {
+  flex-direction: row;
+}
+
 .header.center {
   flex-direction: column;
   align-items: center;

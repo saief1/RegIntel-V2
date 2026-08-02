@@ -1,4 +1,5 @@
 import type { InputHTMLAttributes } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './Input.module.css'
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,7 +9,7 @@ interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 export function Input({ invalid = false, className, ...rest }: InputProps) {
   return (
     <input
-      className={[styles.input, invalid ? styles.invalid : '', className].filter(Boolean).join(' ')}
+      className={cx(styles.input, invalid && styles.invalid, className)}
       aria-invalid={invalid || undefined}
       {...rest}
     />

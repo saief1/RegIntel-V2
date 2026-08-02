@@ -12,6 +12,7 @@ export function AIPanel() {
       bodyClassName={styles.body}
       title="AI Assistant"
       icon={<AIWorkspaceIcon width={18} height={18} />}
+      role="complementary"
       aria-label="AI Assistant"
     >
       <EmptyState

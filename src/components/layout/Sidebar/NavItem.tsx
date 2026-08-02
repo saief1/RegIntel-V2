@@ -1,3 +1,4 @@
+import { cx } from '../../../lib/classNames'
 import type { NavItemConfig } from './nav-items'
 import styles from './NavItem.module.css'
 
@@ -13,7 +14,7 @@ export function NavItem({ item, isActive, onSelect }: NavItemProps) {
   return (
     <button
       type="button"
-      className={[styles.item, isActive ? styles.itemActive : ''].filter(Boolean).join(' ')}
+      className={cx(styles.item, isActive && styles.itemActive)}
       aria-current={isActive ? 'page' : undefined}
       onClick={() => onSelect(item.id)}
     >

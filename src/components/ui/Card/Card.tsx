@@ -1,4 +1,5 @@
-import type { HTMLAttributes } from 'react'
+import type { HTMLAttributes, KeyboardEvent } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './Card.module.css'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,17 +7,31 @@ interface CardProps extends HTMLAttributes<HTMLDivElement> {
   interactive?: boolean
 }
 
-export function Card({ elevated = false, interactive = false, className, ...rest }: CardProps) {
+export function Card({
+  elevated = false,
+  interactive = false,
+  className,
+  onClick,
+  onKeyDown,
+  tabIndex,
+  role,
+  ...rest
+}: CardProps) {
+  function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
+    onKeyDown?.(event)
+    if (interactive && onClick && !event.defaultPrevented && (event.key === 'Enter' || event.key === ' ')) {
+      event.preventDefault()
+      event.currentTarget.click()
+    }
+  }
+
   return (
     <div
-      className={[
-        styles.card,
-        elevated ? styles.elevated : '',
-        interactive ? styles.interactive : '',
-        className,
-      ]
-        .filter(Boolean)
-        .join(' ')}
+      className={cx(styles.card, elevated && styles.elevated, interactive && styles.interactive, className)}
+      onClick={onClick}
+      onKeyDown={interactive ? handleKeyDown : onKeyDown}
+      tabIndex={interactive ? (tabIndex ?? 0) : tabIndex}
+      role={interactive ? (role ?? 'button') : role}
       {...rest}
     />
   )

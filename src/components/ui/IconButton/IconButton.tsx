@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './IconButton.module.css'
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -12,7 +13,7 @@ export function IconButton({ label, children, className, ...rest }: IconButtonPr
       type="button"
       aria-label={label}
       title={label}
-      className={[styles.button, className].filter(Boolean).join(' ')}
+      className={cx(styles.button, className)}
       {...rest}
     >
       {children}

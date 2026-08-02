@@ -1,4 +1,5 @@
 import type { HTMLAttributes } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './Toolbar.module.css'
 
 interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
@@ -6,5 +7,5 @@ interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 export function Toolbar({ justify = 'start', className, ...rest }: ToolbarProps) {
-  return <div className={[styles.toolbar, styles[justify], className].filter(Boolean).join(' ')} {...rest} />
+  return <div className={cx(styles.toolbar, styles[justify], className)} {...rest} />
 }

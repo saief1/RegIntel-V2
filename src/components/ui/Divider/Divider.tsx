@@ -1,3 +1,4 @@
+import { cx } from '../../../lib/classNames'
 import styles from './Divider.module.css'
 
 interface DividerProps {
@@ -7,9 +8,10 @@ interface DividerProps {
 
 export function Divider({ orientation = 'horizontal', className }: DividerProps) {
   return (
-    <hr
-      className={[styles.divider, styles[orientation], className].filter(Boolean).join(' ')}
+    <div
+      role="separator"
       aria-orientation={orientation}
+      className={cx(styles.divider, styles[orientation], className)}
     />
   )
 }

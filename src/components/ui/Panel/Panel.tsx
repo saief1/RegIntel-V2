@@ -1,4 +1,5 @@
 import type { HTMLAttributes, ReactNode } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './Panel.module.css'
 
 interface PanelProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -29,9 +30,9 @@ export function Panel({
   ...rest
 }: PanelProps) {
   return (
-    <div className={[styles.panel, styles[variant], className].filter(Boolean).join(' ')} {...rest}>
+    <div className={cx(styles.panel, styles[variant], className)} {...rest}>
       {(title || actions) && (
-        <div className={[styles.header, headerClassName].filter(Boolean).join(' ')}>
+        <div className={cx(styles.header, headerClassName)}>
           <div className={styles.heading}>
             {icon}
             {title && <h2 className={styles.title}>{title}</h2>}
@@ -39,7 +40,7 @@ export function Panel({
           {actions && <div className={styles.actions}>{actions}</div>}
         </div>
       )}
-      <div className={[styles.body, bodyClassName].filter(Boolean).join(' ')}>{children}</div>
+      <div className={cx(styles.body, bodyClassName)}>{children}</div>
     </div>
   )
 }

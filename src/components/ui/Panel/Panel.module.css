@@ -55,4 +55,5 @@
   flex: 1;
   min-height: 0;
   padding: var(--ri-panel-padding);
+  overflow-y: auto;
 }

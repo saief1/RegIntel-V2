@@ -1,4 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
+import { cx } from '../../../lib/classNames'
 import styles from './Button.module.css'
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger'
@@ -24,7 +25,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={[styles.button, styles[variant], styles[size], className].filter(Boolean).join(' ')}
+      className={cx(styles.button, styles[variant], styles[size], className)}
       {...rest}
     >
       {leadingIcon}
