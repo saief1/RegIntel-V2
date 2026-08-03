@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.8.0-beta | 2026-08-03 | Customer Experience — onboarding, help, success, tours, community |
 | 1.7.0-beta | 2026-08-03 | Industry Solutions — wealth flagship, banking, insurance, GRC marketplace |
 | 1.6.0-beta | 2026-08-03 | Production Operations — ops center, incidents, backups, deploys, observability |
 | 1.5.0-beta | 2026-08-03 | Developer Platform — portal, API explorer, apps, webhooks, SDKs |
@@ -42,6 +43,36 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.8.0-beta — Customer Experience, Onboarding & Adoption
+
+**Status:** Beta  
+**Sprint:** 18 (`SPRINT18_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel gains self-serve onboarding, learning, customer success coaching, product tours, and community feedback loops.
+
+#### Highlights
+
+##### Guided Onboarding (P086)
+
+- `/onboarding` 8-step wizard with progress, skip, save, checklist, and time estimates
+
+##### Learning Center (P087)
+
+- `/help` searchable docs, tours, academies, API docs, release notes, bookmarks
+
+##### Customer Success (P088)
+
+- `/customer-success` adoption metrics, checklist, recommendations, milestones, QBR summary
+
+##### Product Tours (P089)
+
+- `/settings/tours` first-login and area tours with coach marks and restart
+
+##### Feedback & Community (P090)
+
+- `/community` feature requests, roadmap, known issues, votes, submit/export feedback
 
 ### v1.7.0-beta — Industry Solution Packs
 

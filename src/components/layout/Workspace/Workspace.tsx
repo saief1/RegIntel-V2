@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { clsx as cx } from 'clsx'
+import { GlobalOnboardingChecklist } from '../../adoption/GlobalOnboardingChecklist'
+import { WelcomeBanner } from '../../adoption/WelcomeBanner'
+import { WhatsNewModal } from '../../adoption/WhatsNewModal'
 import { MaintenanceBanner } from '../../operations/MaintenanceBanner'
 import { Skeleton } from '../../ui/Skeleton/Skeleton'
 import styles from './Workspace.module.css'
@@ -18,6 +21,12 @@ export function Workspace() {
   }, [])
 
   const isFlushLayout = location.pathname === '/ai' || location.pathname.startsWith('/ai/')
+  const hideAdoptionChrome =
+    location.pathname.startsWith('/onboarding') ||
+    location.pathname.startsWith('/help') ||
+    location.pathname.startsWith('/customer-success') ||
+    location.pathname.startsWith('/community') ||
+    location.pathname.startsWith('/settings/tours')
 
   return (
     <main className={cx(styles.workspace, isFlushLayout && styles.flush)} aria-label="Workspace">
@@ -34,7 +43,14 @@ export function Workspace() {
       ) : (
         <div key={location.pathname} className={cx(styles.page, isFlushLayout && styles.flushPage)}>
           <MaintenanceBanner />
+          {!isFlushLayout && !hideAdoptionChrome && (
+            <>
+              <WelcomeBanner />
+              <GlobalOnboardingChecklist />
+            </>
+          )}
           <Outlet />
+          <WhatsNewModal />
         </div>
       )}
     </main>

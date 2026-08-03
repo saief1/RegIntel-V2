@@ -1,0 +1,153 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(260px, 0.8fr);
+  gap: var(--ri-space-4);
+  align-items: start;
+}
+
+.hubLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.hubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  color: var(--ri-color-text-primary);
+  text-decoration: none;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+.hubLink:hover {
+  border-color: rgb(109 94 246 / 30%);
+  background: var(--ri-color-hover);
+}
+
+.hubLink:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: 2px;
+}
+
+.progressTrack {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.progressStep,
+.progressStepActive,
+.progressStepDone {
+  padding: 8px 6px;
+  border-radius: var(--ri-radius-md);
+  border: 1px solid var(--ri-color-border);
+  background: var(--ri-color-surface);
+  font-size: 11px;
+  text-align: center;
+}
+
+.progressStepActive {
+  border-color: var(--ri-color-accent);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.progressStepDone {
+  border-color: rgb(22 163 74 / 35%);
+  background: rgb(22 163 74 / 8%);
+}
+
+.coachList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.coachMark {
+  padding: 6px 10px;
+  border-radius: var(--ri-radius-md);
+  border: 1px dashed rgb(109 94 246 / 40%);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+  font-size: var(--ri-font-size-caption);
+}
+
+.bannerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--ri-space-3) var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-accent-subtle);
+}
+
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  background: rgb(15 23 42 / 35%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ri-space-4);
+}
+
+.modalCard {
+  width: min(520px, 100%);
+  max-height: min(80vh, 640px);
+  overflow: auto;
+  border-radius: var(--ri-radius-xl);
+  border: 1px solid var(--ri-color-border);
+  background: var(--ri-color-surface);
+  padding: var(--ri-space-5);
+  box-shadow: 0 16px 48px rgb(15 23 42 / 16%);
+}
+
+.helpIcon {
+  appearance: none;
+  border: 0;
+  background: transparent;
+  color: var(--ri-color-text-muted);
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--ri-radius-sm);
+  display: inline-flex;
+}
+
+.helpIcon:hover,
+.helpIcon:focus-visible {
+  color: var(--ri-color-accent);
+}
+
+.helpIcon:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: 2px;
+}
+
+.checklistFloat {
+  position: sticky;
+  top: calc(var(--ri-header-height) + 8px);
+}
+
+@media (max-width: 960px) {
+  .split,
+  .progressTrack {
+    grid-template-columns: 1fr;
+  }
+}

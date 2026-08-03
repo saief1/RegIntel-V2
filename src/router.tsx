@@ -131,6 +131,21 @@ const InsuranceSolutionPage = lazy(() =>
 const GrcSolutionPage = lazy(() =>
   import('./pages/solutions/GrcSolutionPage').then((module) => ({ default: module.GrcSolutionPage })),
 )
+const OnboardingPage = lazy(() =>
+  import('./pages/adoption/OnboardingPage').then((module) => ({ default: module.OnboardingPage })),
+)
+const LearningCenterPage = lazy(() =>
+  import('./pages/adoption/LearningCenterPage').then((module) => ({ default: module.LearningCenterPage })),
+)
+const CustomerSuccessPage = lazy(() =>
+  import('./pages/adoption/CustomerSuccessPage').then((module) => ({ default: module.CustomerSuccessPage })),
+)
+const ToursPage = lazy(() =>
+  import('./pages/adoption/ToursPage').then((module) => ({ default: module.ToursPage })),
+)
+const CommunityPage = lazy(() =>
+  import('./pages/adoption/CommunityPage').then((module) => ({ default: module.CommunityPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -472,6 +487,14 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="tours"
+            element={
+              <LazyPage>
+                <ToursPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route
@@ -676,6 +699,39 @@ export function AppRoutes() {
           />
         </Route>
 
+        <Route
+          path="onboarding"
+          element={
+            <LazyPage>
+              <OnboardingPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="help"
+          element={
+            <LazyPage>
+              <LearningCenterPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="customer-success"
+          element={
+            <LazyPage>
+              <CustomerSuccessPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="community"
+          element={
+            <LazyPage>
+              <CommunityPage />
+            </LazyPage>
+          }
+        />
+
         <Route path="investigations">
           <Route
             index
@@ -769,6 +825,11 @@ export function AppRoutes() {
               'solutions-banking',
               'solutions-insurance',
               'solutions-grc',
+              'onboarding',
+              'learning-center',
+              'customer-success',
+              'product-tours',
+              'community',
             ].includes(item.id),
         ).map((item) => (
           <Route

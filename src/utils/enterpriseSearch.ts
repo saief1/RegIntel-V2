@@ -46,6 +46,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'sol-bank', title: 'Banking Pack', subtitle: 'AML sanctions privacy', href: '/solutions/banking', terms: 'banking aml sanctions risk heatmap' },
   { id: 'sol-ins', title: 'Insurance Pack', subtitle: 'Market conduct licensing', href: '/solutions/insurance', terms: 'insurance licensing conduct agent supervision' },
   { id: 'sol-grc', title: 'Enterprise GRC Pack', subtitle: 'Risk matrix controls SOX', href: '/solutions/grc', terms: 'grc sox audit universe control testing' },
+  { id: 'cx-onboard', title: 'Guided Onboarding', subtitle: 'Workspace setup wizard', href: '/onboarding', terms: 'onboarding checklist invite industry' },
+  { id: 'cx-help', title: 'Learning Center', subtitle: 'Docs tours academies FAQ', href: '/help', terms: 'help documentation academy walkthrough' },
+  { id: 'cx-success', title: 'Customer Success Center', subtitle: 'Adoption score recommendations', href: '/customer-success', terms: 'adoption success engagement health' },
+  { id: 'cx-tours', title: 'Product Tours', subtitle: 'Coach marks and walkthroughs', href: '/settings/tours', terms: 'tour first login coach marks' },
+  { id: 'cx-community', title: 'Feedback & Community', subtitle: 'Roadmap votes and feedback', href: '/community', terms: 'community feedback roadmap feature request' },
 ] as const
 
 interface SearchInput {

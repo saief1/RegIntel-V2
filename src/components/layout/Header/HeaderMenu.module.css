@@ -36,6 +36,15 @@
   color: var(--ri-color-text-primary);
 }
 
+.shortcutRow a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.shortcutRow a:hover {
+  color: var(--ri-color-accent);
+}
+
 .kbd {
   padding: 2px var(--ri-space-2);
   border-radius: var(--ri-radius-sm);

@@ -7,6 +7,7 @@ import { EcosystemProvider } from '../../../context/EcosystemProvider'
 import { DeveloperProvider } from '../../../context/DeveloperProvider'
 import { ProdOpsProvider } from '../../../context/ProdOpsProvider'
 import { SolutionsProvider } from '../../../context/SolutionsProvider'
+import { AdoptionProvider } from '../../../context/AdoptionProvider'
 import { GovernanceProvider } from '../../../context/GovernanceProvider'
 import { InvestigationsProvider } from '../../../context/InvestigationsProvider'
 import { KnowledgeProvider } from '../../../context/KnowledgeProvider'
@@ -34,20 +35,22 @@ export function AppShell() {
                       <DeveloperProvider>
                         <ProdOpsProvider>
                           <SolutionsProvider>
-                            <CopilotProvider>
-                              <ShellLayoutProvider>
-                                <div className={styles.shell}>
-                                  <Header />
-                                  <div className={styles.body}>
-                                    <Sidebar />
-                                    <Workspace />
-                                    <AIPanel />
+                            <AdoptionProvider>
+                              <CopilotProvider>
+                                <ShellLayoutProvider>
+                                  <div className={styles.shell}>
+                                    <Header />
+                                    <div className={styles.body}>
+                                      <Sidebar />
+                                      <Workspace />
+                                      <AIPanel />
+                                    </div>
                                   </div>
-                                </div>
-                                <CommandPalette />
-                                <ToastCenter />
-                              </ShellLayoutProvider>
-                            </CopilotProvider>
+                                  <CommandPalette />
+                                  <ToastCenter />
+                                </ShellLayoutProvider>
+                              </CopilotProvider>
+                            </AdoptionProvider>
                           </SolutionsProvider>
                         </ProdOpsProvider>
                       </DeveloperProvider>

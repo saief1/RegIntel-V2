@@ -346,6 +346,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/solutions/grc',
     description: 'Risk matrix, controls, audit universe, and SOX.',
   },
+  {
+    id: 'onboarding',
+    label: 'Guided Onboarding',
+    path: '/onboarding',
+    description: 'Workspace setup wizard with progress and checklist.',
+  },
+  {
+    id: 'learning-center',
+    label: 'Learning Center',
+    path: '/help',
+    description: 'Docs, tours, academies, API docs, and FAQ.',
+  },
+  {
+    id: 'customer-success',
+    label: 'Customer Success',
+    path: '/customer-success',
+    description: 'Adoption score, checklist, and recommendations.',
+  },
+  {
+    id: 'product-tours',
+    label: 'Product Tours',
+    path: '/settings/tours',
+    description: 'First-login and area tours with coach marks.',
+  },
+  {
+    id: 'community',
+    label: 'Community & Feedback',
+    path: '/community',
+    description: 'Feature requests, roadmap, and release highlights.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {
