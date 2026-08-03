@@ -41,11 +41,24 @@ const ReportsPage = lazy(() =>
 const SettingsPage = lazy(() =>
   import('./pages/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
 )
+const IntegrationsPage = lazy(() =>
+  import('./pages/settings/IntegrationsPage').then((module) => ({ default: module.IntegrationsPage })),
+)
+const ApiPlatformPage = lazy(() =>
+  import('./pages/settings/ApiPlatformPage').then((module) => ({ default: module.ApiPlatformPage })),
+)
+const AdminConsolePage = lazy(() =>
+  import('./pages/settings/AdminConsolePage').then((module) => ({ default: module.AdminConsolePage })),
+)
+const CollaborationPage = lazy(() =>
+  import('./pages/settings/CollaborationPage').then((module) => ({ default: module.CollaborationPage })),
+)
 const AIWorkspacePage = lazy(() =>
   import('./pages/ai/AIWorkspacePage').then((module) => ({ default: module.AIWorkspacePage })),
 )
 const PromptsPage = lazy(() => import('./pages/ai/PromptsPage').then((module) => ({ default: module.PromptsPage })))
 const MemoryPage = lazy(() => import('./pages/ai/MemoryPage').then((module) => ({ default: module.MemoryPage })))
+const AgentsPage = lazy(() => import('./pages/ai/AgentsPage').then((module) => ({ default: module.AgentsPage })))
 const InvestigationsPage = lazy(() =>
   import('./pages/investigations/InvestigationsPage').then((module) => ({ default: module.InvestigationsPage })),
 )
@@ -185,6 +198,14 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="agents"
+            element={
+              <LazyPage>
+                <AgentsPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route
@@ -195,11 +216,54 @@ export function AppRoutes() {
             </LazyPage>
           }
         />
+        <Route path="settings">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <SettingsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="integrations"
+            element={
+              <LazyPage>
+                <IntegrationsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="api"
+            element={
+              <LazyPage>
+                <ApiPlatformPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="admin"
+            element={
+              <LazyPage>
+                <AdminConsolePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="collaboration"
+            element={
+              <LazyPage>
+                <CollaborationPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
         <Route
-          path="settings"
+          path="integrations"
           element={
             <LazyPage>
-              <SettingsPage />
+              <IntegrationsPage />
             </LazyPage>
           }
         />
@@ -250,7 +314,19 @@ export function AppRoutes() {
           />
         ))}
         {SECONDARY_DESTINATIONS.filter(
-          (item) => !['investigations', 'regulatory-changes'].includes(item.id),
+          (item) =>
+            ![
+              'investigations',
+              'regulatory-changes',
+              'policies',
+              'workflows',
+              'calendar',
+              'integrations',
+              'api-platform',
+              'admin-console',
+              'collaboration',
+              'ai-agents',
+            ].includes(item.id),
         ).map((item) => (
           <Route
             key={item.id}

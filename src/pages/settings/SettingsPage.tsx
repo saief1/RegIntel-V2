@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Settings } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
@@ -10,6 +10,7 @@ import { Select } from '../../components/ui/Select/Select'
 import { useGovernance } from '../../hooks/useGovernance'
 import { useWork } from '../../hooks/useWork'
 import { formatRelativeTime } from '../../utils/date'
+import connected from '../connected/connected.module.css'
 import styles from './SettingsPage.module.css'
 
 type Tab = 'org' | 'rbac' | 'audit' | 'automation'
@@ -57,6 +58,24 @@ export function SettingsPage() {
         description={`Enterprise governance controls · Signed in as ${roleLabel}`}
         icon={<Settings size={20} />}
       />
+
+      <nav className={connected.hubLinks} aria-label="Connected enterprise areas">
+        <Link className={connected.hubLink} to="/settings/integrations">
+          Integrations
+        </Link>
+        <Link className={connected.hubLink} to="/settings/api">
+          API Platform
+        </Link>
+        <Link className={connected.hubLink} to="/settings/admin">
+          Admin Console
+        </Link>
+        <Link className={connected.hubLink} to="/settings/collaboration">
+          Collaboration
+        </Link>
+        <Link className={connected.hubLink} to="/ai/agents">
+          AI Agents
+        </Link>
+      </nav>
 
       <div className={g.tabs} role="tablist" aria-label="Settings sections">
         {(

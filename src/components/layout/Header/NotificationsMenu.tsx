@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
+import { useConnected } from '../../../hooks/useConnected'
 import { useInvestigations } from '../../../hooks/useInvestigations'
 import { useWork } from '../../../hooks/useWork'
 import { formatRelativeTime } from '../../../utils/date'
@@ -11,7 +12,7 @@ import styles from './NotificationsMenu.module.css'
 
 interface UnifiedNotification {
   id: string
-  source: 'work' | 'investigations'
+  source: 'work' | 'investigations' | 'collaboration'
   title: string
   body: string
   href?: string
@@ -24,6 +25,7 @@ export function NotificationsMenu() {
   const navigate = useNavigate()
   const work = useWork()
   const investigations = useInvestigations()
+  const connected = useConnected()
 
   const notifications = useMemo<UnifiedNotification[]>(() => {
     const workItems: UnifiedNotification[] = work.notifications.map((item) => ({
@@ -48,10 +50,57 @@ export function NotificationsMenu() {
       createdAt: item.createdAt,
       group: item.group,
     }))
-    return [...workItems, ...investigationItems].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
-  }, [work.notifications, investigations.notifications])
+    const mentionItems: UnifiedNotification[] = connected.mentionFeed.map((item) => ({
+      id: `mention-${item.id}`,
+      source: 'collaboration',
+      title: '@Mention',
+      body: item.body,
+      href: item.href,
+      read: false,
+      createdAt: item.at,
+      group: 'Mentions',
+    }))
+    const digestItems: UnifiedNotification[] = connected.digests
+      .filter((item) => item.enabled)
+      .map((item) => ({
+        id: `digest-${item.id}`,
+        source: 'collaboration' as const,
+        title: 'Digest',
+        body: `${item.label} · ${item.cadence}`,
+        href: '/settings/collaboration',
+        read: true,
+        createdAt: new Date().toISOString(),
+        group: 'Digests',
+      }))
+    const approvalReminders: UnifiedNotification[] = connected.watchlist
+      .filter((item) => item.following)
+      .slice(0, 2)
+      .map((item) => ({
+        id: `watch-${item.id}`,
+        source: 'collaboration' as const,
+        title: 'Approval reminder',
+        body: `Following ${item.title}`,
+        href: item.href,
+        read: false,
+        createdAt: new Date().toISOString(),
+        group: 'Watchlists',
+      }))
 
-  const unreadNotificationCount = work.unreadNotificationCount + investigations.unreadNotificationCount
+    return [...workItems, ...investigationItems, ...mentionItems, ...digestItems, ...approvalReminders].sort(
+      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
+    )
+  }, [
+    connected.digests,
+    connected.mentionFeed,
+    connected.watchlist,
+    investigations.notifications,
+    work.notifications,
+  ])
+
+  const unreadNotificationCount =
+    work.unreadNotificationCount +
+    investigations.unreadNotificationCount +
+    notifications.filter((item) => item.source === 'collaboration' && !item.read).length
 
   const groups = useMemo(() => {
     const order: string[] = []
@@ -68,12 +117,12 @@ export function NotificationsMenu() {
 
   function markRead(item: UnifiedNotification) {
     if (item.source === 'work') work.markNotificationRead(item.id.replace(/^work-/, ''))
-    else investigations.markNotificationRead(item.id.replace(/^inv-/, ''))
+    else if (item.source === 'investigations') investigations.markNotificationRead(item.id.replace(/^inv-/, ''))
   }
 
   function dismiss(item: UnifiedNotification) {
     if (item.source === 'work') work.dismissNotification(item.id.replace(/^work-/, ''))
-    else investigations.dismissNotification(item.id.replace(/^inv-/, ''))
+    else if (item.source === 'investigations') investigations.dismissNotification(item.id.replace(/^inv-/, ''))
   }
 
   function markAllRead() {
@@ -117,6 +166,21 @@ export function NotificationsMenu() {
             </div>
           </header>
 
+          {connected.announcements[0] && (
+            <div className={styles.group} style={{ padding: '0 12px 8px' }}>
+              <p className={styles.itemTitle}>{connected.announcements[0].title}</p>
+              <p className={styles.itemBody}>{connected.announcements[0].body}</p>
+              <Link
+                to="/settings/collaboration"
+                className={styles.itemBody}
+                onClick={close}
+                style={{ display: 'inline-block', marginTop: 4, color: 'var(--ri-color-accent)' }}
+              >
+                Collaboration center
+              </Link>
+            </div>
+          )}
+
           {notifications.length === 0 ? (
             <p className={styles.empty}>You're all caught up. No notifications.</p>
           ) : (
@@ -142,14 +206,16 @@ export function NotificationsMenu() {
                             {formatRelativeTime(item.createdAt)}
                           </time>
                         </button>
-                        <button
-                          type="button"
-                          className={styles.dismiss}
-                          aria-label={`Dismiss ${item.title}`}
-                          onClick={() => dismiss(item)}
-                        >
-                          Dismiss
-                        </button>
+                        {item.source !== 'collaboration' && (
+                          <button
+                            type="button"
+                            className={styles.dismiss}
+                            aria-label={`Dismiss ${item.title}`}
+                            onClick={() => dismiss(item)}
+                          >
+                            Dismiss
+                          </button>
+                        )}
                       </li>
                     ))}
                   </ul>

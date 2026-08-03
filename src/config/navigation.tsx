@@ -112,6 +112,30 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/integrations',
     description: 'Connect RegIntel to tools your team already uses.',
   },
+  {
+    id: 'api-platform',
+    label: 'API Platform',
+    path: '/settings/api',
+    description: 'Developer portal for keys, OAuth, webhooks, and API usage.',
+  },
+  {
+    id: 'admin-console',
+    label: 'Admin Console',
+    path: '/settings/admin',
+    description: 'Tenant, identity, session, and security administration.',
+  },
+  {
+    id: 'collaboration',
+    label: 'Collaboration',
+    path: '/settings/collaboration',
+    description: 'Channels, mentions, digests, and watchlists.',
+  },
+  {
+    id: 'ai-agents',
+    label: 'AI Agents',
+    path: '/ai/agents',
+    description: 'Continuous regulatory monitoring agents and health dashboard.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

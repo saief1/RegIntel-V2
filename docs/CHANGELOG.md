@@ -32,8 +32,47 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v0.9.0 — Connected Enterprise Platform
+
+**Status:** Stable  
+**Sprint:** 9 (`SPRINT9_COMPLETE`)  
+**Date:** 2026-08-02
+
+RegIntel becomes the compliance command center for the enterprise stack — integrations, developer APIs, continuous AI monitoring, collaboration, and admin controls.
+
+#### Highlights
+
+##### Integration Hub (P041)
+
+- Settings Integrations area plus `/integrations`
+- Sixteen mock connectors (M365, Outlook, SharePoint, Teams, Jira, ServiceNow, Slack, Confluence, OneDrive, Google Workspace, GitHub, Box, AWS S3, Azure Blob, Generic REST, Webhooks)
+- Status, health, owner, permissions, sync frequency, activity log, disconnect/reconnect
+- Background sync queue with retry UI, error history, global activity stream
+
+##### API Platform (P042)
+
+- API keys, OAuth clients, webhooks, event logs
+- Usage & rate limits, documentation viewer, test console
+
+##### Continuous AI Monitoring (P043)
+
+- Agents for FINTRAC, CIRO, CSA, OSFI, SEC, FINRA, FCA, ESMA
+- Last scan, publications, impact, confidence, actions, generated tasks
+- Agent health dashboard
+
+##### Notifications & Collaboration (P044)
+
+- Mentions, channels, announcement banners, digests, watchlists
+- Expanded notification feed with approval reminders
+
+##### Enterprise Administration (P045)
+
+- Admin Console: tenant, users, teams/departments, SSO/SAML/SCIM (mock)
+- Sessions, MFA, password/security policies, login history
 
 ### v0.8.0 — Enterprise Governance
 

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BookMarked, History, Library, PanelRight, Sparkles } from 'lucide-react'
+import { BookMarked, Bot, History, Library, PanelRight, Sparkles } from 'lucide-react'
 import { AiSettingsPanel } from '../../components/ai/AiSettingsPanel/AiSettingsPanel'
 import { ContextPanel } from '../../components/ai/ContextPanel/ContextPanel'
 import { ConversationHistoryPanel } from '../../components/ai/ConversationHistoryPanel/ConversationHistoryPanel'
@@ -131,6 +131,9 @@ export function AIWorkspacePage() {
           </Button>
           <Button size="sm" variant="ghost" onClick={() => navigate('/ai/memory')} leadingIcon={<BookMarked size={14} />}>
             Memory
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => navigate('/ai/agents')} leadingIcon={<Bot size={14} />}>
+            AI Agents
           </Button>
         </div>
       </header>

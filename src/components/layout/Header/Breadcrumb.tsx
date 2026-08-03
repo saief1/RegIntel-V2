@@ -66,12 +66,21 @@ function useBreadcrumbTrail(): Crumb[] {
   }
 
   if (segments[0] === 'reports') return [{ label: 'Reports', path: '/reports' }, { label: 'Executive Dashboard' }]
-  if (segments[0] === 'settings') return [{ label: 'Settings' }]
+  if (segments[0] === 'integrations') return [{ label: 'Integrations' }]
+  if (segments[0] === 'settings') {
+    const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
+    if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })
+    else if (segments[1] === 'api') trail.push({ label: 'API Platform' })
+    else if (segments[1] === 'admin') trail.push({ label: 'Admin Console' })
+    else if (segments[1] === 'collaboration') trail.push({ label: 'Collaboration' })
+    return trail
+  }
 
   if (segments[0] === 'ai') {
     const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]
     if (segments[1] === 'prompts') trail.push({ label: 'Prompt library' })
     if (segments[1] === 'memory') trail.push({ label: 'Memory' })
+    if (segments[1] === 'agents') trail.push({ label: 'AI Agents' })
     return trail
   }
 
