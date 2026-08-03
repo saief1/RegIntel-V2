@@ -41,6 +41,21 @@ const ReportsPage = lazy(() =>
 const CommandCenterPage = lazy(() =>
   import('./pages/reports/CommandCenterPage').then((module) => ({ default: module.CommandCenterPage })),
 )
+const AnalyticsCenterPage = lazy(() =>
+  import('./pages/reports/AnalyticsCenterPage').then((module) => ({ default: module.AnalyticsCenterPage })),
+)
+const KpiBuilderPage = lazy(() =>
+  import('./pages/reports/KpiBuilderPage').then((module) => ({ default: module.KpiBuilderPage })),
+)
+const PredictivePage = lazy(() =>
+  import('./pages/reports/PredictivePage').then((module) => ({ default: module.PredictivePage })),
+)
+const BoardStudioPage = lazy(() =>
+  import('./pages/reports/BoardStudioPage').then((module) => ({ default: module.BoardStudioPage })),
+)
+const BenchmarkPage = lazy(() =>
+  import('./pages/reports/BenchmarkPage').then((module) => ({ default: module.BenchmarkPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -248,6 +263,46 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="analytics"
+            element={
+              <LazyPage>
+                <AnalyticsCenterPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="kpis"
+            element={
+              <LazyPage>
+                <KpiBuilderPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="predictive"
+            element={
+              <LazyPage>
+                <PredictivePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="board"
+            element={
+              <LazyPage>
+                <BoardStudioPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="benchmark"
+            element={
+              <LazyPage>
+                <BenchmarkPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route path="agents">
@@ -392,6 +447,11 @@ export function AppRoutes() {
               'knowledge-graph',
               'command-center',
               'continuous-monitoring',
+              'analytics-center',
+              'kpi-builder',
+              'predictive',
+              'board-studio',
+              'benchmarking',
             ].includes(item.id),
         ).map((item) => (
           <Route

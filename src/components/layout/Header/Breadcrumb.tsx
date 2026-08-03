@@ -70,6 +70,11 @@ function useBreadcrumbTrail(): Crumb[] {
   if (segments[0] === 'reports') {
     const trail: Crumb[] = [{ label: 'Reports', path: '/reports' }]
     if (segments[1] === 'command') trail.push({ label: 'AI Command Center' })
+    else if (segments[1] === 'analytics') trail.push({ label: 'Analytics Center' })
+    else if (segments[1] === 'kpis') trail.push({ label: 'KPI Builder' })
+    else if (segments[1] === 'predictive') trail.push({ label: 'Predictive Compliance' })
+    else if (segments[1] === 'board') trail.push({ label: 'Board Studio' })
+    else if (segments[1] === 'benchmark') trail.push({ label: 'Benchmarking' })
     else trail.push({ label: 'Executive Dashboard' })
     return trail
   }

@@ -33,6 +33,12 @@ export function CommandCenterPage() {
         <Link className={styles.hubLink} to="/reports">
           Executive Dashboard
         </Link>
+        <Link className={styles.hubLink} to="/reports/analytics">
+          Analytics Center
+        </Link>
+        <Link className={styles.hubLink} to="/reports/board">
+          Board Studio
+        </Link>
         <Link className={styles.hubLink} to="/agents">
           AI Agents
         </Link>

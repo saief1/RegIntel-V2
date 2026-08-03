@@ -166,6 +166,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/ai/agents',
     description: 'Regulator-specific monitoring agents and health dashboard.',
   },
+  {
+    id: 'analytics-center',
+    label: 'Analytics Center',
+    path: '/reports/analytics',
+    description: 'Executive analytics with heatmaps, trends, and saved views.',
+  },
+  {
+    id: 'kpi-builder',
+    label: 'KPI Builder',
+    path: '/reports/kpis',
+    description: 'Compose custom compliance KPIs with thresholds and alerts.',
+  },
+  {
+    id: 'predictive',
+    label: 'Predictive Compliance',
+    path: '/reports/predictive',
+    description: 'AI forecasts for workload, audit findings, and resources.',
+  },
+  {
+    id: 'board-studio',
+    label: 'Board Reporting Studio',
+    path: '/reports/board',
+    description: 'Assemble and schedule board packages for leadership.',
+  },
+  {
+    id: 'benchmarking',
+    label: 'Enterprise Benchmarking',
+    path: '/reports/benchmark',
+    description: 'Compare departments, regions, and business units.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

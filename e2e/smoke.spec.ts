@@ -16,7 +16,12 @@ const CORE_ROUTES = [
   { path: '/work/workflows', mustInclude: /Workflow Builder|Templates/i },
   { path: '/work/calendar', mustInclude: /Compliance Calendar/i },
   { path: '/work/cases', mustInclude: /Cases/i },
-  { path: '/reports', mustInclude: /Executive Dashboard|Compliance Health|Reporting Engine/i },
+  { path: '/reports', mustInclude: /Executive Dashboard|Compliance Health|Reporting Engine|Analytics Center/i },
+  { path: '/reports/analytics', mustInclude: /Executive Analytics Center|Risk heatmap|Saved dashboard views/i },
+  { path: '/reports/kpis', mustInclude: /KPI Builder|Open High-Risk Findings|Formula builder/i },
+  { path: '/reports/predictive', mustInclude: /Predictive Compliance|Upcoming regulatory workload|Suggested mitigation/i },
+  { path: '/reports/board', mustInclude: /Board Reporting Studio|Executive summary|Generate board package/i },
+  { path: '/reports/benchmark', mustInclude: /Enterprise Benchmarking|Leaderboard|Accessible metrics table/i },
   { path: '/settings', mustInclude: /Organization|RBAC|Audit Trail|Automation|Integrations|Admin Console/i },
   { path: '/settings/integrations', mustInclude: /Integrations|Microsoft 365|Background sync queue/i },
   { path: '/integrations', mustInclude: /Integrations|Microsoft 365|Sync queue/i },
@@ -63,7 +68,9 @@ async function assertNoHorizontalOverflow(page: Page) {
 }
 
 test.describe('RegIntel smoke suite', () => {
+  // Route catalog grows each sprint; keep this suite sequential but give it room.
   test('shell loads and core routes render', async ({ page }) => {
+    test.setTimeout(120_000)
     for (const route of CORE_ROUTES) {
       await page.goto(route.path)
       await waitForShell(page)
@@ -82,6 +89,9 @@ test.describe('RegIntel smoke suite', () => {
         '/knowledge/policies',
         '/work',
         '/reports',
+        '/reports/analytics',
+        '/reports/board',
+        '/reports/benchmark',
         '/settings',
         '/settings/integrations',
         '/settings/api',

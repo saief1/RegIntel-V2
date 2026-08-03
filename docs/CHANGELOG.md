@@ -32,10 +32,43 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.1.0-beta | 2026-08-03 | Enterprise Intelligence — analytics, KPIs, board, benchmarks |
 | 1.0.0-beta | 2026-08-03 | Autonomous Compliance — AI workforce, queue, knowledge graph |
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.1.0-beta — Enterprise Intelligence & Analytics
+
+**Status:** Beta  
+**Sprint:** 11 (`SPRINT11_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel strengthens the executive layer so CCOs, CROs, and boards can understand compliance posture with analytics, forecasts, and board-ready packages.
+
+#### Highlights
+
+##### Executive Analytics Center (P051)
+
+- `/reports/analytics` with compliance score, risk heatmap, department performance, trends
+- Date ranges, business unit filters, saved/shared/favorite views, export queue
+
+##### KPI Builder (P052)
+
+- Custom KPIs with metric composition, formulas, thresholds, alerts, goals, trends
+
+##### Predictive Compliance (P053)
+
+- Workload, audit, department risk, resource, deadline, policy, and agent forecasts
+- Confidence, reasoning, and suggested mitigation on each prediction
+
+##### Board Reporting Studio (P054)
+
+- `/reports/board` with rearrangeable sections, templates, package generation, version history
+
+##### Enterprise Benchmarking (P055)
+
+- `/reports/benchmark` leaderboards, SVG radar + accessible table, improvement opportunities
 
 ### v1.0.0-beta — Autonomous AI Compliance Platform
 

@@ -73,6 +73,15 @@ export function ReportsPage() {
         <Link className={connected.hubLink} to="/reports/command">
           AI Command Center
         </Link>
+        <Link className={connected.hubLink} to="/reports/analytics">
+          Analytics Center
+        </Link>
+        <Link className={connected.hubLink} to="/reports/board">
+          Board Studio
+        </Link>
+        <Link className={connected.hubLink} to="/reports/benchmark">
+          Benchmarking
+        </Link>
         <Link className={connected.hubLink} to="/agents">
           AI Agents
         </Link>
