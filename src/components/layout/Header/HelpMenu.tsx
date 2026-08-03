@@ -18,6 +18,9 @@ const HELP_LINKS = [
   { to: '/customer-success', label: 'Customer Success' },
   { to: '/settings/tours', label: 'Product Tours' },
   { to: '/community', label: 'Community & Feedback' },
+  { to: '/settings/billing', label: 'Billing & Subscription' },
+  { to: '/customer', label: 'Customer Portal' },
+  { to: '/partners', label: 'Partner Portal' },
   { to: '/developer', label: 'Developer Portal' },
 ] as const
 

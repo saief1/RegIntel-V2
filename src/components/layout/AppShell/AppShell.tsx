@@ -8,6 +8,7 @@ import { DeveloperProvider } from '../../../context/DeveloperProvider'
 import { ProdOpsProvider } from '../../../context/ProdOpsProvider'
 import { SolutionsProvider } from '../../../context/SolutionsProvider'
 import { AdoptionProvider } from '../../../context/AdoptionProvider'
+import { CommercialProvider } from '../../../context/CommercialProvider'
 import { GovernanceProvider } from '../../../context/GovernanceProvider'
 import { InvestigationsProvider } from '../../../context/InvestigationsProvider'
 import { KnowledgeProvider } from '../../../context/KnowledgeProvider'
@@ -36,20 +37,22 @@ export function AppShell() {
                         <ProdOpsProvider>
                           <SolutionsProvider>
                             <AdoptionProvider>
-                              <CopilotProvider>
-                                <ShellLayoutProvider>
-                                  <div className={styles.shell}>
-                                    <Header />
-                                    <div className={styles.body}>
-                                      <Sidebar />
-                                      <Workspace />
-                                      <AIPanel />
+                              <CommercialProvider>
+                                <CopilotProvider>
+                                  <ShellLayoutProvider>
+                                    <div className={styles.shell}>
+                                      <Header />
+                                      <div className={styles.body}>
+                                        <Sidebar />
+                                        <Workspace />
+                                        <AIPanel />
+                                      </div>
                                     </div>
-                                  </div>
-                                  <CommandPalette />
-                                  <ToastCenter />
-                                </ShellLayoutProvider>
-                              </CopilotProvider>
+                                    <CommandPalette />
+                                    <ToastCenter />
+                                  </ShellLayoutProvider>
+                                </CopilotProvider>
+                              </CommercialProvider>
                             </AdoptionProvider>
                           </SolutionsProvider>
                         </ProdOpsProvider>

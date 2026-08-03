@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.9.0-beta | 2026-08-03 | Commercial Platform — billing, customer portal, partners, usage, licensing |
 | 1.8.0-beta | 2026-08-03 | Customer Experience — onboarding, help, success, tours, community |
 | 1.7.0-beta | 2026-08-03 | Industry Solutions — wealth flagship, banking, insurance, GRC marketplace |
 | 1.6.0-beta | 2026-08-03 | Production Operations — ops center, incidents, backups, deploys, observability |
@@ -43,6 +44,36 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.9.0-beta — Commercial Platform
+
+**Status:** Beta  
+**Sprint:** 19 (`SPRINT19_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel gains billing & subscription management, customer and partner portals, usage analytics, and enterprise licensing — with trial countdown, usage warnings, and plan-aware feature flags (mock).
+
+#### Highlights
+
+##### Billing & Subscription Center (P091)
+
+- `/settings/billing` current plan, trial/renewal, usage meters, plan comparison, payment methods, invoices, cost breakdown
+
+##### Customer Portal (P092)
+
+- `/customer` org profile, contracts, CSM, tickets, training, health score, QBR, renewal readiness
+
+##### Partner Portal (P093)
+
+- `/partners` consulting/implementation/technology/marketplace directory, deals, certifications, revenue
+
+##### Usage & Consumption Analytics (P094)
+
+- `/settings/usage` AI/API/storage trends, top users, feature adoption, department usage, CSV export
+
+##### Enterprise Licensing (P095)
+
+- `/settings/licensing` seat assign/revoke/transfer, entitlements, modules, environments, trial licenses
 
 ### v1.8.0-beta — Customer Experience, Onboarding & Adoption
 

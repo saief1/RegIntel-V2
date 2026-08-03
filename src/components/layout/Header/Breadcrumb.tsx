@@ -127,6 +127,8 @@ function useBreadcrumbTrail(): Crumb[] {
   if (segments[0] === 'help') return [{ label: 'Learning Center' }]
   if (segments[0] === 'customer-success') return [{ label: 'Customer Success' }]
   if (segments[0] === 'community') return [{ label: 'Community' }]
+  if (segments[0] === 'customer') return [{ label: 'Customer Portal' }]
+  if (segments[0] === 'partners') return [{ label: 'Partner Portal' }]
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
     if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })
@@ -136,6 +138,9 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'data') trail.push({ label: 'Data Management' })
     else if (segments[1] === 'security') trail.push({ label: 'Security Center' })
     else if (segments[1] === 'tours') trail.push({ label: 'Product Tours' })
+    else if (segments[1] === 'billing') trail.push({ label: 'Billing' })
+    else if (segments[1] === 'usage') trail.push({ label: 'Usage' })
+    else if (segments[1] === 'licensing') trail.push({ label: 'Licensing' })
     return trail
   }
 

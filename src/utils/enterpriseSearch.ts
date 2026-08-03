@@ -51,6 +51,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'cx-success', title: 'Customer Success Center', subtitle: 'Adoption score recommendations', href: '/customer-success', terms: 'adoption success engagement health' },
   { id: 'cx-tours', title: 'Product Tours', subtitle: 'Coach marks and walkthroughs', href: '/settings/tours', terms: 'tour first login coach marks' },
   { id: 'cx-community', title: 'Feedback & Community', subtitle: 'Roadmap votes and feedback', href: '/community', terms: 'community feedback roadmap feature request' },
+  { id: 'com-billing', title: 'Billing & Subscription', subtitle: 'Plans invoices payment methods', href: '/settings/billing', terms: 'billing subscription invoice trial upgrade seats' },
+  { id: 'com-customer', title: 'Customer Portal', subtitle: 'Contracts CSM renewal health', href: '/customer', terms: 'customer portal contract success manager qbr renewal' },
+  { id: 'com-partners', title: 'Partner Portal', subtitle: 'Directory deals certifications', href: '/partners', terms: 'partner referral deal registration marketplace' },
+  { id: 'com-usage', title: 'Usage Analytics', subtitle: 'AI API storage consumption', href: '/settings/usage', terms: 'usage consumption analytics ai api storage export' },
+  { id: 'com-licensing', title: 'Enterprise Licensing', subtitle: 'Seats entitlements modules', href: '/settings/licensing', terms: 'licensing seats entitlements trial assign revoke' },
 ] as const
 
 interface SearchInput {

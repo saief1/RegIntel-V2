@@ -376,6 +376,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/community',
     description: 'Feature requests, roadmap, and release highlights.',
   },
+  {
+    id: 'billing',
+    label: 'Billing & Subscription',
+    path: '/settings/billing',
+    description: 'Plans, invoices, payment methods, and usage meters.',
+  },
+  {
+    id: 'customer-portal',
+    label: 'Customer Portal',
+    path: '/customer',
+    description: 'Contracts, CSM, health score, and renewal readiness.',
+  },
+  {
+    id: 'partners',
+    label: 'Partner Portal',
+    path: '/partners',
+    description: 'Partner directory, deals, certifications, and enablement.',
+  },
+  {
+    id: 'usage',
+    label: 'Usage Analytics',
+    path: '/settings/usage',
+    description: 'AI, API, storage, and consumption trends.',
+  },
+  {
+    id: 'licensing',
+    label: 'Enterprise Licensing',
+    path: '/settings/licensing',
+    description: 'Seats, entitlements, modules, and trials.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

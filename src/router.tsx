@@ -146,6 +146,21 @@ const ToursPage = lazy(() =>
 const CommunityPage = lazy(() =>
   import('./pages/adoption/CommunityPage').then((module) => ({ default: module.CommunityPage })),
 )
+const BillingPage = lazy(() =>
+  import('./pages/commercial/BillingPage').then((module) => ({ default: module.BillingPage })),
+)
+const CustomerPortalPage = lazy(() =>
+  import('./pages/commercial/CustomerPortalPage').then((module) => ({ default: module.CustomerPortalPage })),
+)
+const PartnersPage = lazy(() =>
+  import('./pages/commercial/PartnersPage').then((module) => ({ default: module.PartnersPage })),
+)
+const UsagePage = lazy(() =>
+  import('./pages/commercial/UsagePage').then((module) => ({ default: module.UsagePage })),
+)
+const LicensingPage = lazy(() =>
+  import('./pages/commercial/LicensingPage').then((module) => ({ default: module.LicensingPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -495,6 +510,30 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="billing"
+            element={
+              <LazyPage>
+                <BillingPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="usage"
+            element={
+              <LazyPage>
+                <UsagePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="licensing"
+            element={
+              <LazyPage>
+                <LicensingPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route
@@ -728,6 +767,22 @@ export function AppRoutes() {
           element={
             <LazyPage>
               <CommunityPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="customer"
+          element={
+            <LazyPage>
+              <CustomerPortalPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="partners"
+          element={
+            <LazyPage>
+              <PartnersPage />
             </LazyPage>
           }
         />

@@ -4,6 +4,8 @@ import { clsx as cx } from 'clsx'
 import { GlobalOnboardingChecklist } from '../../adoption/GlobalOnboardingChecklist'
 import { WelcomeBanner } from '../../adoption/WelcomeBanner'
 import { WhatsNewModal } from '../../adoption/WhatsNewModal'
+import { TrialCountdownBanner } from '../../commercial/TrialCountdownBanner'
+import { UsageWarningBanner } from '../../commercial/UsageWarningBanner'
 import { MaintenanceBanner } from '../../operations/MaintenanceBanner'
 import { Skeleton } from '../../ui/Skeleton/Skeleton'
 import styles from './Workspace.module.css'
@@ -28,6 +30,14 @@ export function Workspace() {
     location.pathname.startsWith('/community') ||
     location.pathname.startsWith('/settings/tours')
 
+  const hideCommercialChrome =
+    location.pathname.startsWith('/settings/billing') ||
+    location.pathname.startsWith('/settings/usage') ||
+    location.pathname.startsWith('/settings/licensing') ||
+    location.pathname === '/customer' ||
+    location.pathname.startsWith('/customer/') ||
+    location.pathname.startsWith('/partners')
+
   return (
     <main className={cx(styles.workspace, isFlushLayout && styles.flush)} aria-label="Workspace">
       {initializing ? (
@@ -43,6 +53,12 @@ export function Workspace() {
       ) : (
         <div key={location.pathname} className={cx(styles.page, isFlushLayout && styles.flushPage)}>
           <MaintenanceBanner />
+          {!isFlushLayout && !hideCommercialChrome && (
+            <>
+              <TrialCountdownBanner />
+              <UsageWarningBanner />
+            </>
+          )}
           {!isFlushLayout && !hideAdoptionChrome && (
             <>
               <WelcomeBanner />

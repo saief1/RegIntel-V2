@@ -90,6 +90,21 @@ export function SettingsPage() {
         <Link className={connected.hubLink} to="/system">
           System Health
         </Link>
+        <Link className={connected.hubLink} to="/settings/billing">
+          Billing
+        </Link>
+        <Link className={connected.hubLink} to="/settings/usage">
+          Usage
+        </Link>
+        <Link className={connected.hubLink} to="/settings/licensing">
+          Licensing
+        </Link>
+        <Link className={connected.hubLink} to="/customer">
+          Customer Portal
+        </Link>
+        <Link className={connected.hubLink} to="/partners">
+          Partners
+        </Link>
       </nav>
 
       <div className={g.tabs} role="tablist" aria-label="Settings sections">
