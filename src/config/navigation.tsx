@@ -1,4 +1,4 @@
-import { BarChart3, BookOpen, Briefcase, Home, Plug, Settings, Sparkles, type LucideIcon } from 'lucide-react'
+import { BarChart3, BookOpen, Briefcase, Home, Plug, Scale, Settings, ShieldAlert, Sparkles, type LucideIcon } from 'lucide-react'
 
 export type NavGroupId = 'workspace' | 'insights' | 'general'
 
@@ -55,6 +55,22 @@ export const NAV_ITEMS: NavItemConfig[] = [
     icon: Briefcase,
     group: 'workspace',
     description: 'Track and manage your active work items.',
+  },
+  {
+    id: 'investigations',
+    label: 'Investigations',
+    path: '/investigations',
+    icon: ShieldAlert,
+    group: 'workspace',
+    description: 'Investigate compliance issues, evidence gaps, and regulatory exposure.',
+  },
+  {
+    id: 'regulatory-changes',
+    label: 'Regulatory Changes',
+    path: '/regulatory-changes',
+    icon: Scale,
+    group: 'insights',
+    description: 'Track regulatory updates, impact assessments, and remediation.',
   },
   {
     id: 'reports',

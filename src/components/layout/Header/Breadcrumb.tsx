@@ -3,6 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { clsx as cx } from 'clsx'
 import { findNavItemByPath } from '../../../config/navigation'
 import { useKnowledge } from '../../../hooks/useKnowledge'
+import { useInvestigations } from '../../../hooks/useInvestigations'
 import { useShellLayout } from '../../../hooks/useShellLayout'
 import { useWork } from '../../../hooks/useWork'
 import styles from './Breadcrumb.module.css'
@@ -16,6 +17,7 @@ function useBreadcrumbTrail(): Crumb[] {
   const location = useLocation()
   const { getDocument, collections } = useKnowledge()
   const { getCase } = useWork()
+  const { getInvestigation, getChange } = useInvestigations()
   const segments = location.pathname.split('/').filter(Boolean)
 
   if (segments[0] === 'knowledge') {
@@ -54,6 +56,24 @@ function useBreadcrumbTrail(): Crumb[] {
     const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]
     if (segments[1] === 'prompts') trail.push({ label: 'Prompt library' })
     if (segments[1] === 'memory') trail.push({ label: 'Memory' })
+    return trail
+  }
+
+  if (segments[0] === 'investigations') {
+    const trail: Crumb[] = [{ label: 'Investigations', path: '/investigations' }]
+    if (segments[1]) {
+      const investigation = getInvestigation(segments[1])
+      trail.push({ label: investigation?.caseId ?? 'Investigation' })
+    }
+    return trail
+  }
+
+  if (segments[0] === 'regulatory-changes') {
+    const trail: Crumb[] = [{ label: 'Regulatory Changes', path: '/regulatory-changes' }]
+    if (segments[1]) {
+      const change = getChange(segments[1])
+      trail.push({ label: change?.title ?? 'Change' })
+    }
     return trail
   }
 

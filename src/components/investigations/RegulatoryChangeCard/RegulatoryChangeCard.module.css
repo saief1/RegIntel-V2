@@ -1,0 +1,55 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  width: 100%;
+  padding: var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background: var(--ri-color-surface);
+  text-align: left;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.card:hover {
+  border-color: var(--ri-color-accent);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ri-space-2);
+}
+
+.jurisdiction {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ri-font-size-body);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.summary {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+  line-height: var(--ri-line-height-relaxed);
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-3);
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}

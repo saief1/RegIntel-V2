@@ -1,4 +1,4 @@
-import { Suspense, lazy } from 'react'
+import { Suspense, lazy, type ReactNode } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { AppShell } from './components/layout/AppShell/AppShell'
 import { RouteFallback } from './components/layout/RouteFallback/RouteFallback'
@@ -24,8 +24,30 @@ const AIWorkspacePage = lazy(() =>
 )
 const PromptsPage = lazy(() => import('./pages/ai/PromptsPage').then((module) => ({ default: module.PromptsPage })))
 const MemoryPage = lazy(() => import('./pages/ai/MemoryPage').then((module) => ({ default: module.MemoryPage })))
+const InvestigationsPage = lazy(() =>
+  import('./pages/investigations/InvestigationsPage').then((module) => ({ default: module.InvestigationsPage })),
+)
+const InvestigationDetailPage = lazy(() =>
+  import('./pages/investigations/InvestigationDetailPage').then((module) => ({
+    default: module.InvestigationDetailPage,
+  })),
+)
+const RegulatoryChangesPage = lazy(() =>
+  import('./pages/investigations/RegulatoryChangesPage').then((module) => ({
+    default: module.RegulatoryChangesPage,
+  })),
+)
+const RegulatoryChangeDetailPage = lazy(() =>
+  import('./pages/investigations/RegulatoryChangeDetailPage').then((module) => ({
+    default: module.RegulatoryChangeDetailPage,
+  })),
+)
 
-const BUILT_OUT_NAV_ITEM_IDS = new Set(['knowledge', 'work', 'ai'])
+const BUILT_OUT_NAV_ITEM_IDS = new Set(['knowledge', 'work', 'ai', 'investigations', 'regulatory-changes'])
+
+function LazyPage({ children }: { children: ReactNode }) {
+  return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
+}
 
 export function AppRoutes() {
   return (
@@ -45,25 +67,25 @@ export function AppRoutes() {
           <Route
             index
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <WorkDashboardPage />
-              </Suspense>
+              </LazyPage>
             }
           />
           <Route
             path="cases"
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <CasesPage />
-              </Suspense>
+              </LazyPage>
             }
           />
           <Route
             path="cases/:caseId"
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <CaseDetailPage />
-              </Suspense>
+              </LazyPage>
             }
           />
         </Route>
@@ -72,25 +94,63 @@ export function AppRoutes() {
           <Route
             index
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <AIWorkspacePage />
-              </Suspense>
+              </LazyPage>
             }
           />
           <Route
             path="prompts"
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <PromptsPage />
-              </Suspense>
+              </LazyPage>
             }
           />
           <Route
             path="memory"
             element={
-              <Suspense fallback={<RouteFallback />}>
+              <LazyPage>
                 <MemoryPage />
-              </Suspense>
+              </LazyPage>
+            }
+          />
+        </Route>
+
+        <Route path="investigations">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <InvestigationsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path=":investigationId"
+            element={
+              <LazyPage>
+                <InvestigationDetailPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
+        <Route path="regulatory-changes">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <RegulatoryChangesPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path=":changeId"
+            element={
+              <LazyPage>
+                <RegulatoryChangeDetailPage />
+              </LazyPage>
             }
           />
         </Route>

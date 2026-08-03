@@ -1,0 +1,113 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-6);
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ri-space-3);
+}
+
+.filters {
+  display: grid;
+  grid-template-columns: minmax(180px, 1.6fr) repeat(4, minmax(120px, 1fr));
+  gap: var(--ri-space-3);
+  align-items: center;
+}
+
+.date {
+  height: 36px;
+  padding: 0 var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  font: inherit;
+  color: var(--ri-color-text-primary);
+}
+
+.date:focus-visible,
+.reset:focus-visible,
+.linkButton:focus-visible,
+.inlineLink:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.reset,
+.linkButton,
+.inlineLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  padding: var(--ri-space-2) var(--ri-space-3);
+  font: inherit;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-accent);
+  cursor: pointer;
+}
+
+.inlineLink {
+  border: none;
+  padding: 0;
+  background: none;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.55fr) minmax(280px, 0.9fr);
+  gap: var(--ri-space-6);
+  align-items: start;
+}
+
+.main,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ri-space-3);
+}
+
+.changeStack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+}
+
+.empty {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-muted);
+}
+
+@media (max-width: 1100px) {
+  .metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .layout,
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .metrics,
+  .filters {
+    grid-template-columns: 1fr;
+  }
+}

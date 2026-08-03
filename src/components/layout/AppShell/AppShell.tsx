@@ -1,5 +1,6 @@
 import { CommandPalette } from '../../CommandPalette/CommandPalette'
 import { CopilotProvider } from '../../../context/CopilotProvider'
+import { InvestigationsProvider } from '../../../context/InvestigationsProvider'
 import { KnowledgeProvider } from '../../../context/KnowledgeProvider'
 import { ShellLayoutProvider } from '../../../context/ShellLayoutProvider'
 import { WorkProvider } from '../../../context/WorkProvider'
@@ -13,19 +14,21 @@ export function AppShell() {
   return (
     <KnowledgeProvider>
       <WorkProvider>
-        <CopilotProvider>
-          <ShellLayoutProvider>
-            <div className={styles.shell}>
-              <Header />
-              <div className={styles.body}>
-                <Sidebar />
-                <Workspace />
-                <AIPanel />
+        <InvestigationsProvider>
+          <CopilotProvider>
+            <ShellLayoutProvider>
+              <div className={styles.shell}>
+                <Header />
+                <div className={styles.body}>
+                  <Sidebar />
+                  <Workspace />
+                  <AIPanel />
+                </div>
               </div>
-            </div>
-            <CommandPalette />
-          </ShellLayoutProvider>
-        </CopilotProvider>
+              <CommandPalette />
+            </ShellLayoutProvider>
+          </CopilotProvider>
+        </InvestigationsProvider>
       </WorkProvider>
     </KnowledgeProvider>
   )

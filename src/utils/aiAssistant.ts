@@ -88,14 +88,41 @@ export function answerCopilotPrompt(
         '',
         'Missing evidence hotspots:',
         '',
-        '- Cloud subprocessor TOMs on CASE-2026-014',
-        '- Remediation owners matrix on CASE-2026-018',
+        '- Cloud subprocessor TOMs on CASE-2026-014 / INV-2026-014',
+        '- Remediation owners matrix on CASE-2026-018 / INV-2026-018',
         '',
         'Attach verified artifacts before recording a final decision.',
       ].join('\n'),
       citations: pickCitations(['cite-04', 'cite-05', 'cite-06']),
       followUps: ['Open CASE-2026-014', 'Suggest an evidence checklist'],
       confidence: 0.83,
+    }
+  }
+
+  if (
+    normalized.includes('investigation') ||
+    normalized.includes('next action') ||
+    normalized.includes('summarize inv')
+  ) {
+    return {
+      content: [
+        `${lengthNote}`,
+        '',
+        '## Investigation assistance',
+        '',
+        '- Summarize open exposure and owners.',
+        '- Flag missing evidence before decisions.',
+        '- Recommend linked regulations and related cases.',
+        '',
+        'Open `/investigations` for the full queue, or ask about a specific INV ID.',
+      ].join('\n'),
+      citations: pickCitations(['cite-01', 'cite-04', 'cite-06']),
+      followUps: [
+        'Summarize INV-2026-014',
+        'What evidence is missing?',
+        'Recommend regulations for this investigation',
+      ],
+      confidence: 0.86,
     }
   }
 

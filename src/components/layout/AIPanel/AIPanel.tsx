@@ -6,6 +6,7 @@ import { useShellLayout } from '../../../hooks/useShellLayout'
 import { useResizablePanel } from '../../../hooks/useResizablePanel'
 import { ResearchHistoryMenu } from '../../knowledge/ResearchPanel/ResearchHistoryMenu'
 import { ResearchPanel } from '../../knowledge/ResearchPanel/ResearchPanel'
+import { InvestigationAssistant } from '../../investigations/InvestigationAssistant/InvestigationAssistant'
 import { WorkAssistant } from '../../work/WorkAssistant/WorkAssistant'
 import { IconButton } from '../../ui/IconButton/IconButton'
 import { Panel } from '../../ui/Panel/Panel'
@@ -27,8 +28,11 @@ export function AIPanel() {
   })
 
   const isWorkWorkspace = location.pathname.startsWith('/work')
-  const title = isWorkWorkspace ? 'AI Assistant' : 'AI Research'
-  const ariaLabel = isWorkWorkspace ? 'AI Assistant' : 'AI Research'
+  const isInvestigationsWorkspace =
+    location.pathname.startsWith('/investigations') || location.pathname.startsWith('/regulatory-changes')
+  const title = isWorkWorkspace || isInvestigationsWorkspace ? 'AI Assistant' : 'AI Research'
+  const ariaLabel = title
+  const showResearchHistory = !isWorkWorkspace && !isInvestigationsWorkspace
 
   useEffect(() => {
     const timer = window.setTimeout(() => setLoading(false), INITIAL_LOAD_MS)
@@ -62,7 +66,7 @@ export function AIPanel() {
           aria-label={ariaLabel}
           actions={
             <>
-              {!isWorkWorkspace && <ResearchHistoryMenu />}
+              {showResearchHistory && <ResearchHistoryMenu />}
               <IconButton label="Close AI panel" onClick={toggleAIPanel}>
                 <X size={16} />
               </IconButton>
@@ -77,6 +81,8 @@ export function AIPanel() {
             </div>
           ) : isWorkWorkspace ? (
             <WorkAssistant />
+          ) : isInvestigationsWorkspace ? (
+            <InvestigationAssistant />
           ) : (
             <ResearchPanel />
           )}

@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bell } from 'lucide-react'
+import { useInvestigations } from '../../../hooks/useInvestigations'
 import { useWork } from '../../../hooks/useWork'
 import { formatRelativeTime } from '../../../utils/date'
 import { Button } from '../../ui/Button/Button'
@@ -8,20 +9,51 @@ import { Dropdown } from '../../ui/Dropdown/Dropdown'
 import { IconButton } from '../../ui/IconButton/IconButton'
 import styles from './NotificationsMenu.module.css'
 
+interface UnifiedNotification {
+  id: string
+  source: 'work' | 'investigations'
+  title: string
+  body: string
+  href?: string
+  read: boolean
+  createdAt: string
+  group: string
+}
+
 export function NotificationsMenu() {
   const navigate = useNavigate()
-  const {
-    notifications,
-    unreadNotificationCount,
-    markNotificationRead,
-    markAllNotificationsRead,
-    dismissNotification,
-    clearAllNotifications,
-  } = useWork()
+  const work = useWork()
+  const investigations = useInvestigations()
+
+  const notifications = useMemo<UnifiedNotification[]>(() => {
+    const workItems: UnifiedNotification[] = work.notifications.map((item) => ({
+      id: `work-${item.id}`,
+      source: 'work',
+      title: item.title,
+      body: item.body,
+      href: item.caseId ? `/work/cases/${item.caseId}` : undefined,
+      read: item.read,
+      createdAt: item.createdAt,
+      group: item.group,
+    }))
+    const investigationItems: UnifiedNotification[] = investigations.notifications.map((item) => ({
+      id: `inv-${item.id}`,
+      source: 'investigations',
+      title: item.title,
+      body: item.body,
+      href: item.href,
+      read: item.read,
+      createdAt: item.createdAt,
+      group: item.group,
+    }))
+    return [...workItems, ...investigationItems].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+  }, [work.notifications, investigations.notifications])
+
+  const unreadNotificationCount = work.unreadNotificationCount + investigations.unreadNotificationCount
 
   const groups = useMemo(() => {
     const order: string[] = []
-    const map = new Map<string, typeof notifications>()
+    const map = new Map<string, UnifiedNotification[]>()
     for (const item of notifications) {
       if (!map.has(item.group)) {
         map.set(item.group, [])
@@ -31,6 +63,26 @@ export function NotificationsMenu() {
     }
     return order.map((label) => ({ label, items: map.get(label)! }))
   }, [notifications])
+
+  function markRead(item: UnifiedNotification) {
+    if (item.source === 'work') work.markNotificationRead(item.id.replace(/^work-/, ''))
+    else investigations.markNotificationRead(item.id.replace(/^inv-/, ''))
+  }
+
+  function dismiss(item: UnifiedNotification) {
+    if (item.source === 'work') work.dismissNotification(item.id.replace(/^work-/, ''))
+    else investigations.dismissNotification(item.id.replace(/^inv-/, ''))
+  }
+
+  function markAllRead() {
+    work.markAllNotificationsRead()
+    investigations.markAllNotificationsRead()
+  }
+
+  function clearAll() {
+    work.clearAllNotifications()
+    investigations.clearAllNotifications()
+  }
 
   return (
     <Dropdown
@@ -54,15 +106,10 @@ export function NotificationsMenu() {
           <header className={styles.header}>
             <p className={styles.title}>Notifications</p>
             <div className={styles.headerActions}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => markAllNotificationsRead()}
-                disabled={unreadNotificationCount === 0}
-              >
+              <Button variant="ghost" size="sm" onClick={markAllRead} disabled={unreadNotificationCount === 0}>
                 Mark all read
               </Button>
-              <Button variant="ghost" size="sm" onClick={() => clearAllNotifications()} disabled={notifications.length === 0}>
+              <Button variant="ghost" size="sm" onClick={clearAll} disabled={notifications.length === 0}>
                 Clear all
               </Button>
             </div>
@@ -82,9 +129,9 @@ export function NotificationsMenu() {
                           type="button"
                           className={styles.itemButton}
                           onClick={() => {
-                            markNotificationRead(item.id)
+                            markRead(item)
                             close()
-                            if (item.caseId) navigate(`/work/cases/${item.caseId}`)
+                            if (item.href) navigate(item.href)
                           }}
                         >
                           <span className={styles.itemTitle}>{item.title}</span>
@@ -97,7 +144,7 @@ export function NotificationsMenu() {
                           type="button"
                           className={styles.dismiss}
                           aria-label={`Dismiss ${item.title}`}
-                          onClick={() => dismissNotification(item.id)}
+                          onClick={() => dismiss(item)}
                         >
                           Dismiss
                         </button>

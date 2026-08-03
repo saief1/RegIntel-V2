@@ -15,6 +15,10 @@ dist-ssr
 # Local QA / tooling artifacts
 ri_screenshot.mjs
 *.playwright/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
 
 # Editor directories and files
 .vscode/*
