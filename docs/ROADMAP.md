@@ -35,7 +35,7 @@ Ships as a production-ready **frontend platform**: shell, design system, routed 
 | Phase | Status | Progress |
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
-| Phase A – Stabilization | ⏳ Planned | 0% |
+| Phase A – Stabilization | ✅ Complete | 100% |
 | Phase B – Backend Platform | ⏳ Planned | 0% |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
@@ -77,9 +77,9 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 
 **Exit criteria:** lint/build/e2e green; Product Board Phase A complete; tagged `v2.0.1`.
 
-### A002 performance notes (fill during Phase A)
+### A002 performance notes
 
-- Document bundle/lazy-route findings and any deferred work here or in a short `docs/PERFORMANCE.md` if needed.
+See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry chunk remains large — deferred provider/shell splits until Phase B.
 
 ## 5. Phase B — Backend Platform (B001–B025)
 
@@ -162,6 +162,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase A | A001–A010 complete; Product Board Phase A ✅; tag v2.0.1 Platform Stabilized |
 | 2026-08-03 | Phase A prep | Expand to Phases A–F + Product Board + ticket IDs (A001–F015); v3.0 launch milestone |
 | 2026-08-03 | Sprint 20 | Frontend Platform GA; replace sprint ladder with Phases A–D |
 | TBD | TBD | Initial placeholder document created |

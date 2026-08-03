@@ -64,6 +64,7 @@ export function Modal({
         ref={dialogRef}
         role="dialog"
         aria-modal="true"
+        tabIndex={-1}
         aria-label={!labelledBy && !title ? ariaLabel : undefined}
         aria-labelledby={labelledBy ?? (title ? titleId : undefined)}
         className={cx(styles.dialog, styles[size], className)}

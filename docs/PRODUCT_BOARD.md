@@ -5,7 +5,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 | Phase | Status | Progress |
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
-| Phase A – Stabilization | ⏳ Planned | 0% |
+| Phase A – Stabilization | ✅ Complete | 100% |
 | Phase B – Backend Platform | ⏳ Planned | 0% |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
@@ -17,7 +17,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 
 ```
 RegIntel v2.x Frontend Platform GA (v2.0.0)
-→ Phase A Platform Stabilization (A001–A010)
+→ Phase A Platform Stabilization (A001–A010) ✅
 → Phase B Backend Platform (B001–B025)
 → Phase C AI Intelligence Layer (C001–C020)
 → Phase D Wealth Management Production (D001–D020)

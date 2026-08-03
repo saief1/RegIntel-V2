@@ -28,9 +28,10 @@ At **v2.0.0**, RegIntel ships as a **Frontend Platform GA**: a complete, product
 | Item | Status |
 |---|---|
 | Frontend Platform GA | ✅ v2.0.0 |
+| Platform Stabilized | ✅ v2.0.1 (Phase A) |
 | Finished SaaS (auth, DB, live integrations, billing) | ❌ Future (Phases B–F → v3.0) |
 | Sprint numbering | **Stopped** after Sprint 20 |
-| Next planning unit | Phases A–F in [`ROADMAP.md`](./ROADMAP.md) (ticket IDs are source of truth) |
+| Next planning unit | Phase B (B001–B025) in [`ROADMAP.md`](./ROADMAP.md) |
 
 **Positioning statement for stakeholders:**  
 *RegIntel v2.0.0 is Frontend Platform GA — not a finished SaaS.*

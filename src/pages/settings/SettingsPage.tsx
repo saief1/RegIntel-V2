@@ -4,6 +4,7 @@ import { Settings } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
 import { Button } from '../../components/ui/Button/Button'
+import { EmptyState } from '../../components/ui/EmptyState/EmptyState'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { Select } from '../../components/ui/Select/Select'
@@ -263,20 +264,39 @@ export function SettingsPage() {
               ))}
             </Select>
           </div>
-          <ul className={g.list}>
-            {filteredAudit.map((event) => (
-              <li key={event.id} className={g.listItem}>
-                <span>
-                  <strong>{event.action}</strong> · {event.objectTitle}
-                  <br />
-                  <span className={g.muted}>
-                    {getUser(event.actorId)?.name} · {event.objectType} · {event.detail}
+          {filteredAudit.length === 0 ? (
+            <EmptyState
+              title="No audit events match"
+              description="Try clearing filters to see the full immutable audit trail."
+              action={
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  onClick={() => {
+                    setActorFilter('')
+                    setActionFilter('all')
+                  }}
+                >
+                  Clear filters
+                </Button>
+              }
+            />
+          ) : (
+            <ul className={g.list}>
+              {filteredAudit.map((event) => (
+                <li key={event.id} className={g.listItem}>
+                  <span>
+                    <strong>{event.action}</strong> · {event.objectTitle}
+                    <br />
+                    <span className={g.muted}>
+                      {getUser(event.actorId)?.name} · {event.objectType} · {event.detail}
+                    </span>
                   </span>
-                </span>
-                <time dateTime={event.createdAt}>{formatRelativeTime(event.createdAt)}</time>
-              </li>
-            ))}
-          </ul>
+                  <time dateTime={event.createdAt}>{formatRelativeTime(event.createdAt)}</time>
+                </li>
+              ))}
+            </ul>
+          )}
         </section>
       )}
 

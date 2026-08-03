@@ -97,28 +97,6 @@
   background: var(--ri-color-accent-subtle);
 }
 
-.modalBackdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 90;
-  background: rgb(15 23 42 / 35%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--ri-space-4);
-}
-
-.modalCard {
-  width: min(520px, 100%);
-  max-height: min(80vh, 640px);
-  overflow: auto;
-  border-radius: var(--ri-radius-xl);
-  border: 1px solid var(--ri-color-border);
-  background: var(--ri-color-surface);
-  padding: var(--ri-space-5);
-  box-shadow: 0 16px 48px rgb(15 23 42 / 16%);
-}
-
 .helpIcon {
   appearance: none;
   border: 0;

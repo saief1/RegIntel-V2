@@ -20,8 +20,8 @@
 .hubLink {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: var(--ri-space-1);
+  padding: var(--ri-space-2) var(--ri-space-3);
   border: 1px solid var(--ri-color-border);
   border-radius: var(--ri-radius-md);
   background: var(--ri-color-surface);
@@ -29,15 +29,16 @@
   text-decoration: none;
   font-size: var(--ri-font-size-body-sm);
   font-weight: var(--ri-font-weight-medium);
+  transition: var(--ri-transition-hover);
 }
 
 .hubLink:hover {
-  border-color: rgb(109 94 246 / 30%);
+  border-color: var(--ri-palette-purple-100);
   background: var(--ri-color-hover);
 }
 
 .hubLink:focus-visible {
-  outline: 2px solid var(--ri-color-accent);
+  outline: 2px solid var(--ri-color-focus-ring);
   outline-offset: 2px;
 }
 
@@ -56,7 +57,7 @@
 }
 
 .syncDotIdle {
-  background: var(--ri-color-success, #16a34a);
+  background: var(--ri-color-success);
 }
 
 @keyframes pulse {

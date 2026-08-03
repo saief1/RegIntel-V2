@@ -26,10 +26,25 @@ interface DropdownProps {
   align?: 'start' | 'end'
   width?: number
   className?: string
+  /**
+   * `menu` for action lists with `role="menuitem"` children.
+   * `dialog` for richer panels (notifications) that contain mixed controls.
+   */
+  panelRole?: 'menu' | 'dialog'
+  /** Accessible name when `panelRole="dialog"`. */
+  ariaLabel?: string
 }
 
 /** Generic floating menu: user profile, notifications, help, organization switcher. */
-export function Dropdown({ trigger, children, align = 'start', width, className }: DropdownProps) {
+export function Dropdown({
+  trigger,
+  children,
+  align = 'start',
+  width,
+  className,
+  panelRole = 'menu',
+  ariaLabel,
+}: DropdownProps) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -53,11 +68,15 @@ export function Dropdown({ trigger, children, align = 'start', width, className 
 
   useEffect(() => {
     if (!open || !menuRef.current) return
-    const firstItem = menuRef.current.querySelector<HTMLElement>('[role="menuitem"]')
-    firstItem?.focus()
+    const menuItem = menuRef.current.querySelector<HTMLElement>('[role="menuitem"]')
+    const fallback = menuRef.current.querySelector<HTMLElement>(
+      'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+    )
+    ;(menuItem ?? fallback)?.focus()
   }, [open])
 
   function onMenuKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (panelRole !== 'menu') return
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return
     event.preventDefault()
     const items = Array.from(menuRef.current?.querySelectorAll<HTMLElement>('[role="menuitem"]') ?? [])
@@ -76,7 +95,7 @@ export function Dropdown({ trigger, children, align = 'start', width, className 
           trigger.props.onClick?.(event)
           setOpen((value) => !value)
         },
-        'aria-haspopup': 'menu',
+        'aria-haspopup': panelRole === 'dialog' ? 'dialog' : 'menu',
         'aria-expanded': open,
       })
     : trigger
@@ -87,7 +106,8 @@ export function Dropdown({ trigger, children, align = 'start', width, className 
       {open && (
         <div
           ref={menuRef}
-          role="menu"
+          role={panelRole}
+          aria-label={panelRole === 'dialog' ? ariaLabel : undefined}
           className={cx(styles.menu, styles[align])}
           style={width ? { width } : undefined}
           onKeyDown={onMenuKeyDown}

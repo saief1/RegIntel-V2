@@ -7,6 +7,7 @@ import { useWork } from '../../../hooks/useWork'
 import { formatRelativeTime } from '../../../utils/date'
 import { Button } from '../../ui/Button/Button'
 import { Dropdown } from '../../ui/Dropdown/Dropdown'
+import { EmptyState } from '../../ui/EmptyState/EmptyState'
 import { IconButton } from '../../ui/IconButton/IconButton'
 import styles from './NotificationsMenu.module.css'
 
@@ -139,9 +140,11 @@ export function NotificationsMenu() {
     <Dropdown
       align="end"
       width={360}
+      panelRole="dialog"
+      ariaLabel="Notifications"
       trigger={
         <span className={styles.triggerWrap}>
-          <IconButton label="Notifications" aria-haspopup="menu">
+          <IconButton label="Notifications">
             <Bell size={18} />
           </IconButton>
           {unreadNotificationCount > 0 && (
@@ -167,22 +170,17 @@ export function NotificationsMenu() {
           </header>
 
           {connected.announcements[0] && (
-            <div className={styles.group} style={{ padding: '0 12px 8px' }}>
+            <div className={styles.announcement}>
               <p className={styles.itemTitle}>{connected.announcements[0].title}</p>
               <p className={styles.itemBody}>{connected.announcements[0].body}</p>
-              <Link
-                to="/settings/collaboration"
-                className={styles.itemBody}
-                onClick={close}
-                style={{ display: 'inline-block', marginTop: 4, color: 'var(--ri-color-accent)' }}
-              >
+              <Link to="/settings/collaboration" className={styles.announcementLink} onClick={close}>
                 Collaboration center
               </Link>
             </div>
           )}
 
           {notifications.length === 0 ? (
-            <p className={styles.empty}>You're all caught up. No notifications.</p>
+            <EmptyState title="You're all caught up" description="No notifications right now." />
           ) : (
             <div className={styles.groups}>
               {groups.map((group) => (

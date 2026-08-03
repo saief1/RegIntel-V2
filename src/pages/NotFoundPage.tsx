@@ -12,7 +12,7 @@ export function NotFoundPage() {
     <div className={styles.wrapper}>
       <PageContainer>
         <EmptyState
-          icon={<Compass size={22} />}
+          icon={<Compass size={22} aria-hidden="true" />}
           title="Page not found"
           description="The page you're looking for doesn't exist or has moved."
           action={

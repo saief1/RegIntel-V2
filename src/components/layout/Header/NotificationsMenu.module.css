@@ -5,17 +5,17 @@
 
 .badge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  min-width: 16px;
-  height: 16px;
-  padding: 0 4px;
+  top: var(--ri-space-1);
+  right: var(--ri-space-1);
+  min-width: var(--ri-space-4);
+  height: var(--ri-space-4);
+  padding: 0 var(--ri-space-1);
   border-radius: var(--ri-radius-pill);
   background-color: var(--ri-color-accent);
   color: var(--ri-color-text-on-accent);
-  font-size: 10px;
+  font-size: var(--ri-font-size-caption);
   font-weight: var(--ri-font-weight-semibold);
-  line-height: 16px;
+  line-height: var(--ri-space-4);
   text-align: center;
   pointer-events: none;
 }
@@ -23,7 +23,7 @@
 .panel {
   display: flex;
   flex-direction: column;
-  max-height: 420px;
+  max-height: min(70vh, 26rem);
 }
 
 .header {
@@ -49,12 +49,26 @@
   gap: var(--ri-space-1);
 }
 
-.empty {
-  margin: 0;
-  padding: var(--ri-space-6) var(--ri-space-3);
-  text-align: center;
-  font-size: var(--ri-font-size-body-sm);
-  color: var(--ri-color-text-muted);
+.announcement {
+  padding: 0 var(--ri-space-3) var(--ri-space-2);
+}
+
+.announcementLink {
+  display: inline-block;
+  margin-top: var(--ri-space-1);
+  color: var(--ri-color-accent);
+  font-size: var(--ri-font-size-caption);
+  text-decoration: none;
+}
+
+.announcementLink:hover {
+  text-decoration: underline;
+}
+
+.announcementLink:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ri-radius-sm);
 }
 
 .groups {
@@ -100,7 +114,7 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 2px;
+  gap: var(--ri-space-1);
   width: 100%;
   padding: var(--ri-space-2) var(--ri-space-3);
   border: none;
@@ -140,7 +154,7 @@
   align-self: start;
   margin-top: var(--ri-space-2);
   margin-right: var(--ri-space-2);
-  padding: 2px var(--ri-space-2);
+  padding: var(--ri-space-1) var(--ri-space-2);
   border: none;
   border-radius: var(--ri-radius-sm);
   background: none;
@@ -153,4 +167,9 @@
 .dismiss:hover {
   color: var(--ri-color-error);
   background-color: var(--ri-color-hover);
+}
+
+.dismiss:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
 }

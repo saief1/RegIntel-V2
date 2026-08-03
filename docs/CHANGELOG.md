@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.0.1 | 2026-08-03 | Platform Stabilized — Phase A polish (design, a11y, loading/error, docs) |
 | 2.0.0 | 2026-08-03 | Frontend Platform GA — hardening, error boundary, docs, no new modules |
 | 1.9.0-beta | 2026-08-03 | Commercial Platform — billing, customer portal, partners, usage, licensing |
 | 1.8.0-beta | 2026-08-03 | Customer Experience — onboarding, help, success, tours, community |
@@ -46,13 +47,43 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
+### v2.0.1 — Platform Stabilized
+
+**Status:** Patch (Phase A complete)  
+**Tags:** `v2.0.1`, `PHASE_A_COMPLETE`  
+**Date:** 2026-08-03
+
+Phase A (A001–A010) refinement only — no new business modules. Enterprise polish across design tokens, accessibility, empty/error patterns, responsive/e2e coverage, and documentation. Product Board: Phase A ✅ 100%. Next: Phase B Backend Platform.
+
+#### Added
+
+- `docs/PERFORMANCE.md` (A002 findings)
+- `docs/PRODUCT_BOARD.md` mirror of roadmap board
+- Playwright coverage for notifications dialog + cases `aria-sort`
+
+#### Changed
+
+- WhatsNew uses canonical `Modal` (removed one-off dialog chrome)
+- Notifications panel uses `Dropdown` `panelRole="dialog"` + `EmptyState`
+- Tokenized spacing/focus on Work, Cases, AI, governance, connected hub surfaces
+- Lazy `NotFoundPage` / `ComingSoonPage`
+- `EmptyState` supports configurable `role`; `NetworkErrorState` uses `alert`
+- Roadmap / Product Board → Phases A–F; Phase A marked complete
+- `package.json` version → `2.0.1`
+
+#### Fixed
+
+- Focus trap fallback when dialogs have no focusable children
+- Cases table sort announcements (`aria-sort` + button labels)
+- Settings audit trail empty state when filters match nothing
+
 ### v2.0.0 — Frontend Platform GA
 
 **Status:** GA (Frontend Platform)  
 **Sprint:** 20 (`SPRINT20_COMPLETE`, `v2.0.0`)  
 **Date:** 2026-08-03
 
-Release Candidate / GA hardening sprint. **No new business modules.** v2.0.0 is the Frontend Platform GA — **not** a finished SaaS (real auth, persistence, live integrations, AI orchestration, and billing remain Phases B–D). Sprint numbering stops here; next work is Phases A–D.
+Release Candidate / GA hardening sprint. **No new business modules.** v2.0.0 is the Frontend Platform GA — **not** a finished SaaS (real auth, persistence, live integrations, AI orchestration, and billing remain Phases B–F / v3.0). Sprint numbering stops here; next work is Phases A–F.
 
 #### Added
 

@@ -60,19 +60,25 @@
   appearance: none;
   border: 0;
   border-radius: var(--ri-radius-md);
-  padding: 8px 12px;
+  padding: var(--ri-space-2) var(--ri-space-3);
   font: inherit;
   font-size: var(--ri-font-size-body-sm);
   font-weight: var(--ri-font-weight-medium);
   cursor: pointer;
   color: var(--ri-color-text-secondary);
   background: transparent;
-  transition: background-color 120ms ease, color 120ms ease;
+  transition: var(--ri-transition-hover);
 }
 
 .modeTab:hover {
   background-color: var(--ri-color-hover);
   color: var(--ri-color-text-primary);
+}
+
+.modeTab:focus-visible,
+.modeTabActive:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
 }
 
 .modeTabActive {

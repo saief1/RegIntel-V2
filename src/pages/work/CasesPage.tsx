@@ -225,39 +225,74 @@ export function CasesPage() {
                     aria-label="Select all cases on this page"
                   />
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('caseNumber')}>
+                <TableHeaderCell aria-sort={sortKey === 'caseNumber' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('caseNumber')}
+                    aria-label={`Sort by ID${sortKey === 'caseNumber' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     ID
                   </button>
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('title')}>
+                <TableHeaderCell aria-sort={sortKey === 'title' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('title')}
+                    aria-label={`Sort by title${sortKey === 'title' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Title
                   </button>
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('status')}>
+                <TableHeaderCell aria-sort={sortKey === 'status' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('status')}
+                    aria-label={`Sort by status${sortKey === 'status' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Status
                   </button>
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('risk')}>
+                <TableHeaderCell aria-sort={sortKey === 'risk' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('risk')}
+                    aria-label={`Sort by risk${sortKey === 'risk' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Risk
                   </button>
                 </TableHeaderCell>
                 <TableHeaderCell>Owner</TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('dueDate')}>
+                <TableHeaderCell aria-sort={sortKey === 'dueDate' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('dueDate')}
+                    aria-label={`Sort by due date${sortKey === 'dueDate' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Due date
                   </button>
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('createdAt')}>
+                <TableHeaderCell aria-sort={sortKey === 'createdAt' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('createdAt')}
+                    aria-label={`Sort by created date${sortKey === 'createdAt' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Created
                   </button>
                 </TableHeaderCell>
-                <TableHeaderCell>
-                  <button type="button" className={styles.sortButton} onClick={() => toggleSort('updatedAt')}>
+                <TableHeaderCell aria-sort={sortKey === 'updatedAt' ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none'}>
+                  <button
+                    type="button"
+                    className={styles.sortButton}
+                    onClick={() => toggleSort('updatedAt')}
+                    aria-label={`Sort by last updated${sortKey === 'updatedAt' ? `, currently ${sortDir === 'asc' ? 'ascending' : 'descending'}` : ''}`}
+                  >
                     Last updated
                   </button>
                 </TableHeaderCell>

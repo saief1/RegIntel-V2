@@ -123,6 +123,7 @@ test.describe('RegIntel smoke suite', () => {
         '/knowledge',
         '/knowledge/policies',
         '/work',
+        '/work/cases',
         '/reports',
         '/reports/analytics',
         '/reports/board',
@@ -188,5 +189,25 @@ test.describe('RegIntel smoke suite', () => {
     await expect(page.getByRole('main', { name: 'Workspace' })).toContainText(/Page not found/i)
     await expect(page.getByRole('button', { name: 'Go to Home' })).toBeVisible()
     await assertNoHorizontalOverflow(page)
+  })
+
+  test('notifications panel opens as dialog and closes with Escape', async ({ page }) => {
+    await page.goto('/work')
+    await waitForShell(page)
+    await page.getByRole('button', { name: 'Notifications' }).click()
+    await expect(page.getByRole('dialog', { name: 'Notifications' })).toBeVisible()
+    await page.keyboard.press('Escape')
+    await expect(page.getByRole('dialog', { name: 'Notifications' })).toHaveCount(0)
+  })
+
+  test('cases table exposes aria-sort on active column', async ({ page }) => {
+    await page.goto('/work/cases')
+    await waitForShell(page)
+    await expect(page.getByRole('columnheader', { name: /Last updated/i })).toHaveAttribute(
+      'aria-sort',
+      'descending',
+    )
+    await page.getByRole('button', { name: /Sort by title/i }).click()
+    await expect(page.getByRole('columnheader', { name: /Title/i })).toHaveAttribute('aria-sort', 'ascending')
   })
 })

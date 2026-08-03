@@ -17,6 +17,7 @@ import { TaskFormModal } from '../../components/work/TaskFormModal/TaskFormModal
 import { WorkCalendarView } from '../../components/work/WorkCalendarView/WorkCalendarView'
 import { WorkTimelineView } from '../../components/work/WorkTimelineView/WorkTimelineView'
 import { Button } from '../../components/ui/Button/Button'
+import { EmptyState } from '../../components/ui/EmptyState/EmptyState'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { useWork } from '../../hooks/useWork'
@@ -238,7 +239,10 @@ export function WorkDashboardPage() {
                 />
               ))}
               {sectionTasks[activeSection].length === 0 && (
-                <p className={styles.empty}>No items in this section.</p>
+                <EmptyState
+                  title="No items in this section"
+                  description="Tasks that match this filter will appear here."
+                />
               )}
             </div>
           </div>

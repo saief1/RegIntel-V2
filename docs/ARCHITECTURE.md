@@ -23,7 +23,7 @@ Describes RegIntel's architecture at **v2.0.0 Frontend Platform GA**, and how it
 | Capability | v2.0.0 GA | Future |
 |---|---|---|
 | App shell, nav (≤6), workspace | ✅ | Evolve |
-| Design system + tokens | ✅ | Phase A harden |
+| Design system + tokens | ✅ | Phase A ✅ (v2.0.1); continue opportunistic cleanup |
 | Module UIs (Work, Knowledge, AI, Reports, Settings, …) | ✅ mock-backed | Phase B wire APIs |
 | Real auth / SSO | ❌ | Phase B |
 | Persistence / multi-tenant DB | ❌ | Phase B |

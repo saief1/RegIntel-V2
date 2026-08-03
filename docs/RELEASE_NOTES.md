@@ -1,5 +1,37 @@
 # Release Notes
 
+## RegIntel v2.0.1 — Platform Stabilized
+
+**Date:** 2026-08-03  
+**Tags:** `v2.0.1`, `PHASE_A_COMPLETE`  
+**Phase:** A (A001–A010)
+
+### Headline
+
+Phase A **Platform Stabilization** ships as **v2.0.1**. The frontend platform feels more consistently enterprise-grade: design-token alignment on key surfaces, accessibility and focus polish, standardized empty/error/loading patterns, and certified lint/build/e2e.
+
+> Still **not** a finished SaaS. Auth, Postgres, live APIs, AI orchestration, and billing remain Phases B–F.
+
+### Highlights
+
+- Canonical Modal for What's New; notifications as accessible dialog panel
+- Empty/error consistency (`EmptyState`, `NetworkErrorState`, ErrorBoundary retry)
+- Work / Cases / Settings / AI / hub token + focus-visible polish
+- Performance notes documented (`docs/PERFORMANCE.md`); large shell chunk deferred to Phase B
+- Product Board: Phase A ✅ Complete 100%
+
+### Upgrade notes
+
+- `package.json` version is `2.0.1`
+- No new npm dependencies
+- See [`ROADMAP.md`](./ROADMAP.md) for Phase B (B001–B025)
+
+### Next
+
+**Phase B — Backend Platform** (auth → orgs → RBAC → Postgres → API → storage → jobs → notifications → audit → multi-tenancy).
+
+---
+
 ## RegIntel v2.0.0 — Frontend Platform GA
 
 **Date:** 2026-08-03  

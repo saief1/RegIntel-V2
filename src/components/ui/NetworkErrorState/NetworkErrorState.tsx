@@ -26,6 +26,7 @@ export function NetworkErrorState({
 }: NetworkErrorStateProps) {
   return (
     <EmptyState
+      role="alert"
       icon={<WifiOff size={22} aria-hidden="true" />}
       title={title}
       description={description}

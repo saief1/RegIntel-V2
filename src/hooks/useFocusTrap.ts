@@ -15,12 +15,23 @@ export function useFocusTrap(containerRef: RefObject<HTMLElement | null>, active
     const container = containerRef.current
     const previouslyFocused = document.activeElement as HTMLElement | null
     const focusable = container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR)
-    focusable[0]?.focus()
+    if (focusable[0]) {
+      focusable[0].focus()
+    } else if (!container.hasAttribute('tabindex')) {
+      container.setAttribute('tabindex', '-1')
+      container.focus()
+    } else {
+      container.focus()
+    }
 
     function onKeyDown(event: KeyboardEvent) {
       if (event.key !== 'Tab') return
       const elements = Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTOR))
-      if (elements.length === 0) return
+      if (elements.length === 0) {
+        event.preventDefault()
+        container.focus()
+        return
+      }
 
       const first = elements[0]
       const last = elements[elements.length - 1]

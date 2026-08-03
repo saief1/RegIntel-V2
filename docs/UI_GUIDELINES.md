@@ -33,6 +33,25 @@ Full mechanical unification of every historical page-level style is **Phase A** 
 
 **Going forward:** single path for Button, Badge, Card, Modal, Table, typography tokens (`--ri-font-*`), and spacing tokens (`--ri-space-*`).
 
+## Canonical component system (Phase A — A007)
+
+**One system only.** All new and touched UI must use these paths under `src/components/ui/`:
+
+| Concern | Canonical | Do not |
+|---|---|---|
+| Actions | `Button`, `IconButton` | Ad-hoc `<button>` chrome that reimplements variants |
+| Status | `Badge` | Parallel pill/chip components for status |
+| Surfaces | `Card`, `Panel` | Page-local card shells for generic content |
+| Dialogs | `Modal`, `ConfirmDialog` | Custom backdrop/dialog markup (e.g. retired WhatsNew one-off) |
+| Data | `Table` (+ header/body/cell) | Unstyled tables with inline styles for product grids |
+| Forms | `Input`, `Select`, `Textarea`, `SearchField` | Parallel field wrappers |
+| Empty / offline | `EmptyState`, `NetworkErrorState` | Plain `<p>` empty copy on product surfaces |
+| Loading | `Skeleton`, `RouteFallback` | Spinner one-offs for route loads |
+
+Domain-specific visuals (e.g. `RiskBadge`, `ActionTaskCard`) are allowed when they compose the primitives above — they are not a second design system.
+
+Floating panels: use `Dropdown` with `panelRole="menu"` for action lists, or `panelRole="dialog"` for mixed-content panels (notifications).
+
 ## Table of Contents
 
 - [1. Design Principles](#1-design-principles)
@@ -118,11 +137,12 @@ See [`ARCHITECTURE.md`](./ARCHITECTURE.md) § Design System Paths.
 
 - Prefer `--ri-transition-hover` and motion tokens
 - Motion for hierarchy/presence, not noise
-- Respect reduced-motion in future Phase A polish if not already covered
+- Prefer `prefers-reduced-motion` for non-essential animation when adding new motion (shell pulse/skeleton already keep motion light)
 
 ## 10. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase A | Canonical component table (A007); Modal/Dropdown dialog guidance |
 | 2026-08-03 | Sprint 20 | Frontend Platform GA notes, audit table, canonical component paths |
 | TBD | TBD | Initial placeholder document created |

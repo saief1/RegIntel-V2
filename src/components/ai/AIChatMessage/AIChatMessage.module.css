@@ -87,20 +87,27 @@
   appearance: none;
   border: 1px solid var(--ri-color-border);
   border-radius: var(--ri-radius-md);
-  padding: 6px 10px;
+  padding: var(--ri-space-1) var(--ri-space-2);
   background-color: var(--ri-color-surface);
   color: var(--ri-color-text-secondary);
   font: inherit;
   font-size: var(--ri-font-size-caption);
   font-weight: var(--ri-font-weight-medium);
   cursor: pointer;
+  transition: var(--ri-transition-hover);
 }
 
 .workAction:hover,
 .followChip:hover {
-  border-color: rgb(109 94 246 / 30%);
+  border-color: var(--ri-palette-purple-100);
   color: var(--ri-color-accent);
   background-color: var(--ri-color-accent-subtle);
+}
+
+.workAction:focus-visible,
+.followChip:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
 }
 
 .followUps {
@@ -146,7 +153,7 @@
 .recoCard dl {
   margin: 0;
   display: grid;
-  gap: 6px;
+  gap: var(--ri-space-1);
 }
 
 .recoCard div {

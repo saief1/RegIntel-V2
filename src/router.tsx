@@ -4,9 +4,14 @@ import { Plug } from 'lucide-react'
 import { AppShell } from './components/layout/AppShell/AppShell'
 import { RouteFallback } from './components/layout/RouteFallback/RouteFallback'
 import { NAV_ITEMS, SECONDARY_DESTINATIONS } from './config/navigation'
-import { ComingSoonPage } from './pages/ComingSoonPage'
 import { HomePage } from './pages/HomePage'
-import { NotFoundPage } from './pages/NotFoundPage'
+
+const ComingSoonPage = lazy(() =>
+  import('./pages/ComingSoonPage').then((module) => ({ default: module.ComingSoonPage })),
+)
+const NotFoundPage = lazy(() =>
+  import('./pages/NotFoundPage').then((module) => ({ default: module.NotFoundPage })),
+)
 
 const KnowledgeHomePage = lazy(() =>
   import('./pages/knowledge/KnowledgeHomePage').then((module) => ({ default: module.KnowledgeHomePage })),
