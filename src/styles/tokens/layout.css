@@ -9,14 +9,14 @@
  */
 
 :root {
-  --ri-header-height: 64px;
-  --ri-sidebar-width: 260px;
+  --ri-header-height: 56px;
+  --ri-sidebar-width: 240px;
   --ri-sidebar-width-collapsed: 72px;
   --ri-ai-panel-width: 380px;
   --ri-ai-panel-width-min: 320px;
-  --ri-ai-panel-width-max: 560px;
+  --ri-ai-panel-width-max: 400px;
 
-  --ri-content-max-width: 1120px;
+  --ri-content-max-width: 1280px;
   --ri-content-padding: var(--ri-space-8);
   --ri-content-padding-compact: var(--ri-space-5);
   --ri-panel-padding: var(--ri-space-6);

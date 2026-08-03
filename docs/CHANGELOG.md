@@ -18,20 +18,58 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 ### Added
 
-- Project documentation scaffold (`docs/`, `prompts/`, `tasks/`, `assets/`, `CLAUDE.md`).
+- None yet.
 
 ### Changed
 
-- Placeholder
+- None yet.
 
 ### Fixed
 
-- Placeholder
+- None yet.
 
 ## 3. Released Versions
 
-> No versions released yet.
-
 | Version | Date | Summary |
 |---|---|---|
-| Placeholder | TBD | TBD |
+| 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v0.7.0 — Execution Platform
+
+**Status:** Stable  
+**Sprint:** 7 (`SPRINT7_COMPLETE`)  
+**Date:** 2026-08-02
+
+RegIntel moves from AI compliance assistant to AI-powered compliance execution platform.
+
+#### Highlights
+
+- Complete AI Workspace redesign
+- Premium Apple / Harvey UI
+- Action Center
+- Kanban Work Management
+- AI Task Generator
+- AI Recommendation Cards
+- Task Detail Pages
+- Notifications
+- Smart Due Dates
+- Home Dashboard overhaul
+
+#### Added
+
+- Action Center with My Tasks, Assigned, Due Today, Overdue, Awaiting Approval, and Completed sections
+- Work views: Board (drag-and-drop), List, Calendar, and Timeline
+- Task detail pages with ownership, checklist progress, evidence, comments, subtasks, and activity
+- One-click AI actions (task, project, policy update, checklist, control, owner, review, board item)
+- AI implementation task generator with select/deselect and bulk create
+- AI recommendation cards with impact, owner, priority, and estimated effort
+- Smart due-date estimates (recommended days, effort hours, business impact)
+- Global Work widget and grouped Notification Center (Tasks, Approvals, AI, Deadlines, Regulations)
+- AI Workspace modes: Chat, Research, Document Analysis, Compare, Drafting
+
+#### Changed
+
+- Design system: purple accent (`#6D5EF6`), `#FAFAFA` background, Inter typography
+- Primary navigation limited to Home, AI Workspace, Library, Work, Reports, Settings
+- Home dashboard surfaces actionable compliance work instead of static metrics
+- Work task statuses expanded for board workflow (Backlog → Completed)

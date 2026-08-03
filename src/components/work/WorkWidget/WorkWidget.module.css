@@ -1,0 +1,73 @@
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  padding: var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-xl);
+  background-color: var(--ri-color-surface);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ri-space-2);
+}
+
+.header h3 {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.header button {
+  border: 0;
+  background: none;
+  color: var(--ri-color-accent);
+  font: inherit;
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  cursor: pointer;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-1);
+}
+
+.list button {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--ri-space-2);
+  width: 100%;
+  padding: var(--ri-space-2);
+  border: 0;
+  border-radius: var(--ri-radius-md);
+  background: transparent;
+  color: var(--ri-color-text-secondary);
+  font: inherit;
+  font-size: var(--ri-font-size-body-sm);
+  text-align: left;
+  cursor: pointer;
+}
+
+.list button:hover {
+  background-color: var(--ri-color-hover);
+  color: var(--ri-color-text-primary);
+}
+
+.icon {
+  display: inline-flex;
+  color: var(--ri-color-accent);
+}
+
+.list strong {
+  font-variant-numeric: tabular-nums;
+  color: var(--ri-color-text-primary);
+}

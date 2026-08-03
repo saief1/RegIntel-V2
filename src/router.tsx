@@ -1,8 +1,9 @@
 import { Suspense, lazy, type ReactNode } from 'react'
 import { Route, Routes } from 'react-router-dom'
+import { Plug } from 'lucide-react'
 import { AppShell } from './components/layout/AppShell/AppShell'
 import { RouteFallback } from './components/layout/RouteFallback/RouteFallback'
-import { NAV_ITEMS } from './config/navigation'
+import { NAV_ITEMS, SECONDARY_DESTINATIONS } from './config/navigation'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -18,6 +19,9 @@ const WorkDashboardPage = lazy(() =>
 const CasesPage = lazy(() => import('./pages/work/CasesPage').then((module) => ({ default: module.CasesPage })))
 const CaseDetailPage = lazy(() =>
   import('./pages/work/CaseDetailPage').then((module) => ({ default: module.CaseDetailPage })),
+)
+const TaskDetailPage = lazy(() =>
+  import('./pages/work/TaskDetailPage').then((module) => ({ default: module.TaskDetailPage })),
 )
 const AIWorkspacePage = lazy(() =>
   import('./pages/ai/AIWorkspacePage').then((module) => ({ default: module.AIWorkspacePage })),
@@ -85,6 +89,14 @@ export function AppRoutes() {
             element={
               <LazyPage>
                 <CaseDetailPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="tasks/:taskId"
+            element={
+              <LazyPage>
+                <TaskDetailPage />
               </LazyPage>
             }
           />
@@ -160,6 +172,15 @@ export function AppRoutes() {
             key={item.id}
             path={item.path.slice(1)}
             element={<ComingSoonPage title={item.label} description={item.description} icon={item.icon} />}
+          />
+        ))}
+        {SECONDARY_DESTINATIONS.filter(
+          (item) => !['investigations', 'regulatory-changes'].includes(item.id),
+        ).map((item) => (
+          <Route
+            key={item.id}
+            path={item.path.slice(1)}
+            element={<ComingSoonPage title={item.label} description={item.description} icon={Plug} />}
           />
         ))}
         <Route path="*" element={<NotFoundPage />} />

@@ -124,8 +124,8 @@ export function KnowledgeHomePage() {
   return (
     <PageContainer>
       <PageHeader
-        title="Knowledge"
-        description="Your regulatory knowledge base — pinned regulations, collections, and AI-assisted research in one place."
+        title="Library"
+        description="Your centralized compliance knowledge and governance hub."
         icon={<BookOpen size={20} />}
         actions={
           <>

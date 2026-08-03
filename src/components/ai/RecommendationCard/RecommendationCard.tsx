@@ -1,5 +1,7 @@
 import { X } from 'lucide-react'
 import type { AiRecommendation } from '../../../types/ai'
+import { estimateSmartDue } from '../../../utils/smartDueDates'
+import { useWork } from '../../../hooks/useWork'
 import { Badge } from '../../ui/Badge/Badge'
 import { Button } from '../../ui/Button/Button'
 import { IconButton } from '../../ui/IconButton/IconButton'
@@ -20,6 +22,12 @@ interface RecommendationCardProps {
 }
 
 export function RecommendationCard({ recommendation, onAction, onDismiss }: RecommendationCardProps) {
+  const { createFromAiAction } = useWork()
+  const estimate = estimateSmartDue(
+    recommendation.priority === 'urgent' ? 'urgent' : recommendation.priority === 'high' ? 'high' : 'medium',
+    'task',
+  )
+
   return (
     <article className={styles.card}>
       <header className={styles.header}>
@@ -33,9 +41,38 @@ export function RecommendationCard({ recommendation, onAction, onDismiss }: Reco
       </header>
       <h3 className={styles.title}>{recommendation.title}</h3>
       <p className={styles.reason}>{recommendation.reason}</p>
-      <Button size="sm" onClick={onAction}>
-        {recommendation.actionLabel}
-      </Button>
+      <dl className={styles.meta}>
+        <div>
+          <dt>Impact</dt>
+          <dd>{estimate.businessImpact}</dd>
+        </div>
+        <div>
+          <dt>Owner</dt>
+          <dd>Compliance</dd>
+        </div>
+        <div>
+          <dt>Estimated</dt>
+          <dd>{estimate.estimatedHours}h</dd>
+        </div>
+      </dl>
+      <div className={styles.actions}>
+        <Button
+          size="sm"
+          onClick={() => {
+            createFromAiAction({
+              action: 'create_task',
+              title: recommendation.title,
+              description: recommendation.reason,
+              priority: recommendation.priority,
+            })
+          }}
+        >
+          Create Task
+        </Button>
+        <Button size="sm" variant="secondary" onClick={onAction}>
+          {recommendation.actionLabel}
+        </Button>
+      </div>
     </article>
   )
 }

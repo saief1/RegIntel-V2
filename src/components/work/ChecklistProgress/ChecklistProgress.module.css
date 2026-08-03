@@ -1,0 +1,35 @@
+.wrap,
+.compact {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+}
+
+.track {
+  flex: 1;
+  min-width: 64px;
+  height: 6px;
+  border-radius: var(--ri-radius-pill);
+  background-color: var(--ri-color-hover);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: inherit;
+  background-color: var(--ri-color-accent);
+  transition: width 160ms ease;
+}
+
+.label {
+  flex: none;
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.compact .track {
+  min-width: 48px;
+  height: 4px;
+}

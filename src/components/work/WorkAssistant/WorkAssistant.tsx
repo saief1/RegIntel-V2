@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { AlertTriangle, ArrowRight, BookOpen, FileWarning, ListChecks, Sparkles } from 'lucide-react'
 import { useWork } from '../../../hooks/useWork'
 import { EmptyKnowledgeState } from '../../knowledge/EmptyKnowledgeState/EmptyKnowledgeState'
+import { WorkWidget } from '../WorkWidget/WorkWidget'
 import styles from './WorkAssistant.module.css'
 
 const ICONS = {
@@ -33,6 +34,7 @@ export function WorkAssistant() {
   if (!workCase) {
     return (
       <div className={styles.root}>
+        <WorkWidget />
         <EmptyKnowledgeState
           icon={<Sparkles size={20} />}
           title="Compliance assistant"
@@ -44,6 +46,7 @@ export function WorkAssistant() {
 
   return (
     <div className={styles.root}>
+      <WorkWidget />
       <header className={styles.header}>
         <p className={styles.kicker}>Active case</p>
         <h3 className={styles.title}>{workCase.caseNumber}</h3>

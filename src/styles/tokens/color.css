@@ -1,68 +1,69 @@
 /**
- * Color tokens.
- *
- * Two layers:
- * 1. Primitives (--ri-palette-*) — raw values, never used directly in components.
- * 2. Semantic tokens (--ri-color-*) — meaning-based aliases that components consume.
- *
- * This indirection lets the palette evolve (e.g. dark mode) without touching
- * component styles, which should only ever reference semantic tokens.
+ * Color tokens — RegIntel V2 Design System
+ * 95% monochrome + purple accent (#6D5EF6). Color only for meaning.
  */
 
 :root {
   /* --- Primitives: neutrals --- */
   --ri-palette-white: #ffffff;
-  --ri-palette-gray-25: #fbfbfc;
-  --ri-palette-gray-50: #f7f8fa;
-  --ri-palette-gray-100: #eef0f3;
-  --ri-palette-gray-150: #e7e9ed;
-  --ri-palette-gray-200: #dde1e6;
-  --ri-palette-gray-300: #c3c9d1;
-  --ri-palette-gray-400: #9aa1ac;
-  --ri-palette-gray-500: #6b7280;
-  --ri-palette-gray-600: #565c68;
-  --ri-palette-gray-700: #3d424c;
-  --ri-palette-gray-800: #24272e;
-  --ri-palette-gray-900: #14161a;
+  --ri-palette-gray-25: #fafafa;
+  --ri-palette-gray-50: #fafafa;
+  --ri-palette-gray-100: #f4f4f5;
+  --ri-palette-gray-150: #ececef;
+  --ri-palette-gray-200: #e4e4e7;
+  --ri-palette-gray-300: #d4d4d8;
+  --ri-palette-gray-400: #a1a1aa;
+  --ri-palette-gray-500: #71717a;
+  --ri-palette-gray-600: #52525b;
+  --ri-palette-gray-700: #3f3f46;
+  --ri-palette-gray-800: #27272a;
+  --ri-palette-gray-900: #18181b;
 
-  /* --- Primitives: accent blue --- */
-  --ri-palette-blue-50: #eef2fe;
-  --ri-palette-blue-100: #dbe4fd;
-  --ri-palette-blue-500: #2f5fed;
-  --ri-palette-blue-600: #2850c9;
-  --ri-palette-blue-700: #1f3fa0;
+  /* --- Primitives: accent purple --- */
+  --ri-palette-purple-50: #f3f1fe;
+  --ri-palette-purple-100: #e8e4fd;
+  --ri-palette-purple-500: #6d5ef6;
+  --ri-palette-purple-600: #5b4ce0;
+  --ri-palette-purple-700: #4a3bc4;
+
+  /* Legacy blue aliases map to purple so older references stay coherent */
+  --ri-palette-blue-50: var(--ri-palette-purple-50);
+  --ri-palette-blue-100: var(--ri-palette-purple-100);
+  --ri-palette-blue-500: var(--ri-palette-purple-500);
+  --ri-palette-blue-600: var(--ri-palette-purple-600);
+  --ri-palette-blue-700: var(--ri-palette-purple-700);
 
   /* --- Primitives: feedback --- */
-  --ri-palette-green-50: #dafbe1;
-  --ri-palette-green-600: #1a7f37;
-  --ri-palette-amber-50: #fff8c5;
-  --ri-palette-amber-600: #9a6700;
-  --ri-palette-red-50: #ffebe9;
-  --ri-palette-red-600: #cf222e;
+  --ri-palette-green-50: #ecfdf3;
+  --ri-palette-green-600: #16a34a;
+  --ri-palette-amber-50: #fffbeb;
+  --ri-palette-amber-600: #d97706;
+  --ri-palette-red-50: #fef2f2;
+  --ri-palette-red-600: #dc2626;
+  --ri-palette-info-50: #eff6ff;
+  --ri-palette-info-600: #2563eb;
 
   /* --- Semantic: surfaces --- */
-  --ri-color-background: var(--ri-palette-gray-50);
+  --ri-color-background: #fafafa;
   --ri-color-surface: var(--ri-palette-white);
   --ri-color-surface-elevated: var(--ri-palette-white);
-  --ri-color-surface-sunken: var(--ri-palette-gray-50);
+  --ri-color-surface-sunken: var(--ri-palette-gray-25);
 
   /* --- Semantic: borders --- */
-  --ri-color-border: var(--ri-palette-gray-200);
-  --ri-color-divider: var(--ri-palette-gray-150);
+  --ri-color-border: rgb(0 0 0 / 6%);
+  --ri-color-divider: rgb(0 0 0 / 6%);
 
   /* --- Semantic: text --- */
   --ri-color-text-primary: var(--ri-palette-gray-900);
   --ri-color-text-secondary: var(--ri-palette-gray-600);
-  /* gray-500, not gray-400 — gray-400 falls below the 4.5:1 AA contrast ratio
-     required for real text content (e.g. EmptyState descriptions). */
   --ri-color-text-muted: var(--ri-palette-gray-500);
   --ri-color-text-on-accent: var(--ri-palette-white);
 
   /* --- Semantic: accent --- */
-  --ri-color-accent: var(--ri-palette-blue-500);
-  --ri-color-accent-hover: var(--ri-palette-blue-600);
-  --ri-color-accent-active: var(--ri-palette-blue-700);
-  --ri-color-accent-subtle: var(--ri-palette-blue-50);
+  --ri-color-accent: var(--ri-palette-purple-500);
+  --ri-color-accent-hover: var(--ri-palette-purple-600);
+  --ri-color-accent-active: var(--ri-palette-purple-700);
+  --ri-color-accent-subtle: var(--ri-palette-purple-50);
 
   /* --- Semantic: feedback --- */
   --ri-color-success: var(--ri-palette-green-600);
@@ -71,12 +72,12 @@
   --ri-color-warning-subtle: var(--ri-palette-amber-50);
   --ri-color-error: var(--ri-palette-red-600);
   --ri-color-error-subtle: var(--ri-palette-red-50);
+  --ri-color-info: var(--ri-palette-info-600);
+  --ri-color-info-subtle: var(--ri-palette-info-50);
 
   /* --- Semantic: interactive states --- */
   --ri-color-hover: var(--ri-palette-gray-100);
-  --ri-color-active: var(--ri-palette-gray-150);
-  --ri-color-selection: var(--ri-palette-blue-50);
-  /* 80% opacity keeps a soft "halo" look while still clearing the 3:1 non-text
-     contrast minimum for focus indicators against light surfaces. */
-  --ri-color-focus-ring: rgb(47 95 237 / 80%);
+  --ri-color-active: var(--ri-palette-purple-50);
+  --ri-color-selection: var(--ri-palette-purple-50);
+  --ri-color-focus-ring: rgb(109 94 246 / 80%);
 }

@@ -1,6 +1,6 @@
-import { BarChart3, BookOpen, Briefcase, Home, Plug, Scale, Settings, ShieldAlert, Sparkles, type LucideIcon } from 'lucide-react'
+import { BarChart3, BookOpen, Briefcase, Home, Settings, Sparkles, type LucideIcon } from 'lucide-react'
 
-export type NavGroupId = 'workspace' | 'insights' | 'general'
+export type NavGroupId = 'workspace' | 'general'
 
 export interface NavGroup {
   id: NavGroupId
@@ -19,10 +19,10 @@ export interface NavItemConfig {
 
 export const NAV_GROUPS: NavGroup[] = [
   { id: 'workspace', label: 'Workspace' },
-  { id: 'insights', label: 'Insights' },
   { id: 'general', label: 'General' },
 ]
 
+/** Primary navigation — max 6 items per V2 design system. */
 export const NAV_ITEMS: NavItemConfig[] = [
   {
     id: 'home',
@@ -30,7 +30,7 @@ export const NAV_ITEMS: NavItemConfig[] = [
     path: '/',
     icon: Home,
     group: 'workspace',
-    description: 'Your RegIntel Professional overview.',
+    description: 'Your RegIntel overview and daily brief.',
   },
   {
     id: 'ai',
@@ -38,11 +38,11 @@ export const NAV_ITEMS: NavItemConfig[] = [
     path: '/ai',
     icon: Sparkles,
     group: 'workspace',
-    description: 'A dedicated space for AI-assisted analysis and drafting.',
+    description: 'AI-powered compliance assistant for chat, research, analysis, and drafting.',
   },
   {
     id: 'knowledge',
-    label: 'Knowledge',
+    label: 'Library',
     path: '/knowledge',
     icon: BookOpen,
     group: 'workspace',
@@ -54,39 +54,15 @@ export const NAV_ITEMS: NavItemConfig[] = [
     path: '/work',
     icon: Briefcase,
     group: 'workspace',
-    description: 'Track and manage your active work items.',
-  },
-  {
-    id: 'investigations',
-    label: 'Investigations',
-    path: '/investigations',
-    icon: ShieldAlert,
-    group: 'workspace',
-    description: 'Investigate compliance issues, evidence gaps, and regulatory exposure.',
-  },
-  {
-    id: 'regulatory-changes',
-    label: 'Regulatory Changes',
-    path: '/regulatory-changes',
-    icon: Scale,
-    group: 'insights',
-    description: 'Track regulatory updates, impact assessments, and remediation.',
+    description: 'Cases, investigations, and active work items.',
   },
   {
     id: 'reports',
     label: 'Reports',
     path: '/reports',
     icon: BarChart3,
-    group: 'insights',
+    group: 'workspace',
     description: 'Generate and review reports.',
-  },
-  {
-    id: 'integrations',
-    label: 'Integrations',
-    path: '/integrations',
-    icon: Plug,
-    group: 'insights',
-    description: 'Connect RegIntel to the tools your team already uses.',
   },
   {
     id: 'settings',
@@ -95,6 +71,28 @@ export const NAV_ITEMS: NavItemConfig[] = [
     icon: Settings,
     group: 'general',
     description: 'Manage workspace and account preferences.',
+  },
+]
+
+/** Secondary destinations kept out of primary nav but fully routed. */
+export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: string; description: string }> = [
+  {
+    id: 'investigations',
+    label: 'Investigations',
+    path: '/investigations',
+    description: 'Investigate compliance issues and evidence gaps.',
+  },
+  {
+    id: 'regulatory-changes',
+    label: 'Regulatory Changes',
+    path: '/regulatory-changes',
+    description: 'Track regulatory updates and impact assessments.',
+  },
+  {
+    id: 'integrations',
+    label: 'Integrations',
+    path: '/integrations',
+    description: 'Connect RegIntel to tools your team already uses.',
   },
 ]
 

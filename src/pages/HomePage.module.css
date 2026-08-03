@@ -1,6 +1,288 @@
+.page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 360px);
+  gap: var(--ri-space-8);
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: var(--ri-space-8) var(--ri-space-8) var(--ri-space-12);
+  min-height: 100%;
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-8);
+  min-width: 0;
+}
+
 .hero {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  padding-top: var(--ri-space-4);
+}
+
+.greeting {
+  margin: 0;
+  font-size: var(--ri-font-size-heading-xl);
+  font-weight: var(--ri-font-weight-bold);
+  letter-spacing: var(--ri-letter-spacing-heading-xl);
+  color: var(--ri-color-text-primary);
+}
+
+.health {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  margin: 0;
+  font-size: var(--ri-font-size-body);
+  color: var(--ri-color-success);
+}
+
+.aiCard,
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+  padding: var(--ri-space-6);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-xl);
+  background: var(--ri-color-surface);
+  box-shadow: var(--ri-shadow-sm);
+}
+
+.aiCard {
+  box-shadow: var(--ri-shadow-accent);
+}
+
+.aiHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  color: var(--ri-color-accent);
+}
+
+.aiHeader h2 {
+  margin: 0;
+  font-size: var(--ri-font-size-heading-s);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-text-primary);
+}
+
+.aiForm {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-3);
+  padding: var(--ri-space-2) var(--ri-space-2) var(--ri-space-2) var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background: var(--ri-color-surface-sunken);
+}
+
+.aiInput {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  font: inherit;
+  font-size: var(--ri-font-size-body);
+  color: var(--ri-color-text-primary);
+}
+
+.aiInput:focus {
+  outline: none;
+}
+
+.send {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-palette-gray-900);
+  color: var(--ri-palette-white);
+}
+
+.send:focus-visible,
+.promptChip:focus-visible,
+.listButton:focus-visible,
+.viewAll:focus-visible,
+.briefList button:focus-visible,
+.deadlineList button:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.promptChip {
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  font: inherit;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-secondary);
+}
+
+.promptChip:hover {
+  border-color: var(--ri-color-accent);
+  color: var(--ri-color-accent);
+  background: var(--ri-color-accent-subtle);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ri-space-5);
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ri-space-3);
+}
+
+.cardHeader h2,
+.briefTitle {
+  margin: 0;
+  font-size: var(--ri-font-size-heading-s);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.viewAll {
+  border: none;
+  background: none;
+  padding: 0;
+  font: inherit;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-accent);
+}
+
+.list,
+.briefList,
+.deadlineList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-1);
+}
+
+.listButton,
+.briefList button,
+.deadlineList button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ri-space-3);
+  width: 100%;
+  padding: var(--ri-space-3);
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.listButton:hover,
+.briefList button:hover,
+.deadlineList button:hover {
+  background: var(--ri-color-hover);
+}
+
+.listIcon {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100%;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.listText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.listTitle {
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+}
+
+.listDetail,
+.deadlineMeta {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.badgeHigh,
+.badgeMedium {
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--ri-radius-md);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+.badgeHigh {
+  background: var(--ri-color-error-subtle);
+  color: var(--ri-color-error);
+}
+
+.badgeMedium {
+  background: var(--ri-color-warning-subtle);
+  color: var(--ri-color-warning);
+}
+
+.brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+  min-width: 0;
+}
+
+.briefList button,
+.deadlineList button {
+  justify-content: space-between;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+}
+
+.unread {
+  color: var(--ri-color-text-primary);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+@media (max-width: 1100px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .page {
+    padding: var(--ri-space-5);
+  }
 }

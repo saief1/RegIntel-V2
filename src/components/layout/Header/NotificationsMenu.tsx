@@ -31,7 +31,9 @@ export function NotificationsMenu() {
       source: 'work',
       title: item.title,
       body: item.body,
-      href: item.caseId ? `/work/cases/${item.caseId}` : undefined,
+      href:
+        item.href ??
+        (item.taskId ? `/work/tasks/${item.taskId}` : item.caseId ? `/work/cases/${item.caseId}` : undefined),
       read: item.read,
       createdAt: item.createdAt,
       group: item.group,

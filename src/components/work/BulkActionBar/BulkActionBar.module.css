@@ -1,0 +1,21 @@
+.bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ri-space-2);
+  padding: var(--ri-space-3) var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background-color: var(--ri-color-accent-subtle);
+}
+
+.count {
+  margin-right: var(--ri-space-2);
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-accent);
+}
+
+.bar :global(select) {
+  min-width: 120px;
+}

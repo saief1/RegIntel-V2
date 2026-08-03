@@ -80,10 +80,12 @@ function TaskFormBody({
         <div className={styles.field}>
           <label htmlFor={`${titleId}-status`}>Status</label>
           <Select id={`${titleId}-status`} value={status} onChange={(e) => setStatus(e.target.value as TaskStatus)}>
+            <option value="backlog">Backlog</option>
             <option value="todo">To do</option>
             <option value="in_progress">In progress</option>
+            <option value="review">Review</option>
             <option value="blocked">Blocked</option>
-            <option value="done">Done</option>
+            <option value="completed">Completed</option>
           </Select>
         </div>
         <div className={styles.field}>

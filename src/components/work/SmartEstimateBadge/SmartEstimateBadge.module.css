@@ -1,0 +1,28 @@
+.badge {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border-radius: var(--ri-radius-md);
+  border: 1px solid var(--ri-color-border);
+  background-color: var(--ri-color-surface);
+}
+
+.badge[data-impact='high'],
+.badge[data-impact='critical'] {
+  border-color: rgb(109 94 246 / 25%);
+  background-color: var(--ri-color-accent-subtle);
+}
+
+.impact {
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.meta {
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+}

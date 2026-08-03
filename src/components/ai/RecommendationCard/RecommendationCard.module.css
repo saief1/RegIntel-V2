@@ -36,3 +36,33 @@
   color: var(--ri-color-text-secondary);
   line-height: var(--ri-line-height-relaxed);
 }
+
+.meta {
+  margin: 0;
+  width: 100%;
+  display: grid;
+  gap: 6px;
+}
+
+.meta div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ri-space-2);
+  font-size: var(--ri-font-size-caption);
+}
+
+.meta dt {
+  color: var(--ri-color-text-muted);
+}
+
+.meta dd {
+  margin: 0;
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}

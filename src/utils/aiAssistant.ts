@@ -1,6 +1,9 @@
 import { AI_CITATIONS } from '../data/ai/citations'
 import type { AiCitation, AiWorkspaceSettings, ChatMessage } from '../types/ai'
+import { AI_FOLLOW_UP_ACTIONS } from './aiWorkActions'
 import { createId } from './id'
+
+const NEXT_STEP_FOLLOW_UPS = [...AI_FOLLOW_UP_ACTIONS]
 
 /**
  * Local heuristic “model” for the Copilot Workspace.
@@ -41,9 +44,9 @@ export function answerCopilotPrompt(
       ].join('\n'),
       citations: pickCitations(['cite-01', 'cite-03', 'cite-04', 'cite-05']),
       followUps: [
+        ...NEXT_STEP_FOLLOW_UPS.slice(0, 3),
         'What evidence is still missing?',
         'Draft a counsel follow-up.',
-        'List affected Q3 renewals.',
       ],
       confidence: 0.88,
     }
@@ -63,7 +66,7 @@ export function answerCopilotPrompt(
         'Next step: finish field mapping, then assign remediation owners.',
       ].join('\n'),
       citations: pickCitations(['cite-02', 'cite-06']),
-      followUps: ['List unmapped KYC fields.', 'Suggest remediation owners.'],
+      followUps: [...NEXT_STEP_FOLLOW_UPS.slice(0, 3), 'List unmapped KYC fields.', 'Suggest remediation owners.'],
       confidence: 0.85,
     }
   }
@@ -76,7 +79,7 @@ export function answerCopilotPrompt(
         'Incident reporting timers need runbook updates. The open blocker is legal confirmation of when the notification clock starts.',
       ].join('\n'),
       citations: pickCitations(['cite-01']),
-      followUps: ['Draft an escalation note.', 'What evidence supports the current timer?'],
+      followUps: [...NEXT_STEP_FOLLOW_UPS.slice(0, 3), 'Draft an escalation note.', 'What evidence supports the current timer?'],
       confidence: 0.8,
     }
   }

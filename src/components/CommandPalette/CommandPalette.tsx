@@ -1,7 +1,7 @@
 import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bookmark, BookOpen, Clock, FolderOpen, Scale, Search, Sparkles } from 'lucide-react'
-import { NAV_ITEMS } from '../../config/navigation'
+import { NAV_ITEMS, SECONDARY_DESTINATIONS } from '../../config/navigation'
 import { useKnowledge } from '../../hooks/useKnowledge'
 import { useLocalStorageState } from '../../hooks/useLocalStorageState'
 import { useShellLayout } from '../../hooks/useShellLayout'
@@ -117,7 +117,7 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
           id: 'suggest-knowledge',
           group: 'Suggestions',
           title: EMPTY_QUERY_SUGGESTIONS[2],
-          subtitle: 'Return to Knowledge Home',
+          subtitle: 'Return to Library',
           path: '/knowledge',
           icon: 'suggestion',
         },
@@ -135,6 +135,17 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
         idle.push({
           id: `nav-${item.id}`,
           group: 'Destinations',
+          title: item.label,
+          subtitle: item.description,
+          path: item.path,
+          icon: 'destination',
+        })
+      })
+
+      SECONDARY_DESTINATIONS.forEach((item) => {
+        idle.push({
+          id: `secondary-${item.id}`,
+          group: 'More',
           title: item.label,
           subtitle: item.description,
           path: item.path,

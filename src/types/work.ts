@@ -1,12 +1,20 @@
 /**
- * Domain types for the Compliance Workspace (Sprint 4).
+ * Domain types for the Compliance Workspace / Action Center (Sprint 4 + 7).
  * All backing data is local/static — there is no backend.
  */
 
 export type CaseStatus = 'open' | 'in_review' | 'escalated' | 'completed' | 'closed'
 export type RiskLevel = 'low' | 'medium' | 'high' | 'critical'
 export type Priority = 'low' | 'medium' | 'high' | 'urgent'
-export type TaskStatus = 'todo' | 'in_progress' | 'blocked' | 'done'
+/** Board / execution statuses for Action Center tasks. */
+export type TaskStatus = 'backlog' | 'todo' | 'in_progress' | 'review' | 'blocked' | 'completed'
+export type WorkItemKind =
+  | 'task'
+  | 'project'
+  | 'policy_update'
+  | 'risk_review'
+  | 'evidence_request'
+  | 'board_item'
 export type EvidenceStatus = 'pending' | 'verified' | 'rejected'
 export type EvidenceKind = 'attachment' | 'note' | 'link' | 'regulation'
 export type TimelineEventType =
@@ -19,8 +27,11 @@ export type TimelineEventType =
   | 'evidence_added'
   | 'decision_recorded'
   | 'task_updated'
+  | 'checklist_generated'
+  | 'ai_action'
 export type DecisionOutcome = 'approve' | 'reject' | 'escalate' | 'defer' | 'remediate'
-export type NotificationKind = 'assignment' | 'due' | 'mention' | 'decision' | 'system'
+export type NotificationKind = 'assignment' | 'due' | 'mention' | 'decision' | 'system' | 'approval' | 'ai' | 'regulation'
+export type NotificationGroup = 'Tasks' | 'Approvals' | 'AI' | 'Deadlines' | 'Regulations' | 'Mentions' | 'System'
 
 export interface WorkUser {
   id: string
@@ -47,6 +58,21 @@ export interface WorkCase {
   tags: string[]
 }
 
+export interface ChecklistItem {
+  id: string
+  label: string
+  done: boolean
+}
+
+export interface SmartEstimate {
+  /** Recommended calendar days to complete. */
+  recommendedDays: number
+  /** Estimated effort in hours. */
+  estimatedHours: number
+  businessImpact: 'Low' | 'Medium' | 'High' | 'Critical'
+  summary: string
+}
+
 export interface WorkTask {
   id: string
   caseId: string
@@ -56,7 +82,14 @@ export interface WorkTask {
   priority: Priority
   ownerId: string
   dueDate: string
-  checklist: { id: string; label: string; done: boolean }[]
+  checklist: ChecklistItem[]
+  kind: WorkItemKind
+  aiGenerated: boolean
+  linkedRegulation?: string
+  linkedPolicyIds: string[]
+  parentId?: string
+  awaitingApproval: boolean
+  estimate?: SmartEstimate
   createdAt: string
   updatedAt: string
 }
@@ -83,6 +116,7 @@ export interface EvidenceItem {
   confidence: number
   addedById: string
   createdAt: string
+  taskId?: string
 }
 
 export interface DecisionRecord {
@@ -105,6 +139,7 @@ export interface TimelineEvent {
   description?: string
   actorId: string
   createdAt: string
+  taskId?: string
 }
 
 export interface ActivityItem {
@@ -113,6 +148,7 @@ export interface ActivityItem {
   description: string
   actorId: string
   caseId?: string
+  taskId?: string
   createdAt: string
 }
 
@@ -122,9 +158,11 @@ export interface AppNotification {
   title: string
   body: string
   caseId?: string
+  taskId?: string
+  href?: string
   read: boolean
   createdAt: string
-  group: string
+  group: NotificationGroup | string
 }
 
 export interface AiWorkSuggestion {
@@ -134,4 +172,21 @@ export interface AiWorkSuggestion {
   title: string
   detail: string
   documentId?: string
+}
+
+export type AiActionType =
+  | 'create_task'
+  | 'create_project'
+  | 'update_policy'
+  | 'generate_checklist'
+  | 'create_control'
+  | 'assign_owner'
+  | 'schedule_review'
+  | 'add_to_board'
+
+export interface GeneratedChecklistSeed {
+  title: string
+  items: string[]
+  linkedRegulation?: string
+  estimate?: SmartEstimate
 }

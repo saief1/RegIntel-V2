@@ -1,0 +1,88 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  padding: var(--ri-space-3) var(--ri-space-4);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background-color: var(--ri-color-surface);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+.card:hover {
+  border-color: rgb(109 94 246 / 22%);
+}
+
+.card[data-selected] {
+  border-color: var(--ri-color-accent);
+  box-shadow: 0 0 0 1px var(--ri-color-accent-subtle);
+}
+
+.top {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ri-space-2);
+}
+
+.checkbox {
+  margin-top: 3px;
+  accent-color: var(--ri-color-accent);
+}
+
+.titleButton {
+  flex: 1;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+}
+
+.title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-text-primary);
+}
+
+.aiBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  flex: none;
+  padding: 2px 8px;
+  border-radius: var(--ri-radius-pill);
+  background-color: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.meta,
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ri-space-2);
+}
+
+.due,
+.owner,
+.regulation {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-secondary);
+}
+
+.regulation {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: var(--ri-color-text-muted);
+}

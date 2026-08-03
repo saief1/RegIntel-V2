@@ -1,58 +1,48 @@
 /**
- * Typography tokens.
- *
- * A fixed type scale keeps heading and body text consistent across every
- * future screen. Components should compose these primitives rather than
- * declaring their own font-size/line-height/weight values.
+ * Typography tokens — Inter first, Apple/Harvey scale.
  */
 
 :root {
-  --ri-font-family-sans: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', 'Segoe UI', Roboto,
-    Helvetica, Arial, sans-serif;
+  --ri-font-family-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial,
+    sans-serif;
   --ri-font-family-mono: 'SF Mono', ui-monospace, Menlo, Consolas, 'Liberation Mono', monospace;
 
   --ri-font-weight-regular: 400;
   --ri-font-weight-medium: 500;
   --ri-font-weight-semibold: 600;
+  --ri-font-weight-bold: 700;
 
-  /* Heading XL — page-level hero titles */
-  --ri-font-size-heading-xl: 2rem;
-  --ri-line-height-heading-xl: 2.5rem;
-  --ri-letter-spacing-heading-xl: -0.02em;
+  --ri-font-size-heading-xl: 2.25rem;
+  --ri-line-height-heading-xl: 2.75rem;
+  --ri-letter-spacing-heading-xl: -0.03em;
 
-  /* Heading L — section titles */
-  --ri-font-size-heading-l: 1.5rem;
-  --ri-line-height-heading-l: 2rem;
-  --ri-letter-spacing-heading-l: -0.015em;
+  --ri-font-size-heading-l: 1.75rem;
+  --ri-line-height-heading-l: 2.25rem;
+  --ri-letter-spacing-heading-l: -0.025em;
 
-  /* Heading M — panel / card titles */
   --ri-font-size-heading-m: 1.25rem;
   --ri-line-height-heading-m: 1.75rem;
-  --ri-letter-spacing-heading-m: -0.01em;
+  --ri-letter-spacing-heading-m: -0.015em;
 
-  /* Heading S — compact titles, list group headers */
   --ri-font-size-heading-s: 1rem;
   --ri-line-height-heading-s: 1.5rem;
-  --ri-letter-spacing-heading-s: -0.005em;
+  --ri-letter-spacing-heading-s: -0.01em;
 
-  /* Body Large — lede text, empty-state descriptions */
-  --ri-font-size-body-lg: 1rem;
-  --ri-line-height-body-lg: 1.5rem;
+  --ri-font-size-body-lg: 1.0625rem;
+  --ri-line-height-body-lg: 1.625rem;
 
-  /* Body — default UI text */
-  --ri-font-size-body: 0.875rem;
-  --ri-line-height-body: 1.375rem;
+  --ri-font-size-body: 0.9375rem;
+  --ri-line-height-body: 1.5rem;
 
-  /* Body Small — secondary UI text */
-  --ri-font-size-body-sm: 0.8125rem;
-  --ri-line-height-body-sm: 1.25rem;
+  --ri-font-size-body-sm: 0.875rem;
+  --ri-line-height-body-sm: 1.375rem;
 
-  /* Caption — labels, metadata, timestamps */
   --ri-font-size-caption: 0.75rem;
-  --ri-line-height-caption: 1rem;
+  --ri-line-height-caption: 1.125rem;
   --ri-letter-spacing-caption: 0.01em;
 
-  /* Monospace — codes, identifiers, technical values */
   --ri-font-size-mono: 0.8125rem;
   --ri-line-height-mono: 1.25rem;
+
+  --ri-line-height-relaxed: 1.65;
 }

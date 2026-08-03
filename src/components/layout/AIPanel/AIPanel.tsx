@@ -27,9 +27,11 @@ export function AIPanel() {
     edge: 'left',
   })
 
-  const isWorkWorkspace = location.pathname.startsWith('/work')
+  const pathname = location.pathname
+  const hideShellPanel = pathname === '/' || pathname === '/ai' || pathname.startsWith('/ai/')
+  const isWorkWorkspace = pathname.startsWith('/work')
   const isInvestigationsWorkspace =
-    location.pathname.startsWith('/investigations') || location.pathname.startsWith('/regulatory-changes')
+    pathname.startsWith('/investigations') || pathname.startsWith('/regulatory-changes')
   const title = isWorkWorkspace || isInvestigationsWorkspace ? 'AI Assistant' : 'AI Research'
   const ariaLabel = title
   const showResearchHistory = !isWorkWorkspace && !isInvestigationsWorkspace
@@ -39,7 +41,7 @@ export function AIPanel() {
     return () => window.clearTimeout(timer)
   }, [])
 
-  if (!isAIPanelOpen) return null
+  if (hideShellPanel || !isAIPanelOpen) return null
 
   return (
     <>

@@ -16,12 +16,12 @@ interface Crumb {
 function useBreadcrumbTrail(): Crumb[] {
   const location = useLocation()
   const { getDocument, collections } = useKnowledge()
-  const { getCase } = useWork()
+  const { getCase, getTask } = useWork()
   const { getInvestigation, getChange } = useInvestigations()
   const segments = location.pathname.split('/').filter(Boolean)
 
   if (segments[0] === 'knowledge') {
-    const trail: Crumb[] = [{ label: 'Knowledge', path: '/knowledge' }]
+    const trail: Crumb[] = [{ label: 'Library', path: '/knowledge' }]
 
     if (segments[1] === 'library') {
       trail.push({ label: 'Library', path: '/knowledge/library' })
@@ -47,6 +47,12 @@ function useBreadcrumbTrail(): Crumb[] {
       if (segments[2]) {
         const workCase = getCase(segments[2])
         trail.push({ label: workCase?.caseNumber ?? 'Case' })
+      }
+    } else if (segments[1] === 'tasks') {
+      trail.push({ label: 'Action Center', path: '/work' })
+      if (segments[2]) {
+        const task = getTask(segments[2])
+        trail.push({ label: task?.title ?? 'Task' })
       }
     }
     return trail

@@ -1,249 +1,298 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import {
-  AlertTriangle,
   Briefcase,
+  CalendarDays,
   CheckCircle2,
-  Clock3,
-  ListTodo,
+  ClipboardList,
+  Columns3,
+  GanttChart,
+  List,
   Plus,
-  ShieldAlert,
 } from 'lucide-react'
-import { ActivityFeed } from '../../components/work/ActivityFeed/ActivityFeed'
-import { CaseCard } from '../../components/work/CaseCard/CaseCard'
-import { DecisionCard } from '../../components/work/DecisionCard/DecisionCard'
-import { MetricCard } from '../../components/work/MetricCard/MetricCard'
+import { ActionTaskCard } from '../../components/work/ActionTaskCard/ActionTaskCard'
+import { BulkActionBar } from '../../components/work/BulkActionBar/BulkActionBar'
+import { KanbanBoard } from '../../components/work/KanbanBoard/KanbanBoard'
+import { TaskFormModal } from '../../components/work/TaskFormModal/TaskFormModal'
+import { WorkCalendarView } from '../../components/work/WorkCalendarView/WorkCalendarView'
+import { WorkTimelineView } from '../../components/work/WorkTimelineView/WorkTimelineView'
 import { Button } from '../../components/ui/Button/Button'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
-import { SearchField } from '../../components/ui/SearchField/SearchField'
-import { Select } from '../../components/ui/Select/Select'
-import { SectionHeader } from '../../components/ui/SectionHeader/SectionHeader'
 import { useWork } from '../../hooks/useWork'
-import type { CaseStatus, Priority, RiskLevel } from '../../types/work'
+import type { Priority, TaskStatus, WorkTask } from '../../types/work'
+import { isDueToday, isOverdue } from '../../utils/smartDueDates'
 import styles from './WorkDashboardPage.module.css'
 
-type DashboardFilter = 'all' | 'open_reviews' | 'assigned' | 'due_today' | 'completed' | 'high_risk'
+type WorkView = 'action' | 'board' | 'list' | 'calendar' | 'timeline'
+type ActionSection = 'mine' | 'assigned' | 'today' | 'overdue' | 'awaiting' | 'completed'
 
-function isDueToday(isoDate: string): boolean {
-  const today = new Date().toISOString().slice(0, 10)
-  return isoDate.slice(0, 10) === today
-}
+const VIEWS: { id: WorkView; label: string; icon: typeof List }[] = [
+  { id: 'action', label: 'Action Center', icon: ClipboardList },
+  { id: 'board', label: 'Board', icon: Columns3 },
+  { id: 'list', label: 'List', icon: List },
+  { id: 'calendar', label: 'Calendar', icon: CalendarDays },
+  { id: 'timeline', label: 'Timeline', icon: GanttChart },
+]
 
 export function WorkDashboardPage() {
   const navigate = useNavigate()
-  const { cases, decisions, getUser, currentUserId } = useWork()
-  const [query, setQuery] = useState('')
-  const [status, setStatus] = useState<CaseStatus | 'all'>('all')
-  const [priority, setPriority] = useState<Priority | 'all'>('all')
-  const [ownerId, setOwnerId] = useState<string | 'all'>('all')
-  const [sort, setSort] = useState<'updated' | 'due' | 'risk'>('updated')
-  const [metricFilter, setMetricFilter] = useState<DashboardFilter>('all')
+  const [params, setParams] = useSearchParams()
+  const {
+    tasks,
+    users,
+    getUser,
+    currentUserId,
+    createTask,
+    updateTask,
+    deleteTasks,
+    bulkUpdateTasks,
+    activity,
+    timeline,
+  } = useWork()
 
-  const metrics = useMemo(() => {
-    const openReviews = cases.filter((item) => item.status === 'in_review' || item.status === 'open').length
-    const assigned = cases.filter((item) => item.assigneeIds.includes(currentUserId)).length
-    const dueToday = cases.filter((item) => isDueToday(item.dueDate) && item.status !== 'closed' && item.status !== 'completed').length
-    const completed = cases.filter((item) => item.status === 'completed' || item.status === 'closed').length
-    const highRisk = cases.filter((item) => item.risk === 'high' || item.risk === 'critical').length
-    return { openReviews, assigned, dueToday, completed, highRisk }
-  }, [cases, currentUserId])
+  const view = (params.get('view') as WorkView) || 'action'
+  const activeSection = (params.get('section') as ActionSection | null) ?? 'mine'
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [createOpen, setCreateOpen] = useState(false)
 
-  const filteredCases = useMemo(() => {
-    const normalized = query.trim().toLowerCase()
-    let result = cases.filter((item) => {
-      if (normalized && !`${item.title} ${item.caseNumber} ${item.summary}`.toLowerCase().includes(normalized)) return false
-      if (status !== 'all' && item.status !== status) return false
-      if (priority !== 'all' && item.priority !== priority) return false
-      if (ownerId !== 'all' && item.ownerId !== ownerId) return false
-      if (metricFilter === 'open_reviews' && !(item.status === 'open' || item.status === 'in_review')) return false
-      if (metricFilter === 'assigned' && !item.assigneeIds.includes(currentUserId)) return false
-      if (metricFilter === 'due_today' && !isDueToday(item.dueDate)) return false
-      if (metricFilter === 'completed' && !(item.status === 'completed' || item.status === 'closed')) return false
-      if (metricFilter === 'high_risk' && !(item.risk === 'high' || item.risk === 'critical')) return false
-      return true
+  function setActiveSection(section: ActionSection) {
+    const nextParams = new URLSearchParams(params)
+    nextParams.set('section', section)
+    if (!nextParams.get('view')) nextParams.set('view', 'action')
+    setParams(nextParams, { replace: true })
+  }
+
+  const rootTasks = useMemo(() => tasks.filter((task) => !task.parentId), [tasks])
+
+  const sections = useMemo(() => {
+    const mine = rootTasks.filter((task) => task.ownerId === currentUserId && task.status !== 'completed')
+    const assigned = rootTasks.filter((task) => task.ownerId !== currentUserId && task.status !== 'completed')
+    const today = rootTasks.filter((task) => isDueToday(task.dueDate) && task.status !== 'completed')
+    const overdue = rootTasks.filter((task) => isOverdue(task.dueDate, task.status))
+    const awaiting = rootTasks.filter((task) => task.awaitingApproval || task.status === 'review')
+    const completed = rootTasks.filter((task) => task.status === 'completed')
+    return { mine, assigned, today, overdue, awaiting, completed }
+  }, [currentUserId, rootTasks])
+
+  const personal = useMemo(() => {
+    const todaysWork = sections.today
+    const awaitingMe = rootTasks.filter(
+      (task) => task.awaitingApproval && (task.ownerId === currentUserId || task.status === 'review'),
+    )
+    const recentlyCompleted = [...sections.completed]
+      .sort((a, b) => +new Date(b.updatedAt) - +new Date(a.updatedAt))
+      .slice(0, 5)
+    const upcomingReviews = rootTasks
+      .filter((task) => task.kind === 'risk_review' || task.status === 'review')
+      .slice(0, 5)
+    return { todaysWork, awaitingMe, recentlyCompleted, upcomingReviews }
+  }, [currentUserId, rootTasks, sections.completed, sections.today])
+
+  const sectionTasks: Record<ActionSection, WorkTask[]> = {
+    mine: sections.mine,
+    assigned: sections.assigned,
+    today: sections.today,
+    overdue: sections.overdue,
+    awaiting: sections.awaiting,
+    completed: sections.completed,
+  }
+
+  function setView(next: WorkView) {
+    const nextParams = new URLSearchParams(params)
+    nextParams.set('view', next)
+    setParams(nextParams, { replace: true })
+  }
+
+  function toggleSelect(id: string) {
+    setSelectedIds((current) => {
+      const next = new Set(current)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
     })
+  }
 
-    const riskRank: Record<RiskLevel, number> = { critical: 4, high: 3, medium: 2, low: 1 }
-    result = [...result].sort((a, b) => {
-      if (sort === 'due') return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
-      if (sort === 'risk') return riskRank[b.risk] - riskRank[a.risk]
-      return new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime()
-    })
-    return result
-  }, [cases, query, status, priority, ownerId, sort, metricFilter, currentUserId])
+  function exportSelected() {
+    const rows = rootTasks.filter((task) => selectedIds.has(task.id))
+    const payload = rows.map((task) => ({
+      title: task.title,
+      status: task.status,
+      priority: task.priority,
+      owner: getUser(task.ownerId)?.name,
+      dueDate: task.dueDate,
+      regulation: task.linkedRegulation,
+    }))
+    void navigator.clipboard.writeText(JSON.stringify(payload, null, 2))
+  }
 
-  const recentDecisions = useMemo(
-    () => [...decisions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()).slice(0, 3),
-    [decisions],
-  )
-
-  const owners = useMemo(() => {
-    const ids = [...new Set(cases.map((item) => item.ownerId))]
-    return ids.map((id) => getUser(id)).filter((user): user is NonNullable<typeof user> => Boolean(user))
-  }, [cases, getUser])
+  const ownerName = (id: string) => getUser(id)?.name ?? 'Unassigned'
 
   return (
     <PageContainer className={styles.page}>
       <PageHeader
         title="Work"
-        description="Compliance workspace for reviews, cases, evidence, and decisions."
+        description="Action Center — turn compliance insight into managed execution."
         icon={<Briefcase size={20} />}
         actions={
           <>
             <Button variant="secondary" onClick={() => navigate('/work/cases')}>
-              All cases
+              Cases
             </Button>
-            <Button variant="primary" leadingIcon={<Plus size={14} />} onClick={() => navigate('/work/cases')}>
-              Open case queue
+            <Button variant="primary" leadingIcon={<Plus size={14} />} onClick={() => setCreateOpen(true)}>
+              New task
             </Button>
           </>
         }
       />
 
-      <section className={styles.metrics} aria-label="Work metrics">
-        <MetricCard
-          label="Open reviews"
-          value={metrics.openReviews}
-          icon={<ListTodo size={16} />}
-          tone="accent"
-          active={metricFilter === 'open_reviews'}
-          onClick={() => setMetricFilter(metricFilter === 'open_reviews' ? 'all' : 'open_reviews')}
-        />
-        <MetricCard
-          label="Assigned to you"
-          value={metrics.assigned}
-          icon={<Briefcase size={16} />}
-          active={metricFilter === 'assigned'}
-          onClick={() => setMetricFilter(metricFilter === 'assigned' ? 'all' : 'assigned')}
-        />
-        <MetricCard
-          label="Due today"
-          value={metrics.dueToday}
-          icon={<Clock3 size={16} />}
-          tone="warning"
-          active={metricFilter === 'due_today'}
-          onClick={() => setMetricFilter(metricFilter === 'due_today' ? 'all' : 'due_today')}
-        />
-        <MetricCard
-          label="Completed"
-          value={metrics.completed}
-          icon={<CheckCircle2 size={16} />}
-          tone="success"
-          active={metricFilter === 'completed'}
-          onClick={() => setMetricFilter(metricFilter === 'completed' ? 'all' : 'completed')}
-        />
-        <MetricCard
-          label="High risk"
-          value={metrics.highRisk}
-          icon={<ShieldAlert size={16} />}
-          tone="danger"
-          active={metricFilter === 'high_risk'}
-          onClick={() => setMetricFilter(metricFilter === 'high_risk' ? 'all' : 'high_risk')}
-        />
-      </section>
-
-      <section className={styles.filters} aria-label="Filters">
-        <SearchField
-          value={query}
-          onChange={(event) => setQuery(event.target.value)}
-          placeholder="Search cases..."
-          aria-label="Search cases"
-        />
-        <Select value={status} onChange={(e) => setStatus(e.target.value as CaseStatus | 'all')} aria-label="Status">
-          <option value="all">All statuses</option>
-          <option value="open">Open</option>
-          <option value="in_review">In review</option>
-          <option value="escalated">Escalated</option>
-          <option value="completed">Completed</option>
-          <option value="closed">Closed</option>
-        </Select>
-        <Select value={priority} onChange={(e) => setPriority(e.target.value as Priority | 'all')} aria-label="Priority">
-          <option value="all">All priorities</option>
-          <option value="urgent">Urgent</option>
-          <option value="high">High</option>
-          <option value="medium">Medium</option>
-          <option value="low">Low</option>
-        </Select>
-        <Select value={ownerId} onChange={(e) => setOwnerId(e.target.value)} aria-label="Owner">
-          <option value="all">All owners</option>
-          {owners.map((owner) => (
-            <option key={owner.id} value={owner.id}>
-              {owner.name}
-            </option>
-          ))}
-        </Select>
-        <Select value={sort} onChange={(e) => setSort(e.target.value as typeof sort)} aria-label="Sort">
-          <option value="updated">Recently updated</option>
-          <option value="due">Due date</option>
-          <option value="risk">Risk</option>
-        </Select>
-      </section>
-
-      <div className={styles.layout}>
-        <section className={styles.mainColumn} aria-label="Cases">
-          <SectionHeader title="Cases" description={`${filteredCases.length} matching`} as="h2" />
-          {filteredCases.length === 0 ? (
-            <p className={styles.empty}>No cases match your filters.</p>
-          ) : (
-            <div className={styles.caseGrid}>
-              {filteredCases.map((workCase) => (
-                <CaseCard
-                  key={workCase.id}
-                  workCase={workCase}
-                  owner={getUser(workCase.ownerId)}
-                  assignees={workCase.assigneeIds.map((id) => getUser(id)).filter((user): user is NonNullable<typeof user> => Boolean(user))}
-                />
-              ))}
-            </div>
-          )}
-        </section>
-
-        <aside className={styles.sideColumn}>
-          <section className={styles.sidePanel}>
-            <SectionHeader title="Quick actions" />
-            <div className={styles.quickActions}>
-              <Button variant="secondary" onClick={() => navigate('/work/cases')}>
-                Browse case queue
-              </Button>
-              <Button variant="secondary" onClick={() => setMetricFilter('due_today')}>
-                Focus due today
-              </Button>
-              <Button variant="secondary" onClick={() => setMetricFilter('high_risk')}>
-                Review high risk
-              </Button>
-            </div>
-          </section>
-
-          <section className={styles.sidePanel}>
-            <SectionHeader title="Recent decisions" />
-            <div className={styles.decisionStack}>
-              {recentDecisions.map((decision, index) => (
-                <DecisionCard
-                  key={decision.id}
-                  decision={decision}
-                  reviewer={getUser(decision.reviewerId)}
-                  isLatest={index === 0}
-                />
-              ))}
-            </div>
-          </section>
-
-          <section className={styles.sidePanel}>
-            <SectionHeader
-              title="Recent activity"
-              as="h2"
-              size="lg"
-              actions={
-                <span className={styles.activityHint}>
-                  <AlertTriangle size={12} aria-hidden="true" /> Live feed
-                </span>
-              }
-            />
-            <ActivityFeed limit={6} />
-          </section>
-        </aside>
+      <div className={styles.viewTabs} role="tablist" aria-label="Work views">
+        {VIEWS.map((item) => {
+          const Icon = item.icon
+          return (
+            <button
+              key={item.id}
+              type="button"
+              role="tab"
+              aria-selected={view === item.id}
+              className={view === item.id ? styles.tabActive : styles.tab}
+              onClick={() => setView(item.id)}
+            >
+              <Icon size={14} aria-hidden="true" />
+              {item.label}
+            </button>
+          )
+        })}
       </div>
+
+      <BulkActionBar
+        count={selectedIds.size}
+        onClear={() => setSelectedIds(new Set())}
+        onAssign={(ownerId) => {
+          bulkUpdateTasks([...selectedIds], { ownerId })
+          setSelectedIds(new Set())
+        }}
+        onMove={(status) => {
+          bulkUpdateTasks([...selectedIds], { status })
+          setSelectedIds(new Set())
+        }}
+        onPriority={(priority: Priority) => {
+          bulkUpdateTasks([...selectedIds], { priority })
+          setSelectedIds(new Set())
+        }}
+        onDelete={() => {
+          deleteTasks([...selectedIds])
+          setSelectedIds(new Set())
+        }}
+        onExport={exportSelected}
+      />
+
+      {view === 'action' && (
+        <div className={styles.actionLayout}>
+          <aside className={styles.personal} aria-label="Personal dashboard">
+            <PersonalBlock title="My Tasks" count={sections.mine.length} />
+            <PersonalBlock title="Today's Work" count={personal.todaysWork.length} />
+            <PersonalBlock title="Awaiting Me" count={personal.awaitingMe.length} />
+            <PersonalBlock title="Recently Completed" count={personal.recentlyCompleted.length} />
+            <PersonalBlock title="Upcoming Reviews" count={personal.upcomingReviews.length} />
+          </aside>
+
+          <div className={styles.actionMain}>
+            <div className={styles.sectionTabs}>
+              {(
+                [
+                  ['mine', 'My Tasks', sections.mine.length],
+                  ['assigned', 'Assigned', sections.assigned.length],
+                  ['today', 'Due Today', sections.today.length],
+                  ['overdue', 'Overdue', sections.overdue.length],
+                  ['awaiting', 'Awaiting Approval', sections.awaiting.length],
+                  ['completed', 'Completed', sections.completed.length],
+                ] as const
+              ).map(([id, label, count]) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={activeSection === id ? styles.sectionActive : styles.sectionTab}
+                  onClick={() => setActiveSection(id)}
+                >
+                  {label}
+                  <span>{count}</span>
+                </button>
+              ))}
+            </div>
+
+            <div className={styles.cardGrid}>
+              {sectionTasks[activeSection].map((task) => (
+                <ActionTaskCard
+                  key={task.id}
+                  task={task}
+                  ownerName={ownerName(task.ownerId)}
+                  selected={selectedIds.has(task.id)}
+                  onToggleSelect={toggleSelect}
+                />
+              ))}
+              {sectionTasks[activeSection].length === 0 && (
+                <p className={styles.empty}>No items in this section.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {view === 'board' && (
+        <KanbanBoard
+          tasks={rootTasks}
+          getOwnerName={ownerName}
+          selectedIds={selectedIds}
+          onToggleSelect={toggleSelect}
+          onMove={(taskId, status: TaskStatus) => updateTask(taskId, { status })}
+        />
+      )}
+
+      {view === 'list' && (
+        <div className={styles.cardGrid}>
+          {rootTasks.map((task) => (
+            <ActionTaskCard
+              key={task.id}
+              task={task}
+              ownerName={ownerName(task.ownerId)}
+              selected={selectedIds.has(task.id)}
+              onToggleSelect={toggleSelect}
+            />
+          ))}
+        </div>
+      )}
+
+      {view === 'calendar' && <WorkCalendarView tasks={rootTasks} />}
+
+      {view === 'timeline' && (
+        <WorkTimelineView
+          timeline={timeline}
+          activity={activity}
+          getActorName={(id) => getUser(id)?.name ?? users[0]?.name ?? 'Someone'}
+        />
+      )}
+
+      <TaskFormModal
+        open={createOpen}
+        mode="create"
+        onCancel={() => setCreateOpen(false)}
+        onSubmit={(values) => {
+          const task = createTask(values)
+          setCreateOpen(false)
+          navigate(`/work/tasks/${task.id}`)
+        }}
+      />
     </PageContainer>
+  )
+}
+
+function PersonalBlock({ title, count }: { title: string; count: number }) {
+  return (
+    <div className={styles.personalCard}>
+      <span>{title}</span>
+      <strong>{count}</strong>
+      <CheckCircle2 size={14} aria-hidden="true" />
+    </div>
   )
 }

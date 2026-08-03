@@ -6,12 +6,13 @@ import { expect, test, type Page } from '@playwright/test'
  */
 
 const CORE_ROUTES = [
-  { path: '/', mustInclude: /RegIntel Professional/i },
-  { path: '/knowledge', mustInclude: /Knowledge/i },
+  { path: '/', mustInclude: /How can RegIntel help today|Today’s Priorities|Good (morning|afternoon|evening)/i },
+  { path: '/knowledge', mustInclude: /Library/i },
   { path: '/knowledge/library', mustInclude: /Regulation Library/i },
-  { path: '/work', mustInclude: /Work|Compliance workspace/i },
+  { path: '/work', mustInclude: /Action Center|My Tasks|Board/i },
+  { path: '/work/tasks/task-02', mustInclude: /Counsel review|Checklist|Activity/i },
   { path: '/work/cases', mustInclude: /Cases/i },
-  { path: '/ai', mustInclude: /Prompt library|Copilot|Conversation/i },
+  { path: '/ai', mustInclude: /AI Workspace|Prompt library|Chat|Research|Create Task/i },
   { path: '/ai/prompts', mustInclude: /Prompt library/i },
   { path: '/ai/memory', mustInclude: /AI memory|Memory/i },
   { path: '/investigations', mustInclude: /Investigations/i },

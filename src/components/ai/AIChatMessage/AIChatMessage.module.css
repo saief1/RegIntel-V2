@@ -73,3 +73,95 @@
   display: flex;
   gap: var(--ri-space-1);
 }
+
+.workActions,
+.followRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-1);
+  max-width: min(760px, 100%);
+}
+
+.workAction,
+.followChip {
+  appearance: none;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  padding: 6px 10px;
+  background-color: var(--ri-color-surface);
+  color: var(--ri-color-text-secondary);
+  font: inherit;
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-medium);
+  cursor: pointer;
+}
+
+.workAction:hover,
+.followChip:hover {
+  border-color: rgb(109 94 246 / 30%);
+  color: var(--ri-color-accent);
+  background-color: var(--ri-color-accent-subtle);
+}
+
+.followUps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  max-width: min(760px, 100%);
+}
+
+.followTitle {
+  margin: 0;
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.recoGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--ri-space-2);
+  max-width: min(760px, 100%);
+  width: 100%;
+}
+
+.recoCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  padding: var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background-color: var(--ri-color-surface);
+}
+
+.recoCard h4 {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.recoCard dl {
+  margin: 0;
+  display: grid;
+  gap: 6px;
+}
+
+.recoCard div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ri-space-2);
+  font-size: var(--ri-font-size-caption);
+}
+
+.recoCard dt {
+  color: var(--ri-color-text-muted);
+}
+
+.recoCard dd {
+  margin: 0;
+  color: var(--ri-color-text-primary);
+  font-weight: var(--ri-font-weight-medium);
+}
