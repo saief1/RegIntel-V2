@@ -196,6 +196,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/reports/benchmark',
     description: 'Compare departments, regions, and business units.',
   },
+  {
+    id: 'data-management',
+    label: 'Data Management',
+    path: '/settings/data',
+    description: 'Imports, exports, quality, retention, and restore jobs.',
+  },
+  {
+    id: 'security-center',
+    label: 'Security Center',
+    path: '/settings/security',
+    description: 'Sessions, devices, alerts, IP restrictions, and secrets.',
+  },
+  {
+    id: 'audit-center',
+    label: 'Audit Center',
+    path: '/audit',
+    description: 'Audit planning, findings, evidence requests, and lifecycle.',
+  },
+  {
+    id: 'automation-studio',
+    label: 'Automation Studio',
+    path: '/automation',
+    description: 'No-code enterprise automations with run history.',
+  },
+  {
+    id: 'system-health',
+    label: 'System Health',
+    path: '/system',
+    description: 'Platform status, queues, feature flags, and release notes.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

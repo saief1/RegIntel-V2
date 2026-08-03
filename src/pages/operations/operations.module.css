@@ -1,0 +1,204 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  gap: var(--ri-space-4);
+  align-items: start;
+}
+
+.hubLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.hubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  color: var(--ri-color-text-primary);
+  text-decoration: none;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+.hubLink:hover {
+  border-color: rgb(109 94 246 / 30%);
+  background: var(--ri-color-hover);
+}
+
+.hubLink:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: 2px;
+}
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  align-items: center;
+}
+
+.node,
+.nodeActive {
+  padding: 10px 12px;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.nodeActive {
+  border-color: var(--ri-color-accent);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.arrow {
+  color: var(--ri-color-text-muted);
+}
+
+.lifecycle {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--ri-space-2);
+}
+
+.stage,
+.stageActive {
+  padding: var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  text-align: center;
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.stageActive {
+  border-color: var(--ri-color-accent);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+  font-weight: var(--ri-font-weight-semibold);
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ri-space-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+}
+
+.chipRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.chip,
+.chipActive {
+  appearance: none;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  padding: 6px 10px;
+  font: inherit;
+  font-size: var(--ri-font-size-body-sm);
+  background: var(--ri-color-surface);
+  cursor: pointer;
+  color: inherit;
+}
+
+.chipActive,
+.chip:hover {
+  border-color: rgb(109 94 246 / 35%);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.chip:focus-visible,
+.chipActive:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: 2px;
+}
+
+.banner,
+.bannerWarning,
+.bannerCritical {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--ri-space-3);
+  align-items: flex-start;
+  padding: var(--ri-space-3) var(--ri-space-4);
+  border-radius: var(--ri-radius-md);
+  border: 1px solid var(--ri-color-border);
+  background: var(--ri-color-accent-subtle);
+}
+
+.bannerWarning {
+  background: rgb(245 158 11 / 12%);
+}
+
+.bannerCritical {
+  background: rgb(220 38 38 / 10%);
+}
+
+.toastRegion {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: min(360px, calc(100vw - 32px));
+  pointer-events: none;
+}
+
+.toast {
+  pointer-events: auto;
+  padding: 12px 14px;
+  border-radius: var(--ri-radius-md);
+  border: 1px solid var(--ri-color-border);
+  background: var(--ri-color-surface);
+  box-shadow: 0 8px 24px rgb(15 23 42 / 8%);
+}
+
+.toast header {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+}
+
+.toast strong {
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.toast p {
+  margin: 4px 0 0;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+@media (max-width: 960px) {
+  .split,
+  .formGrid,
+  .lifecycle {
+    grid-template-columns: 1fr;
+  }
+}

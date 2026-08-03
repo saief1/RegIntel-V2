@@ -75,6 +75,21 @@ export function SettingsPage() {
         <Link className={connected.hubLink} to="/agents">
           AI Agents
         </Link>
+        <Link className={connected.hubLink} to="/settings/data">
+          Data Management
+        </Link>
+        <Link className={connected.hubLink} to="/settings/security">
+          Security Center
+        </Link>
+        <Link className={connected.hubLink} to="/audit">
+          Audit Center
+        </Link>
+        <Link className={connected.hubLink} to="/automation">
+          Automation Studio
+        </Link>
+        <Link className={connected.hubLink} to="/system">
+          System Health
+        </Link>
       </nav>
 
       <div className={g.tabs} role="tablist" aria-label="Settings sections">

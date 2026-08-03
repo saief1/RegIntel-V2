@@ -28,6 +28,11 @@ const CORE_ROUTES = [
   { path: '/settings/api', mustInclude: /API Platform|API Keys|Test Console/i },
   { path: '/settings/admin', mustInclude: /Admin Console|Tenant Settings|SSO/i },
   { path: '/settings/collaboration', mustInclude: /Collaboration|Watchlists|Team channels/i },
+  { path: '/settings/data', mustInclude: /Data Management Center|Data sources|Failed import queue/i },
+  { path: '/settings/security', mustInclude: /Enterprise Security Center|Security alerts|Trusted devices/i },
+  { path: '/audit', mustInclude: /Audit & Compliance Center|Audit lifecycle|External auditor portal/i },
+  { path: '/automation', mustInclude: /Enterprise Automation Studio|Publish automation|Run history/i },
+  { path: '/system', mustInclude: /System Health Center|Service health|Release notes viewer/i },
   { path: '/ai', mustInclude: /AI Workspace|Prompt library|Chat|Research|Create Task|AI Agents/i },
   { path: '/ai/prompts', mustInclude: /Prompt library/i },
   { path: '/ai/memory', mustInclude: /AI memory|Memory/i },
@@ -70,7 +75,7 @@ async function assertNoHorizontalOverflow(page: Page) {
 test.describe('RegIntel smoke suite', () => {
   // Route catalog grows each sprint; keep this suite sequential but give it room.
   test('shell loads and core routes render', async ({ page }) => {
-    test.setTimeout(120_000)
+    test.setTimeout(180_000)
     for (const route of CORE_ROUTES) {
       await page.goto(route.path)
       await waitForShell(page)
@@ -96,6 +101,11 @@ test.describe('RegIntel smoke suite', () => {
         '/settings/integrations',
         '/settings/api',
         '/settings/admin',
+        '/settings/data',
+        '/settings/security',
+        '/audit',
+        '/automation',
+        '/system',
         '/ai',
         '/ai/agents',
         '/agents',

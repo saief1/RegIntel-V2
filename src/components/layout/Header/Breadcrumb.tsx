@@ -91,8 +91,14 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'api') trail.push({ label: 'API Platform' })
     else if (segments[1] === 'admin') trail.push({ label: 'Admin Console' })
     else if (segments[1] === 'collaboration') trail.push({ label: 'Collaboration' })
+    else if (segments[1] === 'data') trail.push({ label: 'Data Management' })
+    else if (segments[1] === 'security') trail.push({ label: 'Security Center' })
     return trail
   }
+
+  if (segments[0] === 'audit') return [{ label: 'Audit Center' }]
+  if (segments[0] === 'automation') return [{ label: 'Automation Studio' }]
+  if (segments[0] === 'system') return [{ label: 'System Health' }]
 
   if (segments[0] === 'ai') {
     const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]

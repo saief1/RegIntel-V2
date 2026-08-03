@@ -56,6 +56,21 @@ const BoardStudioPage = lazy(() =>
 const BenchmarkPage = lazy(() =>
   import('./pages/reports/BenchmarkPage').then((module) => ({ default: module.BenchmarkPage })),
 )
+const DataManagementPage = lazy(() =>
+  import('./pages/settings/DataManagementPage').then((module) => ({ default: module.DataManagementPage })),
+)
+const SecurityCenterPage = lazy(() =>
+  import('./pages/settings/SecurityCenterPage').then((module) => ({ default: module.SecurityCenterPage })),
+)
+const AuditCenterPage = lazy(() =>
+  import('./pages/audit/AuditCenterPage').then((module) => ({ default: module.AuditCenterPage })),
+)
+const AutomationStudioPage = lazy(() =>
+  import('./pages/automation/AutomationStudioPage').then((module) => ({ default: module.AutomationStudioPage })),
+)
+const SystemHealthPage = lazy(() =>
+  import('./pages/system/SystemHealthPage').then((module) => ({ default: module.SystemHealthPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -373,7 +388,48 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="data"
+            element={
+              <LazyPage>
+                <DataManagementPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="security"
+            element={
+              <LazyPage>
+                <SecurityCenterPage />
+              </LazyPage>
+            }
+          />
         </Route>
+
+        <Route
+          path="audit"
+          element={
+            <LazyPage>
+              <AuditCenterPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="automation"
+          element={
+            <LazyPage>
+              <AutomationStudioPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="system"
+          element={
+            <LazyPage>
+              <SystemHealthPage />
+            </LazyPage>
+          }
+        />
 
         <Route
           path="integrations"
@@ -452,6 +508,11 @@ export function AppRoutes() {
               'predictive',
               'board-studio',
               'benchmarking',
+              'data-management',
+              'security-center',
+              'audit-center',
+              'automation-studio',
+              'system-health',
             ].includes(item.id),
         ).map((item) => (
           <Route

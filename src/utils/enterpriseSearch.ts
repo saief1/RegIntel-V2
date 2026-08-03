@@ -4,11 +4,27 @@ import type { KnowledgeDocument } from '../types/knowledge'
 
 export interface EnterpriseSearchHit {
   id: string
-  group: 'Policies' | 'Regulations' | 'Tasks' | 'Evidence' | 'Reports' | 'Comments' | 'People'
+  group:
+    | 'Policies'
+    | 'Regulations'
+    | 'Tasks'
+    | 'Evidence'
+    | 'Reports'
+    | 'Comments'
+    | 'People'
+    | 'Operations'
   title: string
   subtitle?: string
   href: string
 }
+
+const OPERATION_DESTINATIONS = [
+  { id: 'ops-data', title: 'Data Management Center', subtitle: 'Imports, quality, retention', href: '/settings/data', terms: 'data import export retention archive' },
+  { id: 'ops-security', title: 'Enterprise Security Center', subtitle: 'Sessions, MFA, alerts', href: '/settings/security', terms: 'security mfa session device ip secret' },
+  { id: 'ops-audit', title: 'Audit & Compliance Center', subtitle: 'Findings and evidence requests', href: '/audit', terms: 'audit finding evidence auditor' },
+  { id: 'ops-auto', title: 'Automation Studio', subtitle: 'No-code triggers and actions', href: '/automation', terms: 'automation trigger workflow retry' },
+  { id: 'ops-system', title: 'System Health Center', subtitle: 'Queues, uptime, feature flags', href: '/system', terms: 'system health queue uptime performance cache' },
+] as const
 
 interface SearchInput {
   query: string
@@ -110,6 +126,18 @@ export function enterpriseSearch(input: SearchInput): EnterpriseSearchHit[] {
         title: person.name,
         subtitle: person.role,
         href: '/settings?tab=org',
+      })
+    }
+  }
+
+  for (const destination of OPERATION_DESTINATIONS) {
+    if (`${destination.title} ${destination.subtitle} ${destination.terms}`.toLowerCase().includes(q)) {
+      hits.push({
+        id: destination.id,
+        group: 'Operations',
+        title: destination.title,
+        subtitle: destination.subtitle,
+        href: destination.href,
       })
     }
   }

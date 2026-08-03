@@ -32,11 +32,46 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.2.0-beta | 2026-08-03 | Enterprise Operations — data, security, audit, automation, health |
 | 1.1.0-beta | 2026-08-03 | Enterprise Intelligence — analytics, KPIs, board, benchmarks |
 | 1.0.0-beta | 2026-08-03 | Autonomous Compliance — AI workforce, queue, knowledge graph |
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.2.0-beta — Enterprise Platform & Production Readiness
+
+**Status:** Beta  
+**Sprint:** 12 (`SPRINT12_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel gains the operational platform capabilities CIOs, CISOs, and compliance teams expect before deployment.
+
+#### Highlights
+
+##### Data Management Center (P056)
+
+- `/settings/data` with sources, import/export/archive/restore jobs, quality, retention, duplicates
+
+##### Enterprise Security Center (P057)
+
+- `/settings/security` with alerts, sessions, devices, IP restrictions, secrets, risk scoring
+
+##### Audit & Compliance Center (P058)
+
+- `/audit` with lifecycle visualization, findings, evidence requests, external auditor portal (mock)
+
+##### Automation Studio (P059)
+
+- `/automation` no-code builder, templates, run history, retries
+
+##### System Health Center (P060)
+
+- `/system` service health, queues, feature flags, release notes, maintenance mode
+
+##### Cross-cutting
+
+- Toast center, system announcements, global job queue, operations search index
 
 ### v1.1.0-beta — Enterprise Intelligence & Analytics
 

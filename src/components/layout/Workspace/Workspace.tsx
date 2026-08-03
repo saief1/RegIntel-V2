@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import { clsx as cx } from 'clsx'
+import { MaintenanceBanner } from '../../operations/MaintenanceBanner'
 import { Skeleton } from '../../ui/Skeleton/Skeleton'
 import styles from './Workspace.module.css'
 
@@ -32,6 +33,7 @@ export function Workspace() {
         </div>
       ) : (
         <div key={location.pathname} className={cx(styles.page, isFlushLayout && styles.flushPage)}>
+          <MaintenanceBanner />
           <Outlet />
         </div>
       )}
