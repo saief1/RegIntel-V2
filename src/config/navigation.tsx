@@ -286,6 +286,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/developer/sdk',
     description: 'SDKs, CLI, sample projects, and Postman assets.',
   },
+  {
+    id: 'operations-center',
+    label: 'Operations Center',
+    path: '/operations',
+    description: 'Platform health, jobs, infrastructure, and maintenance.',
+  },
+  {
+    id: 'operations-incidents',
+    label: 'Incident Management',
+    path: '/operations/incidents',
+    description: 'Incident lifecycle, impact, and status page preview.',
+  },
+  {
+    id: 'operations-backups',
+    label: 'Backup & DR',
+    path: '/operations/backups',
+    description: 'Backups, restore, RPO/RTO, and DR simulation.',
+  },
+  {
+    id: 'operations-deployments',
+    label: 'Deployment Center',
+    path: '/operations/deployments',
+    description: 'Environments, rollbacks, flags, and release notes.',
+  },
+  {
+    id: 'operations-observability',
+    label: 'Observability',
+    path: '/operations/observability',
+    description: 'Metrics, logs, tracing, and alert policies.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

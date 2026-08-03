@@ -1,4 +1,5 @@
 import { Activity } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
 import { Button } from '../../components/ui/Button/Button'
@@ -34,6 +35,18 @@ export function SystemHealthPage() {
       />
 
       <OperationsHubNav current="/system" />
+
+      <nav className={styles.hubLinks} aria-label="Production operations">
+        <Link className={styles.hubLink} to="/operations">
+          Operations Center
+        </Link>
+        <Link className={styles.hubLink} to="/operations/observability">
+          Observability
+        </Link>
+        <Link className={styles.hubLink} to="/operations/deployments">
+          Deployments
+        </Link>
+      </nav>
 
       <div className={g.metricGrid} aria-label="Platform status">
         <div className={g.metric}>

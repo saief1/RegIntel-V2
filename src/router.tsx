@@ -101,6 +101,21 @@ const WebhooksCenterPage = lazy(() =>
 const SdkResourcesPage = lazy(() =>
   import('./pages/developer/SdkResourcesPage').then((module) => ({ default: module.SdkResourcesPage })),
 )
+const OperationsCenterPage = lazy(() =>
+  import('./pages/operations/OperationsCenterPage').then((module) => ({ default: module.OperationsCenterPage })),
+)
+const IncidentsPage = lazy(() =>
+  import('./pages/operations/IncidentsPage').then((module) => ({ default: module.IncidentsPage })),
+)
+const BackupsPage = lazy(() =>
+  import('./pages/operations/BackupsPage').then((module) => ({ default: module.BackupsPage })),
+)
+const DeploymentsPage = lazy(() =>
+  import('./pages/operations/DeploymentsPage').then((module) => ({ default: module.DeploymentsPage })),
+)
+const ObservabilityPage = lazy(() =>
+  import('./pages/operations/ObservabilityPage').then((module) => ({ default: module.ObservabilityPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -560,6 +575,49 @@ export function AppRoutes() {
           />
         </Route>
 
+        <Route path="operations">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <OperationsCenterPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="incidents"
+            element={
+              <LazyPage>
+                <IncidentsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="backups"
+            element={
+              <LazyPage>
+                <BackupsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="deployments"
+            element={
+              <LazyPage>
+                <DeploymentsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="observability"
+            element={
+              <LazyPage>
+                <ObservabilityPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
         <Route path="investigations">
           <Route
             index
@@ -643,6 +701,11 @@ export function AppRoutes() {
               'developer-apps',
               'developer-webhooks',
               'developer-sdk',
+              'operations-center',
+              'operations-incidents',
+              'operations-backups',
+              'operations-deployments',
+              'operations-observability',
             ].includes(item.id),
         ).map((item) => (
           <Route

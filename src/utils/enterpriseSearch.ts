@@ -36,6 +36,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'dev-apps', title: 'API Keys & OAuth Apps', subtitle: 'Live and sandbox credentials', href: '/developer/apps', terms: 'api key rotate revoke oauth client secret' },
   { id: 'dev-hooks', title: 'Webhooks Center', subtitle: 'Events and delivery logs', href: '/developer/webhooks', terms: 'webhook replay payload delivery' },
   { id: 'dev-sdk', title: 'SDK & Developer Resources', subtitle: 'SDKs CLI Postman examples', href: '/developer/sdk', terms: 'sdk python typescript cli postman' },
+  { id: 'prod-ops', title: 'Operations Center', subtitle: 'Platform health and jobs', href: '/operations', terms: 'operations health queue sla uptime maintenance' },
+  { id: 'prod-inc', title: 'Incident Management', subtitle: 'Severity lifecycle status page', href: '/operations/incidents', terms: 'incident severity postmortem mitigation' },
+  { id: 'prod-bak', title: 'Backup & Disaster Recovery', subtitle: 'RPO RTO restore simulation', href: '/operations/backups', terms: 'backup restore disaster recovery retention' },
+  { id: 'prod-dep', title: 'Deployment Center', subtitle: 'Environments rollback flags', href: '/operations/deployments', terms: 'deploy staging production rollback feature flag' },
+  { id: 'prod-obs', title: 'Observability', subtitle: 'Metrics logs traces alerts', href: '/operations/observability', terms: 'observability metrics latency tracing alerts' },
 ] as const
 
 interface SearchInput {

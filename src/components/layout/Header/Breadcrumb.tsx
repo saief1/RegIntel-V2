@@ -105,6 +105,15 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'sdk') trail.push({ label: 'SDKs & Resources' })
     return trail
   }
+  if (segments[0] === 'operations') {
+    const trail: Crumb[] = [{ label: 'Operations', path: '/operations' }]
+    if (!segments[1]) return [{ label: 'Operations Center' }]
+    if (segments[1] === 'incidents') trail.push({ label: 'Incidents' })
+    else if (segments[1] === 'backups') trail.push({ label: 'Backups & DR' })
+    else if (segments[1] === 'deployments') trail.push({ label: 'Deployments' })
+    else if (segments[1] === 'observability') trail.push({ label: 'Observability' })
+    return trail
+  }
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
     if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })

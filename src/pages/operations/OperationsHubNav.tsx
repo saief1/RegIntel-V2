@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import styles from './operations.module.css'
 
 const LINKS = [
+  { to: '/operations', label: 'Operations Center' },
   { to: '/settings/data', label: 'Data Management' },
   { to: '/settings/security', label: 'Security Center' },
   { to: '/audit', label: 'Audit Center' },

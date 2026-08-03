@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.6.0-beta | 2026-08-03 | Production Operations — ops center, incidents, backups, deploys, observability |
 | 1.5.0-beta | 2026-08-03 | Developer Platform — portal, API explorer, apps, webhooks, SDKs |
 | 1.3.0-beta | 2026-08-03 | Connected Ecosystem — marketplace, workflow canvas, lineage, twin |
 | 1.2.0-beta | 2026-08-03 | Enterprise Operations — data, security, audit, automation, health |
@@ -40,6 +41,36 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.6.0-beta — Production Operations
+
+**Status:** Beta  
+**Sprint:** 16 (`SPRINT16_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel gains production SaaS operations: monitoring, incidents, backups/DR, deployments, and observability.
+
+#### Highlights
+
+##### Operations Center (P076)
+
+- `/operations` dashboard with health cards, dependency map, jobs, maintenance views
+
+##### Incident Management (P077)
+
+- `/operations/incidents` severity/lifecycle, timeline, AI summary, status page preview
+
+##### Backup & DR (P078)
+
+- `/operations/backups` backup kinds, restore/verify, RPO/RTO, restore simulation
+
+##### Deployment Center (P079)
+
+- `/operations/deployments` environments, checklist, rollback, feature flags
+
+##### Observability (P080)
+
+- `/operations/observability` metrics, logs, traces, alert silence windows
 
 ### v1.5.0-beta — Developer Platform & Public APIs
 
