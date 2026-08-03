@@ -16,11 +16,17 @@ This document describes RegIntel's data model, schema, storage technology, and d
 
 ## 1. Overview
 
-> Placeholder — to be defined.
+No schema implemented yet. **Technology and conventions are frozen** in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §4. Prisma schema and migrations land in **B002**.
 
 ## 2. Technology Choice
 
-> Placeholder — database engine, hosting provider, and rationale to be defined.
+| Item | Decision |
+|---|---|
+| Engine | PostgreSQL |
+| ORM / migrations | Prisma |
+| PKs | UUID |
+| Tenancy | `organization_id` on tenant-scoped rows |
+| Local | Docker Compose (`db` service) |
 
 ## 3. Schema
 
@@ -46,4 +52,5 @@ This document describes RegIntel's data model, schema, storage technology, and d
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase B planning | Point to Backend Architecture Contract (Postgres + Prisma freeze) |
 | TBD | TBD | Initial placeholder document created |

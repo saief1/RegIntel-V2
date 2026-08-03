@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document describes RegIntel's API surface: endpoints, contracts, authentication, versioning, and error handling conventions. No backend/API has been implemented yet.
+This document is the human index for RegIntel's API surface. **Authoritative conventions** (versioning, auth, errors, pagination, OpenAPI) live in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) until the NestJS API exists and this file is filled with concrete routes.
 
 ## Table of Contents
 
@@ -17,36 +17,45 @@ This document describes RegIntel's API surface: endpoints, contracts, authentica
 
 ## 1. Overview
 
-No production API yet. The frontend uses mock providers until **Phase B (B015–B018)**. Contracts, auth, and versioning below are placeholders for that work — see [`ROADMAP.md`](./ROADMAP.md).
+No production API implementation yet (B001+). The frontend uses mock providers; first domain cutovers are **B016–B020** behind feature flags. Foundation auth/org APIs are **B003–B005**.
+
+See [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) and [`ROADMAP.md`](./ROADMAP.md).
 
 ## 2. Conventions
 
-> Placeholder — request/response format, naming conventions, pagination, etc.
+Frozen in the Backend Architecture Contract:
+
+- REST JSON under **`/api/v1`**
+- List envelope `{ data, meta }` with offset pagination
+- Stable error object (see contract §8)
 
 ## 3. Authentication
 
-> Placeholder — auth scheme (e.g. session, JWT, OAuth) to be defined.
+Frozen: **JWT access (Bearer)** + **httpOnly refresh cookie**; **Argon2** password hashing. MFA/SSO later (B006+). Details: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §6.
 
 ## 4. Endpoints
 
 | Method | Path | Description | Status |
 |---|---|---|---|
-| Placeholder | Placeholder | TBD | Not Started |
+| — | — | Concrete routes land with B001–B005 | Not Started |
+
+Swagger will be served at `/api/docs` once B005 lands.
 
 ## 5. Error Handling
 
-> Placeholder — standard error response shape and status codes to be defined.
+Stable shape documented in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §8 (`error.code`, `message`, `statusCode`, `correlationId`, `details`).
 
 ## 6. Versioning
 
-> Placeholder — to be defined.
+URL prefix **`/api/v1`**. Breaking changes require a new major API version segment.
 
 ## 7. Rate Limiting
 
-> Placeholder — to be defined.
+Deferred past Milestone B1; document when introduced.
 
 ## 8. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase B planning | Point to Backend Architecture Contract; clarify B1 vs B016–B020 |
 | TBD | TBD | Initial placeholder document created |

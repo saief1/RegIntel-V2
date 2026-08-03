@@ -106,9 +106,12 @@ See [`UI_GUIDELINES.md`](./UI_GUIDELINES.md) for Frontend Platform GA notes and 
 
 Phases A–F (and v3.0 Commercial Launch) are documented in [`ROADMAP.md`](./ROADMAP.md). Ticket IDs (`A001`–`F015`) are the planning source of truth. Architecture changes that introduce new frameworks, data layers, or folder conventions require approval per `CLAUDE.md`.
 
+**Phase B backend:** conventions, tech freeze, and `backend/` layout are defined in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md). Frontend stays at repo root; UI frozen except mock→API feature-flag wiring. No NestJS scaffolding until B001.
+
 ## 9. Related Documents
 
 - [`MASTER_SPEC.md`](./MASTER_SPEC.md)
+- [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md)
 - [`UI_GUIDELINES.md`](./UI_GUIDELINES.md)
 - [`RELEASE_NOTES.md`](./RELEASE_NOTES.md)
 - [`ROADMAP.md`](./ROADMAP.md)

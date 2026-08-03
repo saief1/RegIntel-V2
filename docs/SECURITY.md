@@ -26,7 +26,7 @@ This document defines RegIntel's security posture, threat model, and compliance 
 
 ## 3. Authentication & Authorization
 
-> Placeholder — auth strategy, role model, and permission system to be defined.
+Phase B direction is frozen in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md): JWT access + refresh, Argon2, MFA-ready / OIDC-SAML-ready interfaces later. Full RBAC/MFA/SSO are B006–B010 — not Milestone B1.
 
 ## 4. Data Protection
 
@@ -52,4 +52,5 @@ This document defines RegIntel's security posture, threat model, and compliance 
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase B planning | Point auth strategy to Backend Architecture Contract |
 | TBD | TBD | Initial placeholder document created |

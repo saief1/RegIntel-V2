@@ -18,11 +18,11 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 ### Added
 
-- None yet.
+- [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) — Phase B Backend Architecture Contract (B000); tech freeze and Milestone B1 conventions. Planning only — no NestJS/Prisma code; no version bump.
 
 ### Changed
 
-- None yet.
+- [`ROADMAP.md`](./ROADMAP.md) / [`PRODUCT_BOARD.md`](./PRODUCT_BOARD.md) — Phase B → In Progress (planning); ticket bands B000–B025; version targets v2.1.0–v3.0.0.
 
 ### Fixed
 

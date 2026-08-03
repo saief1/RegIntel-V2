@@ -20,6 +20,7 @@ This file defines the development rules that any AI coding agent (or human contr
 - [`docs/MASTER_SPEC.md`](./docs/MASTER_SPEC.md)
 - [`docs/PRODUCT.md`](./docs/PRODUCT.md)
 - [`docs/ROADMAP.md`](./docs/ROADMAP.md)
+- [`docs/BACKEND_ARCHITECTURE.md`](./docs/BACKEND_ARCHITECTURE.md)
 - [`docs/FEATURES.md`](./docs/FEATURES.md)
 - [`docs/DATABASE.md`](./docs/DATABASE.md)
 - [`docs/API.md`](./docs/API.md)

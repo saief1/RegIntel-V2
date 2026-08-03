@@ -18,7 +18,16 @@ Append a new entry to the [Decision Log](#2-decision-log) for each notable decis
 
 | ID | Date | Title | Status |
 |---|---|---|---|
-| ADR-001 | TBD | Placeholder | Proposed |
+| ADR-001 | 2026-08-03 | Backend stack & `backend/` layout (Phase B) | Accepted |
+
+### ADR-001: Backend stack & `backend/` layout (Phase B)
+
+- **Date:** 2026-08-03
+- **Status:** Accepted
+- **Context:** Phase A complete; need a frozen backend contract before NestJS scaffolding (B001).
+- **Decision:** NestJS + PostgreSQL + Prisma + Redis + BullMQ + Swagger + Docker Compose; JWT access (Bearer) + httpOnly refresh cookie; Argon2; place API in repo-root `backend/` without relocating the Vite frontend. Full detail: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md).
+- **Alternatives Considered:** `apps/api` monorepo layout; session-only cookies; alternative ORMs/frameworks.
+- **Consequences:** B001+ must follow the contract; changing the freeze requires a superseding ADR.
 
 ## 3. Template
 
