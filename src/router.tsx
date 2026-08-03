@@ -71,6 +71,21 @@ const AutomationStudioPage = lazy(() =>
 const SystemHealthPage = lazy(() =>
   import('./pages/system/SystemHealthPage').then((module) => ({ default: module.SystemHealthPage })),
 )
+const MarketplacePage = lazy(() =>
+  import('./pages/integrations/MarketplacePage').then((module) => ({ default: module.MarketplacePage })),
+)
+const IntegrationBuilderPage = lazy(() =>
+  import('./pages/integrations/IntegrationBuilderPage').then((module) => ({ default: module.IntegrationBuilderPage })),
+)
+const WorkflowCanvasPage = lazy(() =>
+  import('./pages/automation/WorkflowCanvasPage').then((module) => ({ default: module.WorkflowCanvasPage })),
+)
+const DataLineagePage = lazy(() =>
+  import('./pages/data/DataLineagePage').then((module) => ({ default: module.DataLineagePage })),
+)
+const DigitalTwinPage = lazy(() =>
+  import('./pages/reports/DigitalTwinPage').then((module) => ({ default: module.DigitalTwinPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -318,6 +333,14 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="digital-twin"
+            element={
+              <LazyPage>
+                <DigitalTwinPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route path="agents">
@@ -414,14 +437,24 @@ export function AppRoutes() {
             </LazyPage>
           }
         />
-        <Route
-          path="automation"
-          element={
-            <LazyPage>
-              <AutomationStudioPage />
-            </LazyPage>
-          }
-        />
+        <Route path="automation">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <AutomationStudioPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="canvas"
+            element={
+              <LazyPage>
+                <WorkflowCanvasPage />
+              </LazyPage>
+            }
+          />
+        </Route>
         <Route
           path="system"
           element={
@@ -431,14 +464,43 @@ export function AppRoutes() {
           }
         />
 
-        <Route
-          path="integrations"
-          element={
-            <LazyPage>
-              <IntegrationsPage />
-            </LazyPage>
-          }
-        />
+        <Route path="integrations">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <IntegrationsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="marketplace"
+            element={
+              <LazyPage>
+                <MarketplacePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="builder"
+            element={
+              <LazyPage>
+                <IntegrationBuilderPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
+        <Route path="data">
+          <Route
+            path="lineage"
+            element={
+              <LazyPage>
+                <DataLineagePage />
+              </LazyPage>
+            }
+          />
+        </Route>
 
         <Route path="investigations">
           <Route
@@ -513,6 +575,11 @@ export function AppRoutes() {
               'audit-center',
               'automation-studio',
               'system-health',
+              'integration-marketplace',
+              'integration-builder',
+              'workflow-canvas',
+              'data-lineage',
+              'digital-twin',
             ].includes(item.id),
         ).map((item) => (
           <Route

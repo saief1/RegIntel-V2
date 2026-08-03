@@ -226,6 +226,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/system',
     description: 'Platform status, queues, feature flags, and release notes.',
   },
+  {
+    id: 'integration-marketplace',
+    label: 'Integration Marketplace',
+    path: '/integrations/marketplace',
+    description: 'Browse and manage enterprise connectors by category.',
+  },
+  {
+    id: 'integration-builder',
+    label: 'Integration Builder',
+    path: '/integrations/builder',
+    description: 'Build custom REST, GraphQL, webhook, and sync integrations.',
+  },
+  {
+    id: 'workflow-canvas',
+    label: 'Workflow Studio 2.0',
+    path: '/automation/canvas',
+    description: 'Visual workflow canvas with versioning and rollback.',
+  },
+  {
+    id: 'data-lineage',
+    label: 'Data Lineage',
+    path: '/data/lineage',
+    description: 'Dependency graph from regulation to report.',
+  },
+  {
+    id: 'digital-twin',
+    label: 'Executive Digital Twin',
+    path: '/reports/digital-twin',
+    description: 'Simulate organizational capacity and compliance impact.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

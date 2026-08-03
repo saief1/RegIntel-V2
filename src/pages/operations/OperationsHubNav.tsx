@@ -6,6 +6,8 @@ const LINKS = [
   { to: '/settings/security', label: 'Security Center' },
   { to: '/audit', label: 'Audit Center' },
   { to: '/automation', label: 'Automation Studio' },
+  { to: '/automation/canvas', label: 'Workflow Canvas' },
+  { to: '/integrations/marketplace', label: 'Marketplace' },
   { to: '/system', label: 'System Health' },
   { to: '/settings/admin', label: 'Admin Console' },
 ] as const

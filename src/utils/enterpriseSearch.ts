@@ -1,3 +1,4 @@
+import { MARKETPLACE_CONNECTORS } from '../data/ecosystem/platform'
 import type { CollaborationComment, GovernanceEvidence, PolicyRecord } from '../types/governance'
 import type { WorkTask } from '../types/work'
 import type { KnowledgeDocument } from '../types/knowledge'
@@ -13,6 +14,7 @@ export interface EnterpriseSearchHit {
     | 'Comments'
     | 'People'
     | 'Operations'
+    | 'Integrations'
   title: string
   subtitle?: string
   href: string
@@ -24,6 +26,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'ops-audit', title: 'Audit & Compliance Center', subtitle: 'Findings and evidence requests', href: '/audit', terms: 'audit finding evidence auditor' },
   { id: 'ops-auto', title: 'Automation Studio', subtitle: 'No-code triggers and actions', href: '/automation', terms: 'automation trigger workflow retry' },
   { id: 'ops-system', title: 'System Health Center', subtitle: 'Queues, uptime, feature flags', href: '/system', terms: 'system health queue uptime performance cache' },
+  { id: 'ops-market', title: 'Integration Marketplace', subtitle: 'Enterprise connectors', href: '/integrations/marketplace', terms: 'marketplace connector slack jira servicenow okta' },
+  { id: 'ops-builder', title: 'Integration Builder', subtitle: 'Custom REST GraphQL webhooks', href: '/integrations/builder', terms: 'builder rest graphql webhook sync' },
+  { id: 'ops-canvas', title: 'Workflow Studio 2.0', subtitle: 'Visual workflow canvas', href: '/automation/canvas', terms: 'canvas workflow nodes publish rollback' },
+  { id: 'ops-lineage', title: 'Data Lineage', subtitle: 'Dependency and impact graph', href: '/data/lineage', terms: 'lineage dependency impact regulation policy' },
+  { id: 'ops-twin', title: 'Executive Digital Twin', subtitle: 'Organization simulation', href: '/reports/digital-twin', terms: 'digital twin simulation forecast capacity' },
 ] as const
 
 interface SearchInput {
@@ -138,6 +145,22 @@ export function enterpriseSearch(input: SearchInput): EnterpriseSearchHit[] {
         title: destination.title,
         subtitle: destination.subtitle,
         href: destination.href,
+      })
+    }
+  }
+
+  for (const connector of MARKETPLACE_CONNECTORS) {
+    if (
+      `${connector.name} ${connector.vendor} ${connector.category} ${connector.description}`
+        .toLowerCase()
+        .includes(q)
+    ) {
+      hits.push({
+        id: `int-${connector.id}`,
+        group: 'Integrations',
+        title: connector.name,
+        subtitle: `${connector.vendor} · ${connector.category.replace(/_/g, ' ')} · ${connector.state}`,
+        href: '/integrations/marketplace',
       })
     }
   }

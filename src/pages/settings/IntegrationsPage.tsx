@@ -34,14 +34,17 @@ export function IntegrationsPage() {
       />
 
       <nav className={styles.hubLinks} aria-label="Connected enterprise areas">
+        <Link className={styles.hubLink} to="/integrations/marketplace">
+          Marketplace
+        </Link>
+        <Link className={styles.hubLink} to="/integrations/builder">
+          Integration Builder
+        </Link>
+        <Link className={styles.hubLink} to="/data/lineage">
+          Data Lineage
+        </Link>
         <Link className={styles.hubLink} to="/settings/api">
           API Platform
-        </Link>
-        <Link className={styles.hubLink} to="/settings/admin">
-          Admin Console
-        </Link>
-        <Link className={styles.hubLink} to="/settings/collaboration">
-          Collaboration
         </Link>
         <Link className={styles.hubLink} to="/agents">
           AI Agents

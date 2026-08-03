@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { Workflow } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
@@ -11,6 +12,7 @@ import { useOperations } from '../../hooks/useOperations'
 import { formatRelativeTime } from '../../utils/date'
 import { OperationsHubNav } from '../operations/OperationsHubNav'
 import styles from '../operations/operations.module.css'
+import eco from '../ecosystem/ecosystem.module.css'
 
 export function AutomationStudioPage() {
   const {
@@ -45,6 +47,15 @@ export function AutomationStudioPage() {
       />
 
       <OperationsHubNav current="/automation" />
+
+      <nav className={eco.hubLinks} aria-label="Workflow studio">
+        <Link className={eco.hubLink} to="/automation/canvas">
+          Workflow Studio 2.0 Canvas
+        </Link>
+        <Link className={eco.hubLink} to="/integrations/marketplace">
+          Integration Marketplace
+        </Link>
+      </nav>
 
       <section className={g.panel}>
         <h2>Automation flow</h2>

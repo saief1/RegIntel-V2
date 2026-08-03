@@ -9,6 +9,7 @@ const LINKS = [
   { to: '/reports/predictive', label: 'Predictive' },
   { to: '/reports/board', label: 'Board Studio' },
   { to: '/reports/benchmark', label: 'Benchmarking' },
+  { to: '/reports/digital-twin', label: 'Digital Twin' },
 ] as const
 
 export function ReportsHubNav({ current }: { current?: string }) {

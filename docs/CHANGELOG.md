@@ -32,12 +32,43 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.3.0-beta | 2026-08-03 | Connected Ecosystem — marketplace, workflow canvas, lineage, twin |
 | 1.2.0-beta | 2026-08-03 | Enterprise Operations — data, security, audit, automation, health |
 | 1.1.0-beta | 2026-08-03 | Enterprise Intelligence — analytics, KPIs, board, benchmarks |
 | 1.0.0-beta | 2026-08-03 | Autonomous Compliance — AI workforce, queue, knowledge graph |
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.3.0-beta — Enterprise Integrations & Workflow Ecosystem
+
+**Status:** Beta  
+**Sprint:** 13 (`SPRINT13_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel becomes the hub connecting identity, productivity, ticketing, storage, and compliance systems with lineage and organizational simulation.
+
+#### Highlights
+
+##### Integration Marketplace (P061)
+
+- `/integrations/marketplace` with category browse, install/enable/disable, config, sync history
+
+##### Integration Builder (P062)
+
+- `/integrations/builder` for REST/GraphQL/webhook/scheduled sync pipelines (mock)
+
+##### Workflow Studio 2.0 (P063)
+
+- `/automation/canvas` visual canvas with zoom/pan, validation, publish, rollback
+
+##### Data Lineage (P064)
+
+- `/data/lineage` regulation→report graph with impact analysis and list fallback
+
+##### Executive Digital Twin (P065)
+
+- `/reports/digital-twin` organization map, simulations, forecast impact
 
 ### v1.2.0-beta — Enterprise Platform & Production Readiness
 

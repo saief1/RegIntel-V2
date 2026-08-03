@@ -75,6 +75,7 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'predictive') trail.push({ label: 'Predictive Compliance' })
     else if (segments[1] === 'board') trail.push({ label: 'Board Studio' })
     else if (segments[1] === 'benchmark') trail.push({ label: 'Benchmarking' })
+    else if (segments[1] === 'digital-twin') trail.push({ label: 'Digital Twin' })
     else trail.push({ label: 'Executive Dashboard' })
     return trail
   }
@@ -84,7 +85,17 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'queue') trail.push({ label: 'Work Queue' })
     return trail
   }
-  if (segments[0] === 'integrations') return [{ label: 'Integrations' }]
+  if (segments[0] === 'integrations') {
+    const trail: Crumb[] = [{ label: 'Integrations', path: '/integrations' }]
+    if (segments[1] === 'marketplace') trail.push({ label: 'Marketplace' })
+    else if (segments[1] === 'builder') trail.push({ label: 'Builder' })
+    return trail
+  }
+  if (segments[0] === 'data') {
+    const trail: Crumb[] = [{ label: 'Data' }]
+    if (segments[1] === 'lineage') trail.push({ label: 'Lineage' })
+    return trail
+  }
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
     if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })
@@ -97,7 +108,11 @@ function useBreadcrumbTrail(): Crumb[] {
   }
 
   if (segments[0] === 'audit') return [{ label: 'Audit Center' }]
-  if (segments[0] === 'automation') return [{ label: 'Automation Studio' }]
+  if (segments[0] === 'automation') {
+    const trail: Crumb[] = [{ label: 'Automation Studio', path: '/automation' }]
+    if (segments[1] === 'canvas') trail.push({ label: 'Workflow Canvas' })
+    return trail
+  }
   if (segments[0] === 'system') return [{ label: 'System Health' }]
 
   if (segments[0] === 'ai') {

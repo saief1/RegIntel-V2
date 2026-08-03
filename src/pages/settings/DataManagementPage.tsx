@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { Database } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
@@ -39,6 +40,15 @@ export function DataManagementPage() {
       />
 
       <OperationsHubNav current="/settings/data" />
+
+      <nav className={styles.hubLinks} aria-label="Connected data">
+        <Link className={styles.hubLink} to="/data/lineage">
+          Data Lineage
+        </Link>
+        <Link className={styles.hubLink} to="/integrations/marketplace">
+          Integration Marketplace
+        </Link>
+      </nav>
 
       <div className={g.toolbar}>
         <Button size="sm" variant="primary" onClick={() => queueMockImport('csv')}>

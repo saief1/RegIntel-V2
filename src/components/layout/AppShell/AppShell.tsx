@@ -3,6 +3,7 @@ import { AnalyticsProvider } from '../../../context/AnalyticsProvider'
 import { AutonomousProvider } from '../../../context/AutonomousProvider'
 import { ConnectedProvider } from '../../../context/ConnectedProvider'
 import { CopilotProvider } from '../../../context/CopilotProvider'
+import { EcosystemProvider } from '../../../context/EcosystemProvider'
 import { GovernanceProvider } from '../../../context/GovernanceProvider'
 import { InvestigationsProvider } from '../../../context/InvestigationsProvider'
 import { KnowledgeProvider } from '../../../context/KnowledgeProvider'
@@ -26,20 +27,22 @@ export function AppShell() {
               <AutonomousProvider>
                 <AnalyticsProvider>
                   <OperationsProvider>
-                    <CopilotProvider>
-                      <ShellLayoutProvider>
-                        <div className={styles.shell}>
-                          <Header />
-                          <div className={styles.body}>
-                            <Sidebar />
-                            <Workspace />
-                            <AIPanel />
+                    <EcosystemProvider>
+                      <CopilotProvider>
+                        <ShellLayoutProvider>
+                          <div className={styles.shell}>
+                            <Header />
+                            <div className={styles.body}>
+                              <Sidebar />
+                              <Workspace />
+                              <AIPanel />
+                            </div>
                           </div>
-                        </div>
-                        <CommandPalette />
-                        <ToastCenter />
-                      </ShellLayoutProvider>
-                    </CopilotProvider>
+                          <CommandPalette />
+                          <ToastCenter />
+                        </ShellLayoutProvider>
+                      </CopilotProvider>
+                    </EcosystemProvider>
                   </OperationsProvider>
                 </AnalyticsProvider>
               </AutonomousProvider>
