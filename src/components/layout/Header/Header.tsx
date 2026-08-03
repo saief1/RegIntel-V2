@@ -1,6 +1,7 @@
 import { Command, Menu, PanelLeftClose, PanelLeftOpen, Sparkles } from 'lucide-react'
 import { useShellLayout } from '../../../hooks/useShellLayout'
 import { GlobalStatusIndicator } from '../../operations/GlobalStatusIndicator'
+import { SolutionSwitcher } from '../../solutions/SolutionSwitcher'
 import { IconButton } from '../../ui/IconButton/IconButton'
 import { SearchField } from '../../ui/SearchField/SearchField'
 import { Toolbar } from '../../ui/Toolbar/Toolbar'
@@ -54,6 +55,7 @@ export function Header() {
       </div>
 
       <Toolbar>
+        <SolutionSwitcher />
         <GlobalStatusIndicator />
         <Tooltip content="Command palette" side="bottom">
           <IconButton label="Open global search" onClick={openCommandPalette} className={styles.desktopOnly}>

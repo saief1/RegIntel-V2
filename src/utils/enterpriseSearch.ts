@@ -41,6 +41,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'prod-bak', title: 'Backup & Disaster Recovery', subtitle: 'RPO RTO restore simulation', href: '/operations/backups', terms: 'backup restore disaster recovery retention' },
   { id: 'prod-dep', title: 'Deployment Center', subtitle: 'Environments rollback flags', href: '/operations/deployments', terms: 'deploy staging production rollback feature flag' },
   { id: 'prod-obs', title: 'Observability', subtitle: 'Metrics logs traces alerts', href: '/operations/observability', terms: 'observability metrics latency tracing alerts' },
+  { id: 'sol-mkt', title: 'Solution Marketplace', subtitle: 'Industry solution packs', href: '/solutions', terms: 'solutions marketplace wealth banking insurance grc' },
+  { id: 'sol-wealth', title: 'Wealth Management Pack', subtitle: 'CIRO CSA FINTRAC OBSI', href: '/solutions/wealth', terms: 'wealth kyc suitability branch supervision ciro' },
+  { id: 'sol-bank', title: 'Banking Pack', subtitle: 'AML sanctions privacy', href: '/solutions/banking', terms: 'banking aml sanctions risk heatmap' },
+  { id: 'sol-ins', title: 'Insurance Pack', subtitle: 'Market conduct licensing', href: '/solutions/insurance', terms: 'insurance licensing conduct agent supervision' },
+  { id: 'sol-grc', title: 'Enterprise GRC Pack', subtitle: 'Risk matrix controls SOX', href: '/solutions/grc', terms: 'grc sox audit universe control testing' },
 ] as const
 
 interface SearchInput {

@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.7.0-beta | 2026-08-03 | Industry Solutions — wealth flagship, banking, insurance, GRC marketplace |
 | 1.6.0-beta | 2026-08-03 | Production Operations — ops center, incidents, backups, deploys, observability |
 | 1.5.0-beta | 2026-08-03 | Developer Platform — portal, API explorer, apps, webhooks, SDKs |
 | 1.3.0-beta | 2026-08-03 | Connected Ecosystem — marketplace, workflow canvas, lineage, twin |
@@ -41,6 +42,36 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.7.0-beta — Industry Solution Packs
+
+**Status:** Beta  
+**Sprint:** 17 (`SPRINT17_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel becomes industry-aware with a solution marketplace and dedicated packs. Wealth Management (Canada) is the flagship.
+
+#### Highlights
+
+##### Solution Marketplace (P085)
+
+- `/solutions` install/preview cards across wealth, banking, insurance, GRC, and adjacent verticals
+
+##### Wealth Management Pack (P081) — Flagship
+
+- `/solutions/wealth` CIRO/CSA/FINTRAC/OBSI dashboards, KYC, suitability, branch supervision, AI templates
+
+##### Banking Pack (P082)
+
+- `/solutions/banking` AML/sanctions modules with regulatory health and risk heatmap
+
+##### Insurance Pack (P083)
+
+- `/solutions/insurance` agent supervision, review calendar, AI policy review
+
+##### Enterprise GRC Pack (P084)
+
+- `/solutions/grc` risk matrix, control coverage, audit universe, control testing
 
 ### v1.6.0-beta — Production Operations
 

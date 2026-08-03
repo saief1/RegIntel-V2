@@ -316,6 +316,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/operations/observability',
     description: 'Metrics, logs, tracing, and alert policies.',
   },
+  {
+    id: 'solutions-marketplace',
+    label: 'Solution Marketplace',
+    path: '/solutions',
+    description: 'Browse and install industry solution packs.',
+  },
+  {
+    id: 'solutions-wealth',
+    label: 'Wealth Management Pack',
+    path: '/solutions/wealth',
+    description: 'CIRO/CSA/FINTRAC wealth compliance for Canadian dealers.',
+  },
+  {
+    id: 'solutions-banking',
+    label: 'Banking Pack',
+    path: '/solutions/banking',
+    description: 'AML, sanctions, privacy, and banking risk dashboards.',
+  },
+  {
+    id: 'solutions-insurance',
+    label: 'Insurance Pack',
+    path: '/solutions/insurance',
+    description: 'Market conduct, licensing, and agent supervision.',
+  },
+  {
+    id: 'solutions-grc',
+    label: 'Enterprise GRC Pack',
+    path: '/solutions/grc',
+    description: 'Risk matrix, controls, audit universe, and SOX.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

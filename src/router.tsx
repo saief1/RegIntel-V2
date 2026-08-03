@@ -116,6 +116,21 @@ const DeploymentsPage = lazy(() =>
 const ObservabilityPage = lazy(() =>
   import('./pages/operations/ObservabilityPage').then((module) => ({ default: module.ObservabilityPage })),
 )
+const SolutionsMarketplacePage = lazy(() =>
+  import('./pages/solutions/SolutionsMarketplacePage').then((module) => ({ default: module.SolutionsMarketplacePage })),
+)
+const WealthSolutionPage = lazy(() =>
+  import('./pages/solutions/WealthSolutionPage').then((module) => ({ default: module.WealthSolutionPage })),
+)
+const BankingSolutionPage = lazy(() =>
+  import('./pages/solutions/BankingSolutionPage').then((module) => ({ default: module.BankingSolutionPage })),
+)
+const InsuranceSolutionPage = lazy(() =>
+  import('./pages/solutions/InsuranceSolutionPage').then((module) => ({ default: module.InsuranceSolutionPage })),
+)
+const GrcSolutionPage = lazy(() =>
+  import('./pages/solutions/GrcSolutionPage').then((module) => ({ default: module.GrcSolutionPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -618,6 +633,49 @@ export function AppRoutes() {
           />
         </Route>
 
+        <Route path="solutions">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <SolutionsMarketplacePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="wealth"
+            element={
+              <LazyPage>
+                <WealthSolutionPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="banking"
+            element={
+              <LazyPage>
+                <BankingSolutionPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="insurance"
+            element={
+              <LazyPage>
+                <InsuranceSolutionPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="grc"
+            element={
+              <LazyPage>
+                <GrcSolutionPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
         <Route path="investigations">
           <Route
             index
@@ -706,6 +764,11 @@ export function AppRoutes() {
               'operations-backups',
               'operations-deployments',
               'operations-observability',
+              'solutions-marketplace',
+              'solutions-wealth',
+              'solutions-banking',
+              'solutions-insurance',
+              'solutions-grc',
             ].includes(item.id),
         ).map((item) => (
           <Route

@@ -114,6 +114,15 @@ function useBreadcrumbTrail(): Crumb[] {
     else if (segments[1] === 'observability') trail.push({ label: 'Observability' })
     return trail
   }
+  if (segments[0] === 'solutions') {
+    const trail: Crumb[] = [{ label: 'Solutions', path: '/solutions' }]
+    if (!segments[1]) return [{ label: 'Solution Marketplace' }]
+    if (segments[1] === 'wealth') trail.push({ label: 'Wealth Management' })
+    else if (segments[1] === 'banking') trail.push({ label: 'Banking' })
+    else if (segments[1] === 'insurance') trail.push({ label: 'Insurance' })
+    else if (segments[1] === 'grc') trail.push({ label: 'Enterprise GRC' })
+    return trail
+  }
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
     if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })
