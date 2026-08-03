@@ -4,6 +4,7 @@ import { clsx as cx } from 'clsx'
 import { findNavItemByPath } from '../../../config/navigation'
 import { useKnowledge } from '../../../hooks/useKnowledge'
 import { useShellLayout } from '../../../hooks/useShellLayout'
+import { useWork } from '../../../hooks/useWork'
 import styles from './Breadcrumb.module.css'
 
 interface Crumb {
@@ -14,6 +15,7 @@ interface Crumb {
 function useBreadcrumbTrail(): Crumb[] {
   const location = useLocation()
   const { getDocument, collections } = useKnowledge()
+  const { getCase } = useWork()
   const segments = location.pathname.split('/').filter(Boolean)
 
   if (segments[0] === 'knowledge') {
@@ -33,6 +35,25 @@ function useBreadcrumbTrail(): Crumb[] {
       }
     }
 
+    return trail
+  }
+
+  if (segments[0] === 'work') {
+    const trail: Crumb[] = [{ label: 'Work', path: '/work' }]
+    if (segments[1] === 'cases') {
+      trail.push({ label: 'Cases', path: '/work/cases' })
+      if (segments[2]) {
+        const workCase = getCase(segments[2])
+        trail.push({ label: workCase?.caseNumber ?? 'Case' })
+      }
+    }
+    return trail
+  }
+
+  if (segments[0] === 'ai') {
+    const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]
+    if (segments[1] === 'prompts') trail.push({ label: 'Prompt library' })
+    if (segments[1] === 'memory') trail.push({ label: 'Memory' })
     return trail
   }
 

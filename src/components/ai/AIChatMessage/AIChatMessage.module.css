@@ -1,0 +1,75 @@
+.userRow,
+.assistantRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+}
+
+.userRow {
+  align-items: flex-end;
+}
+
+.assistantRow {
+  align-items: flex-start;
+}
+
+.userBubble,
+.assistantBubble {
+  max-width: min(720px, 100%);
+  padding: var(--ri-space-3) var(--ri-space-4);
+  border-radius: var(--ri-radius-lg);
+}
+
+.userBubble {
+  background-color: var(--ri-color-accent);
+  color: var(--ri-color-text-on-accent);
+  border-bottom-right-radius: var(--ri-space-1);
+}
+
+.assistantBubble {
+  width: 100%;
+  background-color: var(--ri-color-surface);
+  border: 1px solid var(--ri-color-border);
+  border-bottom-left-radius: var(--ri-space-1);
+}
+
+.assistantLabel {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  margin-bottom: var(--ri-space-2);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-accent);
+}
+
+.userText {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  white-space: pre-wrap;
+}
+
+.time {
+  display: block;
+  margin-top: var(--ri-space-2);
+  font-size: var(--ri-font-size-caption);
+  opacity: 0.75;
+}
+
+.assistantBubble .time {
+  color: var(--ri-color-text-muted);
+  opacity: 1;
+}
+
+.citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  max-width: min(720px, 100%);
+}
+
+.actions {
+  display: flex;
+  gap: var(--ri-space-1);
+}

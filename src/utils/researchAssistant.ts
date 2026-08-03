@@ -11,6 +11,9 @@ import type { Citation, KnowledgeDocument } from '../types/knowledge'
 export interface ResearchAnswer {
   content: string
   citations: Citation[]
+  confidence: number
+  suggestedNextQuestions: string[]
+  relatedCaseHrefs: string[]
 }
 
 const STOP_WORDS = new Set([
@@ -81,6 +84,12 @@ export function answerResearchPrompt(prompt: string, documents: KnowledgeDocumen
       content:
         "I couldn't find a strong match in your knowledge base for that. Try referencing a specific regulation, jurisdiction, or category, or browse the Regulation Library to explore what's tracked.",
       citations: [],
+      confidence: 0.42,
+      suggestedNextQuestions: [
+        "Summarize this year's data privacy changes",
+        'What are the new AML beneficial ownership rules?',
+      ],
+      relatedCaseHrefs: [],
     }
   }
 
@@ -95,8 +104,28 @@ export function answerResearchPrompt(prompt: string, documents: KnowledgeDocumen
       ? ` Related items worth reviewing: ${rest.map((document) => `"${document.title}"`).join(', ')}.`
       : ''
 
+  const confidence = Math.min(0.92, 0.62 + ranked.length * 0.08 + Math.min(tokens.length, 4) * 0.03)
+  const relatedCaseHrefs = inferRelatedCases(prompt)
+
   return {
     content: `${intro}${followUp}`,
     citations: ranked.map(buildCitation),
+    confidence,
+    suggestedNextQuestions: [
+      `What supporting documents reinforce "${primary.title}"?`,
+      'Which open cases are most affected?',
+      'What evidence would strengthen this conclusion?',
+    ],
+    relatedCaseHrefs,
   }
+}
+
+function inferRelatedCases(prompt: string): string[] {
+  const normalized = prompt.toLowerCase()
+  if (normalized.includes('aml') || normalized.includes('beneficial')) return ['/work/cases/case-02']
+  if (normalized.includes('transfer') || normalized.includes('privacy') || normalized.includes('cross-border')) {
+    return ['/work/cases/case-01']
+  }
+  if (normalized.includes('incident') || normalized.includes('cyber')) return ['/work/cases/case-03']
+  return []
 }

@@ -1,0 +1,40 @@
+.group {
+  display: inline-flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.group li + li {
+  margin-left: calc(var(--ri-space-2) * -1);
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--ri-radius-pill);
+  border: 2px solid var(--ri-color-surface);
+  background-color: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+  font-weight: var(--ri-font-weight-semibold);
+  line-height: 1;
+}
+
+.sm .avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 10px;
+}
+
+.md .avatar {
+  width: 32px;
+  height: 32px;
+  font-size: var(--ri-font-size-caption);
+}
+
+.overflow {
+  background-color: var(--ri-color-hover);
+  color: var(--ri-color-text-secondary);
+}

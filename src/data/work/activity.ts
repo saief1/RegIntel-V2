@@ -1,0 +1,60 @@
+import type { ActivityItem } from '../../types/work'
+
+export const WORK_ACTIVITY: ActivityItem[] = [
+  {
+    id: 'act-01',
+    title: 'Evidence attached',
+    description: 'Sam Rivera attached CRM_KYC_field_export.csv to CASE-2026-018.',
+    actorId: 'u-03',
+    caseId: 'case-02',
+    createdAt: '2026-08-01T16:05:00.000Z',
+  },
+  {
+    id: 'act-02',
+    title: 'Comment added',
+    description: 'Morgan Lee left counsel notes on CASE-2026-014.',
+    actorId: 'u-04',
+    caseId: 'case-01',
+    createdAt: '2026-08-01T11:35:00.000Z',
+  },
+  {
+    id: 'act-03',
+    title: 'Case escalated',
+    description: 'Incident reporting playbook update escalated to counsel.',
+    actorId: 'u-04',
+    caseId: 'case-03',
+    createdAt: '2026-07-30T19:05:00.000Z',
+  },
+  {
+    id: 'act-04',
+    title: 'Decision recorded',
+    description: 'Alex Chen deferred CASE-2026-014 pending counsel confirmation.',
+    actorId: 'u-01',
+    caseId: 'case-01',
+    createdAt: '2026-07-29T17:00:00.000Z',
+  },
+  {
+    id: 'act-05',
+    title: 'Task completed',
+    description: 'Jordan Blake completed “Compare prior transfer clauses”.',
+    actorId: 'u-02',
+    caseId: 'case-01',
+    createdAt: '2026-07-28T15:00:00.000Z',
+  },
+  {
+    id: 'act-06',
+    title: 'Case completed',
+    description: 'Board disclosure checklist refresh marked completed.',
+    actorId: 'u-01',
+    caseId: 'case-06',
+    createdAt: '2026-07-19T17:05:00.000Z',
+  },
+  {
+    id: 'act-07',
+    title: 'Case opened',
+    description: 'AML beneficial ownership gap analysis opened.',
+    actorId: 'u-02',
+    caseId: 'case-02',
+    createdAt: '2026-07-18T11:30:00.000Z',
+  },
+]

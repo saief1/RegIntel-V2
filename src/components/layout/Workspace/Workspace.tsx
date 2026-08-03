@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
+import { clsx as cx } from 'clsx'
 import { Skeleton } from '../../ui/Skeleton/Skeleton'
 import styles from './Workspace.module.css'
 
@@ -15,8 +16,10 @@ export function Workspace() {
     return () => window.clearTimeout(timer)
   }, [])
 
+  const isFlushLayout = location.pathname === '/ai' || location.pathname.startsWith('/ai/')
+
   return (
-    <main className={styles.workspace} aria-label="Workspace">
+    <main className={cx(styles.workspace, isFlushLayout && styles.flush)} aria-label="Workspace">
       {initializing ? (
         <div className={styles.skeletonPage} aria-hidden="true">
           <Skeleton height={28} width="35%" />
@@ -28,7 +31,7 @@ export function Workspace() {
           </div>
         </div>
       ) : (
-        <div key={location.pathname} className={styles.page}>
+        <div key={location.pathname} className={cx(styles.page, isFlushLayout && styles.flushPage)}>
           <Outlet />
         </div>
       )}

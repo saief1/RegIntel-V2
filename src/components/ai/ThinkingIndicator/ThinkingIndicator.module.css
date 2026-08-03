@@ -1,0 +1,12 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border-radius: var(--ri-radius-lg);
+  background-color: var(--ri-color-surface-sunken);
+  border: 1px solid var(--ri-color-divider);
+  color: var(--ri-color-accent);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-medium);
+}

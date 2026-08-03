@@ -93,6 +93,7 @@
 .assistantLabel {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: var(--ri-space-1);
   margin-bottom: var(--ri-space-1);
   font-size: var(--ri-font-size-caption);
@@ -129,6 +130,38 @@
   flex-wrap: wrap;
   gap: var(--ri-space-1);
   max-width: 100%;
+}
+
+.relatedCases,
+.nextQuestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  max-width: 100%;
+}
+
+.relatedCase {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ri-space-1);
+  padding: var(--ri-space-1) var(--ri-space-2);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-pill);
+  background: var(--ri-color-surface);
+  font: inherit;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-secondary);
+  cursor: pointer;
+}
+
+.relatedCase:hover {
+  border-color: var(--ri-color-accent);
+  color: var(--ri-color-accent);
+}
+
+.relatedCase:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
 }
 
 /* --- Evidence --- */

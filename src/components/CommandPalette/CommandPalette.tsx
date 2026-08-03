@@ -126,7 +126,7 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
           group: 'Suggestions',
           title: EMPTY_QUERY_SUGGESTIONS[3],
           subtitle: 'Jump to AI Workspace',
-          path: '/ai-workspace',
+          path: '/ai',
           icon: 'suggestion',
         },
       )

@@ -1,0 +1,55 @@
+import type { MemoryItem } from '../../types/ai'
+
+export const AI_MEMORY: MemoryItem[] = [
+  {
+    id: 'mem-01',
+    kind: 'conversation',
+    title: 'Cross-border transfer obligations',
+    detail: 'Pinned research thread on EU–US transfer clause updates.',
+    href: '/ai',
+    createdAt: '2026-08-01T11:00:00.000Z',
+    pinned: true,
+  },
+  {
+    id: 'mem-02',
+    kind: 'regulation',
+    title: 'Data Privacy Regulation Update',
+    detail: 'Favorite regulation used across renewal reviews.',
+    href: '/knowledge/library/d-01',
+    createdAt: '2026-07-28T09:00:00.000Z',
+    pinned: true,
+  },
+  {
+    id: 'mem-03',
+    kind: 'evidence',
+    title: 'Vendor_Master_Agreement_Annex_B.pdf',
+    detail: 'Saved evidence from CASE-2026-014.',
+    href: '/work/cases/case-01',
+    createdAt: '2026-07-15T13:20:00.000Z',
+  },
+  {
+    id: 'mem-04',
+    kind: 'bookmark',
+    title: 'AML beneficial ownership gap analysis',
+    detail: 'Bookmarked critical case for daily follow-up.',
+    href: '/work/cases/case-02',
+    createdAt: '2026-08-02T08:10:00.000Z',
+  },
+  {
+    id: 'mem-05',
+    kind: 'knowledge',
+    title: 'Q4 Regulatory Review collection',
+    detail: 'Pinned knowledge collection for board prep.',
+    href: '/knowledge/collections',
+    createdAt: '2026-07-20T10:00:00.000Z',
+    pinned: true,
+  },
+  {
+    id: 'mem-06',
+    kind: 'search',
+    title: 'Recent search · privacy',
+    detail: 'Global search for privacy-related regulations and collections.',
+    href: '/knowledge/library',
+    createdAt: '2026-08-02T09:30:00.000Z',
+  },
+]

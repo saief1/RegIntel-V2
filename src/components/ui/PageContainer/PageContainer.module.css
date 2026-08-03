@@ -1,8 +1,10 @@
 .container {
   width: 100%;
   max-width: var(--ri-content-max-width);
+  min-width: 0;
   margin: 0 auto;
   padding: var(--ri-content-padding);
+  box-sizing: border-box;
 }
 
 @media (max-width: 1279px) {

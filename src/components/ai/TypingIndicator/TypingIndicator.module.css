@@ -1,0 +1,35 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: var(--ri-space-2) var(--ri-space-3);
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--ri-radius-pill);
+  background-color: var(--ri-color-text-muted);
+  animation: ri-typing 1.2s var(--ri-easing-standard) infinite;
+}
+
+.dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes ri-typing {
+  0%,
+  80%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}

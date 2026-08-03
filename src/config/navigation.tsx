@@ -33,9 +33,9 @@ export const NAV_ITEMS: NavItemConfig[] = [
     description: 'Your RegIntel Professional overview.',
   },
   {
-    id: 'ai-workspace',
+    id: 'ai',
     label: 'AI Workspace',
-    path: '/ai-workspace',
+    path: '/ai',
     icon: Sparkles,
     group: 'workspace',
     description: 'A dedicated space for AI-assisted analysis and drafting.',

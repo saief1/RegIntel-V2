@@ -5,9 +5,10 @@ import styles from './HeaderMenu.module.css'
 
 const SHORTCUTS: Array<{ keys: string; label: string }> = [
   { keys: '⌘K', label: 'Open global search' },
+  { keys: '⌘/', label: 'Focus AI input' },
   { keys: '⌘S', label: 'Save current search' },
   { keys: '⌘\\', label: 'Toggle sidebar' },
-  { keys: 'Esc', label: 'Close dialogs and menus' },
+  { keys: 'Esc', label: 'Close panels and menus' },
 ]
 
 export function HelpMenu() {

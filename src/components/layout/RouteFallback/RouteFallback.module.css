@@ -1,0 +1,5 @@
+.root {
+  display: grid;
+  gap: var(--ri-space-3);
+  padding: var(--ri-content-padding);
+}

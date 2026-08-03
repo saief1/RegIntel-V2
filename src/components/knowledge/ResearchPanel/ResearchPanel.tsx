@@ -59,7 +59,7 @@ export function ResearchPanel() {
     <div className={styles.root}>
       <div className={styles.conversationArea} ref={scrollRef}>
         {hasMessages && thread ? (
-          <ConversationThread thread={thread} isResearching={isResearching} />
+          <ConversationThread thread={thread} isResearching={isResearching} onAsk={handleSubmit} />
         ) : (
           <div className={styles.emptyWrapper}>
             <EmptyKnowledgeState

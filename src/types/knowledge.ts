@@ -67,6 +67,9 @@ export interface ResearchMessage {
   role: ResearchMessageRole
   content: string
   citations?: Citation[]
+  confidence?: number
+  suggestedNextQuestions?: string[]
+  relatedCaseHrefs?: string[]
   /** ISO 8601 date string. */
   createdAt: string
 }

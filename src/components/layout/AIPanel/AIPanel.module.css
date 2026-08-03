@@ -50,7 +50,7 @@
 
 /* --- Tablet / mobile: overlay --- */
 .backdrop {
-  position: fixed;
+  position: absolute;
   top: var(--ri-header-height);
   right: 0;
   bottom: 0;
@@ -61,7 +61,7 @@
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   z-index: calc(var(--ri-z-drawer) + 1);
   top: var(--ri-header-height);
   right: 0;

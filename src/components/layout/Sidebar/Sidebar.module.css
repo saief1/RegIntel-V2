@@ -116,7 +116,7 @@
 
 /* --- Tablet / mobile: drawer overlay --- */
 .backdrop {
-  position: fixed;
+  position: absolute;
   top: var(--ri-header-height);
   right: 0;
   bottom: 0;
@@ -134,7 +134,7 @@
 }
 
 .drawer {
-  position: fixed;
+  position: absolute;
   z-index: calc(var(--ri-z-drawer) + 1);
   top: var(--ri-header-height);
   bottom: 0;
