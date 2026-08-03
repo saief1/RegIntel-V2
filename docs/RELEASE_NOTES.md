@@ -10,7 +10,7 @@
 
 RegIntel **v2.0.0** marks **Frontend Platform GA**: a production-ready enterprise UI platform with a complete module surface (Sprints 1–19), shared design system, route-level code splitting, and hardened error/empty/loading patterns.
 
-> **Important:** v2.0.0 is **not** a finished SaaS product. Real authentication, persistence, live integrations, production AI orchestration, and live billing are **explicitly out of scope** for this release and belong to post-GA Phases B–D.
+> **Important:** v2.0.0 is **not** a finished SaaS product. Real authentication, persistence, live integrations, production AI orchestration, and live billing are **explicitly out of scope** for this release and belong to post-GA Phases B–F / v3.0.
 
 ### What GA includes
 
@@ -20,7 +20,7 @@ RegIntel **v2.0.0** marks **Frontend Platform GA**: a production-ready enterpris
 - Global React `ErrorBoundary` with recover actions
 - `NetworkErrorState` for future API/offline surfaces (demoed on Integrations)
 - Playwright smoke coverage across core routes and viewports (incl. 404)
-- Documentation framing for Phases A–D (no Sprint 21+)
+- Documentation framing for Phases A–F (no Sprint 21+)
 
 ### What GA does **not** include
 
@@ -40,10 +40,15 @@ RegIntel **v2.0.0** marks **Frontend Platform GA**: a production-ready enterpris
 
 See [`ROADMAP.md`](./ROADMAP.md):
 
-1. **Phase A** — Platform Stabilization  
-2. **Phase B** — Backend Platform  
-3. **Phase C** — AI Intelligence Layer  
-4. **Phase D** — Wealth Management Launch  
+1. **Phase A** — Platform Stabilization (A001–A010)  
+2. **Phase B** — Backend Platform (B001–B025)  
+3. **Phase C** — AI Intelligence Layer (C001–C020)  
+4. **Phase D** — Wealth Management Production (D001–D020)  
+5. **Phase E** — Enterprise Integrations (E001–E015)  
+6. **Phase F** — Pilot Customers (F001–F015)  
+7. **v3.0** — Commercial Launch  
+
+See [`ROADMAP.md`](./ROADMAP.md) Product Board. 
 
 ### Prior beta line
 

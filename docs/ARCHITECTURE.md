@@ -29,7 +29,9 @@ Describes RegIntel's architecture at **v2.0.0 Frontend Platform GA**, and how it
 | Persistence / multi-tenant DB | ❌ | Phase B |
 | Live integrations | ❌ mock connectors | Phase B |
 | Production AI orchestration | ❌ demo assistants | Phase C |
-| Live billing / licensing | ❌ mock commercial UI | Phase D |
+| Live billing / licensing | ❌ mock commercial UI | Phase D–F / v3.0 |
+| Enterprise integrations (live) | ❌ mock connectors | Phase E |
+| Pilot customers | ❌ | Phase F |
 
 ## 2. Frontend Platform (GA)
 
@@ -102,7 +104,7 @@ See [`UI_GUIDELINES.md`](./UI_GUIDELINES.md) for Frontend Platform GA notes and 
 
 ## 8. Post-GA Evolution
 
-Phases A–D are documented in [`ROADMAP.md`](./ROADMAP.md). Architecture changes that introduce new frameworks, data layers, or folder conventions require approval per `CLAUDE.md`.
+Phases A–F (and v3.0 Commercial Launch) are documented in [`ROADMAP.md`](./ROADMAP.md). Ticket IDs (`A001`–`F015`) are the planning source of truth. Architecture changes that introduce new frameworks, data layers, or folder conventions require approval per `CLAUDE.md`.
 
 ## 9. Related Documents
 

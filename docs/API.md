@@ -17,7 +17,7 @@ This document describes RegIntel's API surface: endpoints, contracts, authentica
 
 ## 1. Overview
 
-> Placeholder — to be defined.
+No production API yet. The frontend uses mock providers until **Phase B (B015–B018)**. Contracts, auth, and versioning below are placeholders for that work — see [`ROADMAP.md`](./ROADMAP.md).
 
 ## 2. Conventions
 

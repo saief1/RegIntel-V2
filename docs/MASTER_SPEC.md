@@ -28,9 +28,9 @@ At **v2.0.0**, RegIntel ships as a **Frontend Platform GA**: a complete, product
 | Item | Status |
 |---|---|
 | Frontend Platform GA | ✅ v2.0.0 |
-| Finished SaaS (auth, DB, live integrations, billing) | ❌ Future (Phases B–D) |
+| Finished SaaS (auth, DB, live integrations, billing) | ❌ Future (Phases B–F → v3.0) |
 | Sprint numbering | **Stopped** after Sprint 20 |
-| Next planning unit | Phases A–D in [`ROADMAP.md`](./ROADMAP.md) |
+| Next planning unit | Phases A–F in [`ROADMAP.md`](./ROADMAP.md) (ticket IDs are source of truth) |
 
 **Positioning statement for stakeholders:**  
 *RegIntel v2.0.0 is Frontend Platform GA — not a finished SaaS.*
@@ -68,7 +68,7 @@ High level today:
 - **Lazy routes** for feature pages
 - **Design tokens** in CSS custom properties
 
-Future: Backend Platform (Phase B), AI Intelligence Layer (Phase C), Wealth Launch (Phase D).
+Future: Stabilization (A) → Backend (B) → AI (C) → Wealth Production (D) → Integrations (E) → Pilots (F) → v3.0. See [`ROADMAP.md`](./ROADMAP.md).
 
 ## 6. Tech Stack
 
@@ -121,11 +121,14 @@ Workspace concepts exercised in the UI (mock-backed):
 - Auth provider and tenancy model (Phase B)
 - Persistence strategy and audit store (Phase B)
 - Model hosting / RAG boundaries (Phase C)
-- Wealth launch packaging and environments (Phase D)
+- Wealth production packaging and environments (Phase D)
+- Enterprise connector priorities (Phase E)
+- Pilot success criteria and commercial packaging (Phase F → v3.0)
 
 ## 10. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Phase A prep | Align release status with Phases A–F / v3.0 roadmap |
 | 2026-08-03 | Sprint 20 | Frontend Platform GA status; link ARCHITECTURE / RELEASE_NOTES / Phases A–D |
 | TBD | TBD | Initial placeholder document created |
