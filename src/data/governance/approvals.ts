@@ -1,0 +1,77 @@
+import type { ApprovalRequest } from '../../types/governance'
+
+export const APPROVAL_REQUESTS: ApprovalRequest[] = [
+  {
+    id: 'apr-01',
+    objectType: 'policy',
+    objectId: 'pol-aml',
+    title: 'AML Policy v2.0 publication',
+    status: 'pending',
+    createdAt: '2026-07-20T11:00:00.000Z',
+    updatedAt: '2026-08-01T09:00:00.000Z',
+    steps: [
+      {
+        id: 'step-01',
+        kind: 'manager',
+        label: 'Manager Review',
+        approverId: 'u-02',
+        decision: 'approved',
+        comments: 'Content complete. Proceed to compliance.',
+        decidedAt: '2026-07-22T14:00:00.000Z',
+      },
+      {
+        id: 'step-02',
+        kind: 'compliance',
+        label: 'Compliance Approval',
+        approverId: 'u-01',
+        decision: 'approved',
+        comments: 'Aligned to beneficial ownership obligations.',
+        decidedAt: '2026-07-25T16:00:00.000Z',
+      },
+      {
+        id: 'step-03',
+        kind: 'executive',
+        label: 'Executive Approval',
+        approverId: 'u-04',
+        decision: 'pending',
+        comments: '',
+      },
+    ],
+  },
+  {
+    id: 'apr-02',
+    objectType: 'policy',
+    objectId: 'pol-cyber',
+    title: 'Cybersecurity Incident Reporting Policy v2.0',
+    status: 'pending',
+    createdAt: '2026-07-28T12:00:00.000Z',
+    updatedAt: '2026-08-01T10:00:00.000Z',
+    steps: [
+      {
+        id: 'step-04',
+        kind: 'manager',
+        label: 'Manager Review',
+        approverId: 'u-05',
+        decision: 'approved',
+        comments: 'Timers updated in runbook draft.',
+        decidedAt: '2026-07-29T11:00:00.000Z',
+      },
+      {
+        id: 'step-05',
+        kind: 'compliance',
+        label: 'Compliance Approval',
+        approverId: 'u-01',
+        decision: 'pending',
+        comments: '',
+      },
+      {
+        id: 'step-06',
+        kind: 'executive',
+        label: 'Executive Approval',
+        approverId: 'u-04',
+        decision: 'pending',
+        comments: '',
+      },
+    ],
+  },
+]

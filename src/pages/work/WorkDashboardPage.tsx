@@ -136,6 +136,12 @@ export function WorkDashboardPage() {
         icon={<Briefcase size={20} />}
         actions={
           <>
+            <Button variant="secondary" onClick={() => navigate('/work/workflows')}>
+              Workflows
+            </Button>
+            <Button variant="secondary" onClick={() => navigate('/work/calendar')}>
+              Calendar
+            </Button>
             <Button variant="secondary" onClick={() => navigate('/work/cases')}>
               Cases
             </Button>

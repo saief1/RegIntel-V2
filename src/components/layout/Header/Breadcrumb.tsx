@@ -35,6 +35,9 @@ function useBreadcrumbTrail(): Crumb[] {
         const collection = collections.find((candidate) => candidate.id === segments[2])
         trail.push({ label: collection?.name ?? 'Collection' })
       }
+    } else if (segments[1] === 'policies') {
+      trail.push({ label: 'Policies', path: '/knowledge/policies' })
+      if (segments[2]) trail.push({ label: 'Policy detail' })
     }
 
     return trail
@@ -54,9 +57,16 @@ function useBreadcrumbTrail(): Crumb[] {
         const task = getTask(segments[2])
         trail.push({ label: task?.title ?? 'Task' })
       }
+    } else if (segments[1] === 'workflows') {
+      trail.push({ label: 'Workflows' })
+    } else if (segments[1] === 'calendar') {
+      trail.push({ label: 'Calendar' })
     }
     return trail
   }
+
+  if (segments[0] === 'reports') return [{ label: 'Reports', path: '/reports' }, { label: 'Executive Dashboard' }]
+  if (segments[0] === 'settings') return [{ label: 'Settings' }]
 
   if (segments[0] === 'ai') {
     const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]

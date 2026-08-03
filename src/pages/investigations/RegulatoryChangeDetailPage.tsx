@@ -6,7 +6,9 @@ import { EmptyState } from '../../components/ui/EmptyState/EmptyState'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { SectionHeader } from '../../components/ui/SectionHeader/SectionHeader'
+import { useGovernance } from '../../hooks/useGovernance'
 import { useInvestigations } from '../../hooks/useInvestigations'
+import { useWork } from '../../hooks/useWork'
 import { formatDate } from '../../utils/date'
 import styles from './RegulatoryChangeDetailPage.module.css'
 
@@ -14,7 +16,15 @@ export function RegulatoryChangeDetailPage() {
   const { changeId = '' } = useParams()
   const navigate = useNavigate()
   const { getChange, getUser, getInvestigation } = useInvestigations()
+  const { getImpact } = useGovernance()
+  const { getUser: getWorkUser } = useWork()
   const change = getChange(changeId)
+  const impact =
+    change &&
+    (getImpact(change.updatedRegulationId) ||
+      getImpact(change.originalRegulationId) ||
+      getImpact('d-02') ||
+      getImpact('d-01'))
 
   if (!change) {
     return (
@@ -67,11 +77,33 @@ export function RegulatoryChangeDetailPage() {
 
         <ImpactAssessmentCard impact={change.impact} />
 
+        {impact && (
+          <section className={styles.panel}>
+            <SectionHeader title="AI Impact Analysis" as="h2" />
+            <ul className={styles.list}>
+              <li>Affected policies: {impact.affectedPolicies.join(', ')}</li>
+              <li>Affected procedures: {impact.affectedProcedures.join(', ')}</li>
+              <li>Affected controls: {impact.affectedControls.join(', ')}</li>
+              <li>Affected vendors: {impact.affectedVendors.join(', ')}</li>
+              <li>Affected tasks: {impact.affectedTasks.join(', ')}</li>
+              <li>
+                Estimated work: {impact.estimatedWorkItems} items · {impact.estimatedHours} hours
+              </li>
+              <li>
+                Recommended owners:{' '}
+                {impact.recommendedOwnerIds.map((id) => getWorkUser(id)?.name ?? id).join(', ')}
+              </li>
+            </ul>
+          </section>
+        )}
+
         <section className={styles.panel}>
           <SectionHeader title="Affected policies" as="h2" />
           <ul className={styles.list}>
             {change.affectedPolicyTitles.map((title) => (
-              <li key={title}>{title}</li>
+              <li key={title}>
+                <Link to="/knowledge/policies">{title}</Link>
+              </li>
             ))}
           </ul>
         </section>

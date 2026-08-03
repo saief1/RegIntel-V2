@@ -1,0 +1,136 @@
+.page {
+  min-height: 100%;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+  max-width: 1200px;
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  width: fit-content;
+  color: var(--ri-color-text-secondary);
+  text-decoration: none;
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, 320px);
+  gap: var(--ri-space-5);
+  align-items: start;
+}
+
+.header h1 {
+  margin: var(--ri-space-2) 0;
+  font-size: var(--ri-font-size-heading-l);
+  letter-spacing: var(--ri-letter-spacing-heading-l);
+}
+
+.signoff {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(280px, 0.9fr);
+  gap: var(--ri-space-4);
+  align-items: start;
+}
+
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+}
+
+.body {
+  margin: 0;
+  font-size: var(--ri-font-size-body);
+  line-height: var(--ri-line-height-relaxed);
+  color: var(--ri-color-text-primary);
+  white-space: pre-wrap;
+}
+
+.compareControls {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ri-space-2);
+}
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+}
+
+.steps li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: var(--ri-space-3);
+  border-left: 2px solid var(--ri-color-accent-subtle);
+}
+
+.steps span,
+.steps time,
+.steps p {
+  margin: 0;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-secondary);
+}
+
+.assistant {
+  margin: 0;
+  padding: var(--ri-space-3);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-background);
+  border: 1px solid var(--ri-color-border);
+  white-space: pre-wrap;
+  font-family: var(--ri-font-family-sans);
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ri-space-4);
+}
+
+.comments {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+}
+
+.comments p {
+  margin: 4px 0;
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.commentForm {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+}
+
+@media (max-width: 960px) {
+  .header,
+  .layout,
+  .split {
+    grid-template-columns: 1fr;
+  }
+}

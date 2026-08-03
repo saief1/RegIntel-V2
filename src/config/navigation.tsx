@@ -89,6 +89,24 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     description: 'Track regulatory updates and impact assessments.',
   },
   {
+    id: 'policies',
+    label: 'Policy Workspace',
+    path: '/knowledge/policies',
+    description: 'Manage policy lifecycle, versions, and approvals.',
+  },
+  {
+    id: 'workflows',
+    label: 'Workflow Builder',
+    path: '/work/workflows',
+    description: 'Design and reuse compliance workflow templates.',
+  },
+  {
+    id: 'calendar',
+    label: 'Compliance Calendar',
+    path: '/work/calendar',
+    description: 'Unified calendar for reviews, approvals, and deadlines.',
+  },
+  {
     id: 'integrations',
     label: 'Integrations',
     path: '/integrations',

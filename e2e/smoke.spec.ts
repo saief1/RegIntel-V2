@@ -7,11 +7,17 @@ import { expect, test, type Page } from '@playwright/test'
 
 const CORE_ROUTES = [
   { path: '/', mustInclude: /How can RegIntel help today|Today’s Priorities|Good (morning|afternoon|evening)/i },
-  { path: '/knowledge', mustInclude: /Library/i },
+  { path: '/knowledge', mustInclude: /Library|Policy Workspace/i },
   { path: '/knowledge/library', mustInclude: /Regulation Library/i },
+  { path: '/knowledge/policies', mustInclude: /Policy Workspace|AML Policy/i },
+  { path: '/knowledge/policies/pol-aml', mustInclude: /Version control|Approval workflow|AI Policy Assistant/i },
   { path: '/work', mustInclude: /Action Center|My Tasks|Board/i },
   { path: '/work/tasks/task-02', mustInclude: /Counsel review|Checklist|Activity/i },
+  { path: '/work/workflows', mustInclude: /Workflow Builder|Templates/i },
+  { path: '/work/calendar', mustInclude: /Compliance Calendar/i },
   { path: '/work/cases', mustInclude: /Cases/i },
+  { path: '/reports', mustInclude: /Executive Dashboard|Compliance Health|Reporting Engine/i },
+  { path: '/settings', mustInclude: /Organization|RBAC|Audit Trail|Automation/i },
   { path: '/ai', mustInclude: /AI Workspace|Prompt library|Chat|Research|Create Task/i },
   { path: '/ai/prompts', mustInclude: /Prompt library/i },
   { path: '/ai/memory', mustInclude: /AI memory|Memory/i },
@@ -59,7 +65,17 @@ test.describe('RegIntel smoke suite', () => {
     test(`${viewport.name} layout has no horizontal overflow on key routes`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height })
 
-      for (const path of ['/', '/knowledge', '/work', '/ai', '/investigations', '/regulatory-changes'] as const) {
+      for (const path of [
+        '/',
+        '/knowledge',
+        '/knowledge/policies',
+        '/work',
+        '/reports',
+        '/settings',
+        '/ai',
+        '/investigations',
+        '/regulatory-changes',
+      ] as const) {
         await page.goto(path)
         await waitForShell(page)
         await assertNoHorizontalOverflow(page)

@@ -23,6 +23,24 @@ const CaseDetailPage = lazy(() =>
 const TaskDetailPage = lazy(() =>
   import('./pages/work/TaskDetailPage').then((module) => ({ default: module.TaskDetailPage })),
 )
+const WorkflowsPage = lazy(() =>
+  import('./pages/work/WorkflowsPage').then((module) => ({ default: module.WorkflowsPage })),
+)
+const ComplianceCalendarPage = lazy(() =>
+  import('./pages/work/ComplianceCalendarPage').then((module) => ({ default: module.ComplianceCalendarPage })),
+)
+const PoliciesPage = lazy(() =>
+  import('./pages/knowledge/PoliciesPage').then((module) => ({ default: module.PoliciesPage })),
+)
+const PolicyDetailPage = lazy(() =>
+  import('./pages/knowledge/PolicyDetailPage').then((module) => ({ default: module.PolicyDetailPage })),
+)
+const ReportsPage = lazy(() =>
+  import('./pages/reports/ReportsPage').then((module) => ({ default: module.ReportsPage })),
+)
+const SettingsPage = lazy(() =>
+  import('./pages/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
+)
 const AIWorkspacePage = lazy(() =>
   import('./pages/ai/AIWorkspacePage').then((module) => ({ default: module.AIWorkspacePage })),
 )
@@ -47,7 +65,15 @@ const RegulatoryChangeDetailPage = lazy(() =>
   })),
 )
 
-const BUILT_OUT_NAV_ITEM_IDS = new Set(['knowledge', 'work', 'ai', 'investigations', 'regulatory-changes'])
+const BUILT_OUT_NAV_ITEM_IDS = new Set([
+  'knowledge',
+  'work',
+  'ai',
+  'reports',
+  'settings',
+  'investigations',
+  'regulatory-changes',
+])
 
 function LazyPage({ children }: { children: ReactNode }) {
   return <Suspense fallback={<RouteFallback />}>{children}</Suspense>
@@ -65,6 +91,22 @@ export function AppRoutes() {
           <Route path="library/:documentId" element={<DocumentViewerPage />} />
           <Route path="collections" element={<CollectionsPage />} />
           <Route path="collections/:collectionId" element={<CollectionDetailPage />} />
+          <Route
+            path="policies"
+            element={
+              <LazyPage>
+                <PoliciesPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="policies/:policyId"
+            element={
+              <LazyPage>
+                <PolicyDetailPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route path="work">
@@ -100,6 +142,22 @@ export function AppRoutes() {
               </LazyPage>
             }
           />
+          <Route
+            path="workflows"
+            element={
+              <LazyPage>
+                <WorkflowsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="calendar"
+            element={
+              <LazyPage>
+                <ComplianceCalendarPage />
+              </LazyPage>
+            }
+          />
         </Route>
 
         <Route path="ai">
@@ -128,6 +186,23 @@ export function AppRoutes() {
             }
           />
         </Route>
+
+        <Route
+          path="reports"
+          element={
+            <LazyPage>
+              <ReportsPage />
+            </LazyPage>
+          }
+        />
+        <Route
+          path="settings"
+          element={
+            <LazyPage>
+              <SettingsPage />
+            </LazyPage>
+          }
+        />
 
         <Route path="investigations">
           <Route

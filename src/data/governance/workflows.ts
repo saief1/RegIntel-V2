@@ -1,0 +1,161 @@
+import type { AutomationRule, WorkflowDefinition } from '../../types/governance'
+
+export const WORKFLOW_TEMPLATES: WorkflowDefinition[] = [
+  {
+    id: 'wf-tpl-regulation',
+    name: 'New regulation implementation',
+    description: 'From regulatory intake through training completion.',
+    isTemplate: true,
+    updatedAt: '2026-07-01T10:00:00.000Z',
+    nodes: [
+      { id: 'n1', type: 'trigger', label: 'New Regulation', order: 0 },
+      { id: 'n2', type: 'ai_analysis', label: 'AI Analysis', order: 1 },
+      { id: 'n3', type: 'create_tasks', label: 'Create Tasks', order: 2 },
+      { id: 'n4', type: 'assign_owners', label: 'Assign Owners', order: 3 },
+      { id: 'n5', type: 'policy_update', label: 'Policy Update', order: 4 },
+      { id: 'n6', type: 'approval', label: 'Approval', order: 5 },
+      { id: 'n7', type: 'training', label: 'Training', order: 6 },
+      { id: 'n8', type: 'completed', label: 'Completed', order: 7 },
+    ],
+  },
+  {
+    id: 'wf-tpl-aml',
+    name: 'Annual AML review',
+    description: 'Quarterly-to-annual AML program attestation.',
+    isTemplate: true,
+    updatedAt: '2026-06-15T10:00:00.000Z',
+    nodes: [
+      { id: 'a1', type: 'trigger', label: 'Review Window Opens', order: 0 },
+      { id: 'a2', type: 'checklist', label: 'Generate Checklist', order: 1 },
+      { id: 'a3', type: 'assign_owners', label: 'Assign AML Team', order: 2 },
+      { id: 'a4', type: 'approval', label: 'CCO Sign-off', order: 3 },
+      { id: 'a5', type: 'completed', label: 'Completed', order: 4 },
+    ],
+  },
+  {
+    id: 'wf-tpl-cyber',
+    name: 'Cybersecurity incident',
+    description: 'Incident intake to board-ready evidence.',
+    isTemplate: true,
+    updatedAt: '2026-07-10T10:00:00.000Z',
+    nodes: [
+      { id: 'c1', type: 'trigger', label: 'Incident Detected', order: 0 },
+      { id: 'c2', type: 'notify', label: 'Notify Technology', order: 1 },
+      { id: 'c3', type: 'ai_analysis', label: 'AI Impact Analysis', order: 2 },
+      { id: 'c4', type: 'approval', label: 'Legal Confirmation', order: 3 },
+      { id: 'c5', type: 'completed', label: 'Closed', order: 4 },
+    ],
+  },
+  {
+    id: 'wf-tpl-vendor',
+    name: 'Vendor assessment',
+    description: 'Vendor control and transfer residual review.',
+    isTemplate: true,
+    updatedAt: '2026-05-20T10:00:00.000Z',
+    nodes: [
+      { id: 'v1', type: 'trigger', label: 'Vendor Intake', order: 0 },
+      { id: 'v2', type: 'checklist', label: 'Control Checklist', order: 1 },
+      { id: 'v3', type: 'assign_owners', label: 'Assign Owners', order: 2 },
+      { id: 'v4', type: 'approval', label: 'Risk Approval', order: 3 },
+      { id: 'v5', type: 'completed', label: 'Completed', order: 4 },
+    ],
+  },
+  {
+    id: 'wf-tpl-board',
+    name: 'Board reporting',
+    description: 'Compile board pack and executive approvals.',
+    isTemplate: true,
+    updatedAt: '2026-06-01T10:00:00.000Z',
+    nodes: [
+      { id: 'b1', type: 'trigger', label: 'Board Cycle', order: 0 },
+      { id: 'b2', type: 'ai_analysis', label: 'Draft Summary', order: 1 },
+      { id: 'b3', type: 'approval', label: 'Executive Approval', order: 2 },
+      { id: 'b4', type: 'completed', label: 'Delivered', order: 3 },
+    ],
+  },
+  {
+    id: 'wf-tpl-audit',
+    name: 'Internal audit',
+    description: 'Evidence package and control testing.',
+    isTemplate: true,
+    updatedAt: '2026-04-12T10:00:00.000Z',
+    nodes: [
+      { id: 'i1', type: 'trigger', label: 'Audit Start', order: 0 },
+      { id: 'i2', type: 'create_tasks', label: 'Evidence Requests', order: 1 },
+      { id: 'i3', type: 'approval', label: 'Auditor Review', order: 2 },
+      { id: 'i4', type: 'completed', label: 'Closed', order: 3 },
+    ],
+  },
+  {
+    id: 'wf-tpl-policy',
+    name: 'Policy review',
+    description: 'Standard policy revision and publication.',
+    isTemplate: true,
+    updatedAt: '2026-03-01T10:00:00.000Z',
+    nodes: [
+      { id: 'p1', type: 'trigger', label: 'Review Due', order: 0 },
+      { id: 'p2', type: 'policy_update', label: 'Draft Revision', order: 1 },
+      { id: 'p3', type: 'approval', label: 'Approvals', order: 2 },
+      { id: 'p4', type: 'training', label: 'Staff Training', order: 3 },
+      { id: 'p5', type: 'completed', label: 'Published', order: 4 },
+    ],
+  },
+  {
+    id: 'wf-tpl-control',
+    name: 'Control testing',
+    description: 'Control sample, evidence, and remediation.',
+    isTemplate: true,
+    updatedAt: '2026-05-01T10:00:00.000Z',
+    nodes: [
+      { id: 't1', type: 'trigger', label: 'Test Cycle', order: 0 },
+      { id: 't2', type: 'checklist', label: 'Test Plan', order: 1 },
+      { id: 't3', type: 'create_tasks', label: 'Remediation Tasks', order: 2 },
+      { id: 't4', type: 'completed', label: 'Completed', order: 3 },
+    ],
+  },
+]
+
+export const WORKFLOWS: WorkflowDefinition[] = [
+  {
+    id: 'wf-01',
+    name: 'FINTRAC guidance implementation',
+    description: 'Active program for latest beneficial ownership guidance.',
+    templateId: 'wf-tpl-regulation',
+    isTemplate: false,
+    updatedAt: '2026-08-01T12:00:00.000Z',
+    nodes: [...WORKFLOW_TEMPLATES[0].nodes],
+  },
+]
+
+export const AUTOMATION_RULES: AutomationRule[] = [
+  {
+    id: 'auto-01',
+    name: 'New FINTRAC Guidance',
+    enabled: true,
+    trigger: 'New FINTRAC Guidance',
+    actions: [
+      'Create Project',
+      'Assign AML Team',
+      'Notify CCO',
+      'Generate Checklist',
+      'Schedule Review',
+      'Create Board Item',
+    ],
+    lastRunAt: '2026-08-01T08:30:00.000Z',
+  },
+  {
+    id: 'auto-02',
+    name: 'Cybersecurity notice intake',
+    enabled: true,
+    trigger: 'Cybersecurity regulation change',
+    actions: ['Create Tasks', 'Notify Technology', 'Schedule Legal Review'],
+    lastRunAt: '2026-07-28T09:00:00.000Z',
+  },
+  {
+    id: 'auto-03',
+    name: 'Policy review reminder',
+    enabled: false,
+    trigger: 'Policy next review within 30 days',
+    actions: ['Notify Owner', 'Create Review Task'],
+  },
+]

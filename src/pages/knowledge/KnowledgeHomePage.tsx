@@ -129,6 +129,9 @@ export function KnowledgeHomePage() {
         icon={<BookOpen size={20} />}
         actions={
           <>
+            <Button variant="secondary" onClick={() => navigate('/knowledge/policies')}>
+              Policy Workspace
+            </Button>
             <Button variant="secondary" onClick={() => navigate('/knowledge/collections')}>
               Collections
             </Button>

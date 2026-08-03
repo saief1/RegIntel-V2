@@ -2,9 +2,12 @@ import { useMemo, useState, type KeyboardEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Bookmark, BookOpen, Clock, FolderOpen, Scale, Search, Sparkles } from 'lucide-react'
 import { NAV_ITEMS, SECONDARY_DESTINATIONS } from '../../config/navigation'
+import { useGovernance } from '../../hooks/useGovernance'
 import { useKnowledge } from '../../hooks/useKnowledge'
 import { useLocalStorageState } from '../../hooks/useLocalStorageState'
 import { useShellLayout } from '../../hooks/useShellLayout'
+import { useWork } from '../../hooks/useWork'
+import { enterpriseSearch } from '../../utils/enterpriseSearch'
 import { searchKnowledge } from '../../utils/knowledgeSearch'
 import { SearchResult } from '../knowledge/SearchResult/SearchResult'
 import { Modal } from '../ui/Modal/Modal'
@@ -63,12 +66,28 @@ export function CommandPalette() {
 function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
   const navigate = useNavigate()
   const { documents, collections } = useKnowledge()
+  const { policies, evidence, comments, reports } = useGovernance()
+  const { tasks, users } = useWork()
   const [query, setQuery] = useState('')
   const [activeIndex, setActiveIndex] = useState(0)
   const [recentSearches, setRecentSearches] = useLocalStorageState<string[]>('ri-recent-searches', [])
   const [savedSearches, setSavedSearches] = useLocalStorageState<string[]>('ri-saved-searches', DEFAULT_SAVED_SEARCHES)
 
   const grouped = useMemo(() => searchKnowledge(query, documents, collections), [query, documents, collections])
+  const enterpriseHits = useMemo(
+    () =>
+      enterpriseSearch({
+        query,
+        policies,
+        regulations: documents,
+        tasks,
+        evidence,
+        comments,
+        people: users.map((user) => ({ id: user.id, name: user.name, role: user.role })),
+        reports,
+      }),
+    [comments, documents, evidence, policies, query, reports, tasks, users],
+  )
 
   const flatResults = useMemo((): FlatResult[] => {
     const normalized = query.trim().toLowerCase()
@@ -194,6 +213,18 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
       })
     })
 
+    enterpriseHits.slice(0, 20).forEach((hit) => {
+      if (results.some((item) => item.id === hit.id)) return
+      results.push({
+        id: hit.id,
+        group: hit.group,
+        title: hit.title,
+        subtitle: hit.subtitle,
+        path: hit.href,
+        icon: hit.group === 'Regulations' ? 'regulation' : hit.group === 'Policies' ? 'document' : 'destination',
+      })
+    })
+
     NAV_ITEMS.filter(
       (item) =>
         item.label.toLowerCase().includes(normalized) || item.description.toLowerCase().includes(normalized),
@@ -209,7 +240,7 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
     })
 
     return results
-  }, [query, grouped, recentSearches, savedSearches])
+  }, [query, grouped, recentSearches, savedSearches, enterpriseHits])
 
   function onQueryChange(value: string) {
     setQuery(value)
@@ -272,9 +303,9 @@ function GlobalSearchBody({ onNavigate }: { onNavigate: () => void }) {
           value={query}
           onChange={(event) => onQueryChange(event.target.value)}
           onKeyDown={onKeyDown}
-          placeholder="Search knowledge, collections, or jump to..."
+          placeholder="Search policies, regulations, tasks, evidence, people…"
           className={styles.input}
-          aria-label="Search knowledge base"
+          aria-label="Enterprise search"
           role="combobox"
           aria-expanded="true"
           aria-controls={LIST_ID}
