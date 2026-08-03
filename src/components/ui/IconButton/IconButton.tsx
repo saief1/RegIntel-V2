@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, ReactNode } from 'react'
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './IconButton.module.css'
 
 interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

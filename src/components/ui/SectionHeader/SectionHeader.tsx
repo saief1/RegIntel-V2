@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './SectionHeader.module.css'
 
 type HeadingLevel = 'h1' | 'h2' | 'h3'

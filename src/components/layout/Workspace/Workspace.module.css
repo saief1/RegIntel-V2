@@ -1,7 +1,6 @@
 .workspace {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
   flex: 1;
   min-width: 0;
   height: 100%;
@@ -9,12 +8,50 @@
   background-color: var(--ri-color-surface-sunken);
 }
 
-.content {
+.page {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: var(--ri-space-2);
+  flex: 1;
+  min-height: 100%;
+  animation: ri-page-in var(--ri-duration-slow) var(--ri-easing-standard);
+}
+
+.skeletonPage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
   max-width: var(--ri-content-max-width);
-  text-align: center;
+  width: 100%;
+  margin: 0 auto;
   padding: var(--ri-content-padding);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ri-space-4);
+  margin-top: var(--ri-space-4);
+}
+
+@keyframes ri-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 767px) {
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    animation: none;
+  }
 }

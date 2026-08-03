@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  max-width: var(--ri-content-max-width);
+  margin: 0 auto;
+  padding: var(--ri-content-padding);
+}
+
+@media (max-width: 1279px) {
+  .container {
+    padding: var(--ri-content-padding-compact);
+  }
+}

@@ -1,0 +1,67 @@
+.titleLink {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.titleLink:hover .title {
+  color: var(--ri-color-accent);
+}
+
+.titleLink:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ri-radius-sm);
+}
+
+.title {
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+  transition: var(--ri-transition-hover);
+}
+
+.kind {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.updated {
+  white-space: nowrap;
+  color: var(--ri-color-text-secondary);
+}
+
+.rowActions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--ri-space-1);
+}
+
+.rowAction {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: transparent;
+  color: var(--ri-color-text-muted);
+  transition: var(--ri-transition-hover);
+}
+
+.rowAction:hover {
+  background-color: var(--ri-color-hover);
+  color: var(--ri-color-text-primary);
+}
+
+.rowAction:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.rowActionActive {
+  color: var(--ri-color-accent);
+}

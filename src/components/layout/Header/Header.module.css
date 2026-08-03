@@ -1,43 +1,52 @@
 .header {
+  position: sticky;
+  top: 0;
+  z-index: var(--ri-z-sticky);
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--ri-space-4);
   flex: none;
   width: 100%;
   height: var(--ri-header-height);
-  padding: 0 var(--ri-content-padding);
+  padding: 0 var(--ri-content-padding-compact);
   background-color: var(--ri-color-surface);
   border-bottom: 1px solid var(--ri-color-divider);
 }
 
-.searchSlot {
-  flex: 1;
+.leading {
   display: flex;
+  align-items: center;
+  gap: var(--ri-space-3);
+  min-width: 0;
+  flex: none;
+}
+
+.searchSlot {
+  display: flex;
+  justify-content: center;
+  flex: 1;
   min-width: 0;
 }
 
-.profile {
-  display: flex;
-  align-items: center;
-  gap: var(--ri-space-1);
-  height: 36px;
-  padding: 0 var(--ri-space-1) 0 var(--ri-space-1);
-  border: none;
-  border-radius: var(--ri-radius-md);
-  background-color: transparent;
-  transition: var(--ri-transition-hover);
+.searchSlot :global(input) {
+  cursor: pointer;
 }
 
-.profile:hover {
-  background-color: var(--ri-color-hover);
+.desktopOnly {
+  display: inline-flex;
 }
 
-.profile:focus-visible {
-  outline: 2px solid var(--ri-color-focus-ring);
-  outline-offset: 2px;
-}
+@media (max-width: 1279px) {
+  .leading {
+    flex: 1;
+    min-width: 0;
+  }
 
-.profileChevron {
-  color: var(--ri-color-text-muted);
+  .searchSlot {
+    display: none;
+  }
+
+  .desktopOnly {
+    display: none;
+  }
 }

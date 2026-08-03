@@ -1,6 +1,6 @@
 import type { SelectHTMLAttributes } from 'react'
-import { cx } from '../../../lib/classNames'
-import { ChevronDownIcon } from '../../icons'
+import { clsx as cx } from 'clsx'
+import { ChevronDown } from 'lucide-react'
 import styles from './Select.module.css'
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
@@ -17,7 +17,7 @@ export function Select({ invalid = false, className, children, ...rest }: Select
       >
         {children}
       </select>
-      <ChevronDownIcon className={styles.chevron} width={16} height={16} />
+      <ChevronDown className={styles.chevron} size={16} aria-hidden="true" />
     </div>
   )
 }

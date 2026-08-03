@@ -1,5 +1,5 @@
 import type { TextareaHTMLAttributes } from 'react'
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './Textarea.module.css'
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {

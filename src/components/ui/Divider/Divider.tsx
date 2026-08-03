@@ -1,4 +1,4 @@
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './Divider.module.css'
 
 interface DividerProps {

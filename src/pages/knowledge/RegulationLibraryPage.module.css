@@ -1,0 +1,46 @@
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  margin-bottom: var(--ri-space-6);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ri-space-4);
+  margin-top: var(--ri-space-8);
+}
+
+.pageIndicator {
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-muted);
+}
+
+.skeletonHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  padding-bottom: var(--ri-space-6);
+  margin-bottom: var(--ri-space-6);
+  border-bottom: 1px solid var(--ri-color-divider);
+}
+
+.skeletonToolbar {
+  display: flex;
+  gap: var(--ri-space-3);
+  margin-bottom: var(--ri-space-6);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ri-space-4);
+}
+
+@media (max-width: 767px) {
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+}

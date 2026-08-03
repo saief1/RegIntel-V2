@@ -1,0 +1,16 @@
+/**
+ * Stacking-order tokens.
+ *
+ * A fixed scale prevents ad-hoc z-index values from fighting each other as
+ * more overlay-style components (dropdowns, modals, tooltips) are added.
+ */
+
+:root {
+  --ri-z-sticky: 100;
+  --ri-z-drawer: 200;
+  --ri-z-dropdown: 300;
+  --ri-z-overlay: 400;
+  --ri-z-modal: 410;
+  --ri-z-tooltip: 500;
+  --ri-z-toast: 600;
+}

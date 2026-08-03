@@ -1,17 +1,37 @@
-import { SectionHeader } from '../../ui/SectionHeader/SectionHeader'
+import { useEffect, useState } from 'react'
+import { Outlet, useLocation } from 'react-router-dom'
+import { Skeleton } from '../../ui/Skeleton/Skeleton'
 import styles from './Workspace.module.css'
 
+/** Brief, honest loading transition shown once while the shell mounts — not tied to any backend. */
+const INITIAL_LOAD_MS = 420
+
 export function Workspace() {
+  const location = useLocation()
+  const [initializing, setInitializing] = useState(true)
+
+  useEffect(() => {
+    const timer = window.setTimeout(() => setInitializing(false), INITIAL_LOAD_MS)
+    return () => window.clearTimeout(timer)
+  }, [])
+
   return (
     <main className={styles.workspace} aria-label="Workspace">
-      <div className={styles.content}>
-        <SectionHeader
-          size="xl"
-          align="center"
-          title="Welcome to RegIntel Professional"
-          description="Enterprise Regulatory Intelligence Platform"
-        />
-      </div>
+      {initializing ? (
+        <div className={styles.skeletonPage} aria-hidden="true">
+          <Skeleton height={28} width="35%" />
+          <Skeleton height={16} width="55%" />
+          <div className={styles.skeletonGrid}>
+            <Skeleton height={112} radius="lg" />
+            <Skeleton height={112} radius="lg" />
+            <Skeleton height={112} radius="lg" />
+          </div>
+        </div>
+      ) : (
+        <div key={location.pathname} className={styles.page}>
+          <Outlet />
+        </div>
+      )}
     </main>
   )
 }

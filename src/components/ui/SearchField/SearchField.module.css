@@ -37,3 +37,14 @@
 .input::placeholder {
   color: var(--ri-color-text-muted);
 }
+
+.shortcut {
+  flex: none;
+  padding: 2px var(--ri-space-1);
+  border-radius: var(--ri-radius-sm);
+  border: 1px solid var(--ri-color-border);
+  background-color: var(--ri-color-surface);
+  color: var(--ri-color-text-muted);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-medium);
+}

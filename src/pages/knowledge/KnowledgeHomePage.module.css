@@ -1,0 +1,70 @@
+.sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-10);
+  margin-top: var(--ri-space-2);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+}
+
+.sectionBody {
+  min-height: 0;
+}
+
+.seeAll {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-accent);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.seeAll:hover {
+  text-decoration: underline;
+}
+
+.seeAll:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ri-radius-sm);
+}
+
+.skeletonHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  padding-bottom: var(--ri-space-6);
+  margin-bottom: var(--ri-space-6);
+  border-bottom: 1px solid var(--ri-color-divider);
+}
+
+.skeletonSections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-8);
+}
+
+.skeletonSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ri-space-4);
+}
+
+@media (max-width: 767px) {
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+}

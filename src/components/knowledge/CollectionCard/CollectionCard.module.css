@@ -1,0 +1,104 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-3);
+  height: 100%;
+  padding: var(--ri-space-5);
+  background-color: var(--ri-color-surface);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  transition: var(--ri-transition-card);
+}
+
+.card:hover {
+  border-color: var(--ri-color-text-muted);
+  box-shadow: var(--ri-shadow-md);
+}
+
+.link {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--ri-space-3);
+  min-width: 0;
+  color: inherit;
+  text-decoration: none;
+  padding-right: 88px;
+}
+
+.link:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ri-radius-md);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--ri-radius-md);
+  background-color: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.text {
+  min-width: 0;
+}
+
+.title {
+  margin: 0;
+  font-size: var(--ri-font-size-body-lg);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}
+
+.description {
+  margin: var(--ri-space-1) 0 0;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-1);
+  margin-top: auto;
+  padding-top: var(--ri-space-2);
+  border-top: 1px solid var(--ri-color-divider);
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.dot {
+  flex: none;
+}
+
+.actions {
+  position: absolute;
+  top: var(--ri-space-4);
+  right: var(--ri-space-4);
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.actionButton {
+  width: 28px;
+  height: 28px;
+}
+
+.actionButtonActive {
+  color: var(--ri-color-accent);
+}

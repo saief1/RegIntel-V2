@@ -1,0 +1,15 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  border: none;
+  border-radius: var(--ri-radius-pill);
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}

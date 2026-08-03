@@ -2,16 +2,16 @@
   display: flex;
   align-items: center;
   gap: var(--ri-space-3);
-  width: 100%;
   height: 36px;
-  padding: 0 var(--ri-space-3);
-  border: none;
+  padding-left: calc(var(--ri-space-3) - 2px);
+  padding-right: var(--ri-space-3);
+  margin: 1px var(--ri-space-2);
+  border-left: 2px solid transparent;
   border-radius: var(--ri-radius-md);
-  background-color: transparent;
   color: var(--ri-color-text-secondary);
   font-size: var(--ri-font-size-body-sm);
   font-weight: var(--ri-font-weight-medium);
-  text-align: left;
+  text-decoration: none;
   transition: var(--ri-transition-sidebar);
 }
 
@@ -26,6 +26,7 @@
 }
 
 .itemActive {
+  border-left-color: var(--ri-color-accent);
   background-color: var(--ri-color-selection);
   color: var(--ri-color-accent);
 }
@@ -37,12 +38,24 @@
 
 .icon {
   flex: none;
-  width: 18px;
-  height: 18px;
 }
 
 .label {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.collapsed {
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 1px auto;
+  border-left: none;
+}
+
+.collapsed.itemActive {
+  border-left: none;
 }

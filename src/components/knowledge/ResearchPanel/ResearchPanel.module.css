@@ -1,0 +1,295 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+}
+
+.conversationArea {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--ri-panel-padding);
+}
+
+.emptyWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+  height: 100%;
+  justify-content: center;
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+}
+
+.suggestionChip {
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background-color: var(--ri-color-surface);
+  color: var(--ri-color-text-secondary);
+  font-family: inherit;
+  font-size: var(--ri-font-size-body-sm);
+  text-align: left;
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.suggestionChip:hover {
+  border-color: var(--ri-color-accent);
+  color: var(--ri-color-accent);
+  background-color: var(--ri-color-accent-subtle);
+}
+
+.suggestionChip:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}
+
+/* --- Conversation --- */
+
+.messageList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.messageRowUser {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.messageRowAssistant {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  align-items: flex-start;
+}
+
+.bubbleUser {
+  max-width: 88%;
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border-radius: var(--ri-radius-lg) var(--ri-radius-lg) var(--ri-space-1) var(--ri-radius-lg);
+  background-color: var(--ri-color-accent);
+  color: var(--ri-color-text-on-accent);
+}
+
+.bubbleAssistant {
+  max-width: 100%;
+  width: 100%;
+  padding: var(--ri-space-3);
+  border-radius: var(--ri-space-1) var(--ri-radius-lg) var(--ri-radius-lg) var(--ri-radius-lg);
+  background-color: var(--ri-color-surface-sunken);
+  border: 1px solid var(--ri-color-divider);
+}
+
+.assistantLabel {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-1);
+  margin-bottom: var(--ri-space-1);
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  color: var(--ri-color-accent);
+}
+
+.bubbleText {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  line-height: var(--ri-line-height-body-sm);
+  white-space: pre-wrap;
+}
+
+.bubbleUser .timestamp {
+  color: rgb(255 255 255 / 70%);
+}
+
+.timestamp {
+  display: block;
+  margin-top: var(--ri-space-1);
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.loadingLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+}
+
+.citations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-1);
+  max-width: 100%;
+}
+
+/* --- Evidence --- */
+
+.evidencePanel {
+  flex: none;
+  padding: var(--ri-space-3) var(--ri-panel-padding);
+  border-top: 1px solid var(--ri-color-divider);
+  background-color: var(--ri-color-surface);
+}
+
+.evidenceHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  margin-bottom: var(--ri-space-2);
+  color: var(--ri-color-text-muted);
+}
+
+.evidenceTitle {
+  margin: 0;
+  font-size: var(--ri-font-size-caption);
+  font-weight: var(--ri-font-weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ri-color-text-muted);
+}
+
+.evidenceEmpty {
+  margin: 0;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.evidenceList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-1);
+}
+
+/* --- Composer --- */
+
+.composer {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  flex: none;
+  padding: var(--ri-space-3) var(--ri-panel-padding);
+  border-top: 1px solid var(--ri-color-divider);
+  background-color: var(--ri-color-surface);
+}
+
+.composerInput {
+  flex: 1;
+  min-width: 0;
+  height: 36px;
+  padding: 0 var(--ri-space-3);
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background-color: var(--ri-color-surface-sunken);
+  color: var(--ri-color-text-primary);
+  font-size: var(--ri-font-size-body-sm);
+  transition: var(--ri-transition-hover);
+}
+
+.composerInput::placeholder {
+  color: var(--ri-color-text-muted);
+}
+
+.composerInput:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 1px;
+  border-color: var(--ri-color-accent);
+  background-color: var(--ri-color-surface);
+}
+
+.composerInput:disabled {
+  cursor: not-allowed;
+}
+
+/* --- History menu --- */
+
+.historyList {
+  display: flex;
+  flex-direction: column;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.historyRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-1);
+}
+
+.historyItem {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+  padding: var(--ri-space-2) var(--ri-space-3);
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  font-family: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.historyItem:hover {
+  background-color: var(--ri-color-hover);
+}
+
+.historyItem:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.historyItemActive .historyTitle {
+  color: var(--ri-color-accent);
+}
+
+.historyTitle {
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+}
+
+.historyTime {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.historyDelete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  color: var(--ri-color-text-muted);
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.historyDelete:hover {
+  background-color: var(--ri-color-hover);
+  color: var(--ri-color-error);
+}
+
+.historyDelete:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: -2px;
+}

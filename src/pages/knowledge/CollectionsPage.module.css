@@ -1,0 +1,46 @@
+.toolbar {
+  margin-bottom: var(--ri-space-6);
+}
+
+.skeletonHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-2);
+  padding-bottom: var(--ri-space-6);
+  margin-bottom: var(--ri-space-6);
+  border-bottom: 1px solid var(--ri-color-divider);
+}
+
+.skeletonGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ri-space-4);
+}
+
+.nameLink {
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+  text-decoration: none;
+}
+
+.nameLink:hover {
+  color: var(--ri-color-accent);
+}
+
+.nameLink:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--ri-radius-sm);
+}
+
+.badgeRow {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--ri-space-1);
+}
+
+@media (max-width: 767px) {
+  .skeletonGrid {
+    grid-template-columns: 1fr;
+  }
+}

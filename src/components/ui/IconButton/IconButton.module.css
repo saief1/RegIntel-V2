@@ -24,3 +24,13 @@
   outline: 2px solid var(--ri-color-focus-ring);
   outline-offset: 2px;
 }
+
+.button:disabled {
+  color: var(--ri-color-text-muted);
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button:disabled:hover {
+  background-color: transparent;
+}

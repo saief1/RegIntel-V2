@@ -1,0 +1,78 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-3);
+  width: 100%;
+  padding: var(--ri-space-2);
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.trigger:hover {
+  background-color: var(--ri-color-hover);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.identity {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  text-align: left;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+  color: var(--ri-color-text-primary);
+}
+
+.status {
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+}
+
+.collapsedRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ri-space-2);
+}
+
+.collapsedAvatar {
+  display: inline-flex;
+}
+
+.iconButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  color: var(--ri-color-text-secondary);
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.iconButton:hover {
+  background-color: var(--ri-color-hover);
+  color: var(--ri-color-text-primary);
+}
+
+.iconButton:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: 2px;
+}

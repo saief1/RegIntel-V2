@@ -1,30 +1,43 @@
 /**
  * Motion tokens.
  *
- * Durations and easings are combined into semantic transition tokens so
- * every interactive surface animates consistently. Motion should always be
- * quick and understated — never decorative.
+ * Two durations only — 180ms for direct-manipulation feedback (hover, focus,
+ * press) and 250ms for larger surface changes (expand/collapse, fade,
+ * page transitions, skeleton shimmer) — both riding the same standard
+ * easing curve. Motion should always be quick and understated, never
+ * decorative.
  */
 
 :root {
-  --ri-duration-fast: 120ms;
-  --ri-duration-normal: 180ms;
-  --ri-duration-slow: 260ms;
+  --ri-duration-fast: 180ms;
+  --ri-duration-slow: 250ms;
 
   --ri-easing-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --ri-easing-emphasized: cubic-bezier(0.16, 1, 0.3, 1);
 
+  /* Direct manipulation (180ms) */
   --ri-transition-hover: background-color var(--ri-duration-fast) var(--ri-easing-standard),
     border-color var(--ri-duration-fast) var(--ri-easing-standard),
     color var(--ri-duration-fast) var(--ri-easing-standard);
-  --ri-transition-press: transform 80ms var(--ri-easing-standard);
   --ri-transition-focus: outline-color var(--ri-duration-fast) var(--ri-easing-standard);
-  --ri-transition-sidebar: background-color var(--ri-duration-normal) var(--ri-easing-standard),
-    color var(--ri-duration-normal) var(--ri-easing-standard);
-  --ri-transition-dropdown: opacity var(--ri-duration-normal) var(--ri-easing-emphasized),
-    transform var(--ri-duration-normal) var(--ri-easing-emphasized);
-  --ri-transition-card: box-shadow var(--ri-duration-normal) var(--ri-easing-standard),
-    border-color var(--ri-duration-normal) var(--ri-easing-standard);
+  --ri-transition-active: transform var(--ri-duration-fast) var(--ri-easing-standard);
+  --ri-transition-press: var(--ri-transition-active);
+  --ri-transition-sidebar: background-color var(--ri-duration-fast) var(--ri-easing-standard),
+    color var(--ri-duration-fast) var(--ri-easing-standard);
+  --ri-transition-card: box-shadow var(--ri-duration-fast) var(--ri-easing-standard),
+    border-color var(--ri-duration-fast) var(--ri-easing-standard);
+
+  /* Surface / layout changes (250ms) */
+  --ri-transition-expand: grid-template-rows var(--ri-duration-slow) var(--ri-easing-standard),
+    width var(--ri-duration-slow) var(--ri-easing-standard);
+  --ri-transition-collapse: var(--ri-transition-expand);
+  --ri-transition-fade: opacity var(--ri-duration-slow) var(--ri-easing-standard);
+  --ri-transition-page: opacity var(--ri-duration-slow) var(--ri-easing-standard),
+    transform var(--ri-duration-slow) var(--ri-easing-standard);
+  --ri-transition-dropdown: opacity var(--ri-duration-slow) var(--ri-easing-emphasized),
+    transform var(--ri-duration-slow) var(--ri-easing-emphasized);
+  --ri-transition-skeleton: opacity var(--ri-duration-slow) var(--ri-easing-standard);
+  --ri-skeleton-shimmer-duration: 1.4s;
 }
 
 @media (prefers-reduced-motion: reduce) {

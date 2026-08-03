@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from 'react'
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './Badge.module.css'
 
 export type BadgeVariant = 'neutral' | 'accent' | 'success' | 'warning' | 'error'

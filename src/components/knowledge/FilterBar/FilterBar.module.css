@@ -1,0 +1,25 @@
+.bar {
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.select {
+  width: 168px;
+}
+
+.tagMenu {
+  max-height: 280px;
+  overflow-y: auto;
+}
+
+.tagIconSpacer {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+}
+
+@media (max-width: 767px) {
+  .select {
+    width: 100%;
+  }
+}

@@ -1,0 +1,43 @@
+.skeleton {
+  display: inline-block;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--ri-color-hover) 25%,
+    var(--ri-color-border) 37%,
+    var(--ri-color-hover) 63%
+  );
+  background-size: 400% 100%;
+  animation: ri-skeleton-shimmer var(--ri-skeleton-shimmer-duration) ease-in-out infinite;
+}
+
+.sm {
+  border-radius: var(--ri-radius-sm);
+}
+
+.md {
+  border-radius: var(--ri-radius-md);
+}
+
+.lg {
+  border-radius: var(--ri-radius-lg);
+}
+
+.pill {
+  border-radius: var(--ri-radius-pill);
+}
+
+@keyframes ri-skeleton-shimmer {
+  0% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton {
+    animation: none;
+  }
+}

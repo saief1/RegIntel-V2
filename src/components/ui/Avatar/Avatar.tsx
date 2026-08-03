@@ -1,4 +1,4 @@
-import { UserIcon } from '../../icons'
+import { User } from 'lucide-react'
 import styles from './Avatar.module.css'
 
 interface AvatarProps {
@@ -14,7 +14,7 @@ function getInitials(name: string): string {
 export function Avatar({ name }: AvatarProps) {
   return (
     <div className={styles.avatar}>
-      {name ? getInitials(name) : <UserIcon width={16} height={16} />}
+      {name ? getInitials(name) : <User size={16} />}
     </div>
   )
 }

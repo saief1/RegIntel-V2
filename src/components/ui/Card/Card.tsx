@@ -1,5 +1,5 @@
 import type { HTMLAttributes, KeyboardEvent } from 'react'
-import { cx } from '../../../lib/classNames'
+import { clsx as cx } from 'clsx'
 import styles from './Card.module.css'
 
 interface CardProps extends HTMLAttributes<HTMLDivElement> {

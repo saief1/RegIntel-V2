@@ -1,0 +1,52 @@
+.trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  width: 100%;
+  height: 36px;
+  padding: 0 var(--ri-space-2);
+  border: none;
+  border-radius: var(--ri-radius-md);
+  background: none;
+  color: var(--ri-color-text-primary);
+  font-family: inherit;
+  cursor: pointer;
+  transition: var(--ri-transition-hover);
+}
+
+.trigger:hover {
+  background-color: var(--ri-color-hover);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid var(--ri-color-focus-ring);
+  outline-offset: -2px;
+}
+
+.mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  border-radius: var(--ri-radius-sm);
+  background-color: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+.chevron {
+  flex: none;
+  color: var(--ri-color-text-muted);
+}
