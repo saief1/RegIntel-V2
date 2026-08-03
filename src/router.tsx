@@ -86,6 +86,21 @@ const DataLineagePage = lazy(() =>
 const DigitalTwinPage = lazy(() =>
   import('./pages/reports/DigitalTwinPage').then((module) => ({ default: module.DigitalTwinPage })),
 )
+const DeveloperPortalPage = lazy(() =>
+  import('./pages/developer/DeveloperPortalPage').then((module) => ({ default: module.DeveloperPortalPage })),
+)
+const ApiExplorerPage = lazy(() =>
+  import('./pages/developer/ApiExplorerPage').then((module) => ({ default: module.ApiExplorerPage })),
+)
+const DeveloperAppsPage = lazy(() =>
+  import('./pages/developer/DeveloperAppsPage').then((module) => ({ default: module.DeveloperAppsPage })),
+)
+const WebhooksCenterPage = lazy(() =>
+  import('./pages/developer/WebhooksCenterPage').then((module) => ({ default: module.WebhooksCenterPage })),
+)
+const SdkResourcesPage = lazy(() =>
+  import('./pages/developer/SdkResourcesPage').then((module) => ({ default: module.SdkResourcesPage })),
+)
 const KnowledgeGraphPage = lazy(() =>
   import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
 )
@@ -502,6 +517,49 @@ export function AppRoutes() {
           />
         </Route>
 
+        <Route path="developer">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <DeveloperPortalPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="api"
+            element={
+              <LazyPage>
+                <ApiExplorerPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="apps"
+            element={
+              <LazyPage>
+                <DeveloperAppsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="webhooks"
+            element={
+              <LazyPage>
+                <WebhooksCenterPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="sdk"
+            element={
+              <LazyPage>
+                <SdkResourcesPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
         <Route path="investigations">
           <Route
             index
@@ -580,6 +638,11 @@ export function AppRoutes() {
               'workflow-canvas',
               'data-lineage',
               'digital-twin',
+              'developer-portal',
+              'developer-api',
+              'developer-apps',
+              'developer-webhooks',
+              'developer-sdk',
             ].includes(item.id),
         ).map((item) => (
           <Route

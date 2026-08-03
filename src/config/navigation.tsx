@@ -256,6 +256,36 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
     path: '/reports/digital-twin',
     description: 'Simulate organizational capacity and compliance impact.',
   },
+  {
+    id: 'developer-portal',
+    label: 'Developer Portal',
+    path: '/developer',
+    description: 'API health, usage, keys, webhooks, and SDK downloads.',
+  },
+  {
+    id: 'developer-api',
+    label: 'API Explorer',
+    path: '/developer/api',
+    description: 'Interactive public API documentation and playground.',
+  },
+  {
+    id: 'developer-apps',
+    label: 'API Keys & Apps',
+    path: '/developer/apps',
+    description: 'Live and sandbox keys plus OAuth applications.',
+  },
+  {
+    id: 'developer-webhooks',
+    label: 'Webhooks Center',
+    path: '/developer/webhooks',
+    description: 'Event subscriptions, delivery logs, and replay.',
+  },
+  {
+    id: 'developer-sdk',
+    label: 'SDKs & Resources',
+    path: '/developer/sdk',
+    description: 'SDKs, CLI, sample projects, and Postman assets.',
+  },
 ]
 
 export function findNavItemByPath(pathname: string): NavItemConfig | undefined {

@@ -96,6 +96,15 @@ function useBreadcrumbTrail(): Crumb[] {
     if (segments[1] === 'lineage') trail.push({ label: 'Lineage' })
     return trail
   }
+  if (segments[0] === 'developer') {
+    const trail: Crumb[] = [{ label: 'Developer', path: '/developer' }]
+    if (!segments[1]) return [{ label: 'Developer Portal' }]
+    if (segments[1] === 'api') trail.push({ label: 'API Explorer' })
+    else if (segments[1] === 'apps') trail.push({ label: 'API Keys & Apps' })
+    else if (segments[1] === 'webhooks') trail.push({ label: 'Webhooks' })
+    else if (segments[1] === 'sdk') trail.push({ label: 'SDKs & Resources' })
+    return trail
+  }
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
     if (segments[1] === 'integrations') trail.push({ label: 'Integrations' })

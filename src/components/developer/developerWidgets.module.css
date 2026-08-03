@@ -1,0 +1,57 @@
+.codeShell {
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-lg);
+  background: #0f172a;
+  color: #e2e8f0;
+  overflow: hidden;
+}
+
+.codeHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ri-space-2);
+  padding: 8px 12px;
+  border-bottom: 1px solid rgb(148 163 184 / 25%);
+  font-size: var(--ri-font-size-caption);
+  color: #94a3b8;
+}
+
+.code {
+  margin: 0;
+  padding: 12px 14px;
+  overflow: auto;
+  max-height: 320px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre;
+}
+
+.code:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: -2px;
+}
+
+.versionBadge {
+  display: inline-flex;
+  margin-left: 8px;
+  padding: 2px 6px;
+  border-radius: var(--ri-radius-sm);
+  background: rgb(109 94 246 / 25%);
+  color: #c4b5fd;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.tokKey { color: #93c5fd; }
+.tokString { color: #86efac; }
+.tokNumber { color: #fcd34d; }
+.tokBool { color: #f9a8d4; }
+.tokComment { color: #94a3b8; }
+.tokPlain { color: #e2e8f0; }
+
+.tokJson {
+  color: #86efac;
+}

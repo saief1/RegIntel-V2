@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.5.0-beta | 2026-08-03 | Developer Platform — portal, API explorer, apps, webhooks, SDKs |
 | 1.3.0-beta | 2026-08-03 | Connected Ecosystem — marketplace, workflow canvas, lineage, twin |
 | 1.2.0-beta | 2026-08-03 | Enterprise Operations — data, security, audit, automation, health |
 | 1.1.0-beta | 2026-08-03 | Enterprise Intelligence — analytics, KPIs, board, benchmarks |
@@ -39,6 +40,36 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.5.0-beta — Developer Platform & Public APIs
+
+**Status:** Beta  
+**Sprint:** 15 (`SPRINT15_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel becomes an extensible platform with a public developer experience: portal, API explorer, credentials, webhooks, and SDKs.
+
+#### Highlights
+
+##### Developer Portal (P071)
+
+- `/developer` dashboard with API health, usage cards, request history, and changelog
+
+##### Public API Explorer (P072)
+
+- `/developer/api` Stripe-style docs with categories, version selector, examples, and mock playground
+
+##### API Keys & OAuth Apps (P073)
+
+- `/developer/apps` live/sandbox keys with rotate/revoke plus OAuth app registration
+
+##### Webhooks Center (P074)
+
+- `/developer/webhooks` event catalog, delivery log, payload viewer, replay
+
+##### SDK & Resources (P075)
+
+- `/developer/sdk` multi-language SDKs, CLI, sample projects, Postman collection
 
 ### v1.3.0-beta — Enterprise Integrations & Workflow Ecosystem
 

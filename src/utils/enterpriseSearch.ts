@@ -31,6 +31,11 @@ const OPERATION_DESTINATIONS = [
   { id: 'ops-canvas', title: 'Workflow Studio 2.0', subtitle: 'Visual workflow canvas', href: '/automation/canvas', terms: 'canvas workflow nodes publish rollback' },
   { id: 'ops-lineage', title: 'Data Lineage', subtitle: 'Dependency and impact graph', href: '/data/lineage', terms: 'lineage dependency impact regulation policy' },
   { id: 'ops-twin', title: 'Executive Digital Twin', subtitle: 'Organization simulation', href: '/reports/digital-twin', terms: 'digital twin simulation forecast capacity' },
+  { id: 'dev-portal', title: 'Developer Portal', subtitle: 'API health and usage', href: '/developer', terms: 'developer portal api keys sdk webhook oauth' },
+  { id: 'dev-api', title: 'API Explorer', subtitle: 'Interactive public API docs', href: '/developer/api', terms: 'openapi playground endpoints rate limit' },
+  { id: 'dev-apps', title: 'API Keys & OAuth Apps', subtitle: 'Live and sandbox credentials', href: '/developer/apps', terms: 'api key rotate revoke oauth client secret' },
+  { id: 'dev-hooks', title: 'Webhooks Center', subtitle: 'Events and delivery logs', href: '/developer/webhooks', terms: 'webhook replay payload delivery' },
+  { id: 'dev-sdk', title: 'SDK & Developer Resources', subtitle: 'SDKs CLI Postman examples', href: '/developer/sdk', terms: 'sdk python typescript cli postman' },
 ] as const
 
 interface SearchInput {

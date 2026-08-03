@@ -62,11 +62,14 @@ export function ApiPlatformPage() {
       />
 
       <nav className={styles.hubLinks} aria-label="Connected enterprise areas">
+        <Link className={styles.hubLink} to="/developer">
+          Developer Portal
+        </Link>
+        <Link className={styles.hubLink} to="/developer/api">
+          API Explorer
+        </Link>
         <Link className={styles.hubLink} to="/settings/integrations">
           Integrations
-        </Link>
-        <Link className={styles.hubLink} to="/settings/admin">
-          Admin Console
         </Link>
         <Link className={styles.hubLink} to="/settings">
           Settings
