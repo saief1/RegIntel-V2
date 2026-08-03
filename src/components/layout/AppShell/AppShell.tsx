@@ -1,4 +1,5 @@
 import { CommandPalette } from '../../CommandPalette/CommandPalette'
+import { AutonomousProvider } from '../../../context/AutonomousProvider'
 import { ConnectedProvider } from '../../../context/ConnectedProvider'
 import { CopilotProvider } from '../../../context/CopilotProvider'
 import { GovernanceProvider } from '../../../context/GovernanceProvider'
@@ -19,19 +20,21 @@ export function AppShell() {
         <InvestigationsProvider>
           <GovernanceProvider>
             <ConnectedProvider>
-              <CopilotProvider>
-                <ShellLayoutProvider>
-                  <div className={styles.shell}>
-                    <Header />
-                    <div className={styles.body}>
-                      <Sidebar />
-                      <Workspace />
-                      <AIPanel />
+              <AutonomousProvider>
+                <CopilotProvider>
+                  <ShellLayoutProvider>
+                    <div className={styles.shell}>
+                      <Header />
+                      <div className={styles.body}>
+                        <Sidebar />
+                        <Workspace />
+                        <AIPanel />
+                      </div>
                     </div>
-                  </div>
-                  <CommandPalette />
-                </ShellLayoutProvider>
-              </CopilotProvider>
+                    <CommandPalette />
+                  </ShellLayoutProvider>
+                </CopilotProvider>
+              </AutonomousProvider>
             </ConnectedProvider>
           </GovernanceProvider>
         </InvestigationsProvider>

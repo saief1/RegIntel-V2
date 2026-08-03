@@ -1,0 +1,179 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ri-space-5);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(280px, 0.75fr);
+  gap: var(--ri-space-4);
+  align-items: start;
+}
+
+.hubLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+}
+
+.hubLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  color: var(--ri-color-text-primary);
+  text-decoration: none;
+  font-size: var(--ri-font-size-body-sm);
+  font-weight: var(--ri-font-weight-medium);
+}
+
+.hubLink:hover {
+  border-color: rgb(109 94 246 / 30%);
+  background: var(--ri-color-hover);
+}
+
+.hubLink:focus-visible {
+  outline: 2px solid var(--ri-color-accent);
+  outline-offset: 2px;
+}
+
+.detailGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ri-space-3);
+}
+
+.field label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: var(--ri-font-size-caption);
+  color: var(--ri-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.field p,
+.field span {
+  margin: 0;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-primary);
+  word-break: break-word;
+}
+
+.flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ri-space-2);
+  align-items: center;
+}
+
+.node {
+  padding: 10px 12px;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-md);
+  background: var(--ri-color-surface);
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.nodeActive {
+  border-color: var(--ri-color-accent);
+  background: var(--ri-color-accent-subtle);
+  color: var(--ri-color-accent);
+}
+
+.arrow {
+  color: var(--ri-color-text-muted);
+}
+
+.graphShell {
+  position: relative;
+  border: 1px solid var(--ri-color-border);
+  border-radius: var(--ri-radius-xl);
+  background: var(--ri-color-surface);
+  overflow: hidden;
+  min-height: 420px;
+}
+
+.graphCanvas {
+  width: 100%;
+  height: 420px;
+  display: block;
+  background:
+    radial-gradient(circle at 20% 20%, rgb(109 94 246 / 6%), transparent 40%),
+    var(--ri-color-background);
+  cursor: grab;
+  touch-action: none;
+}
+
+.graphCanvas:active {
+  cursor: grabbing;
+}
+
+.graphNode {
+  cursor: pointer;
+}
+
+.graphNode:focus {
+  outline: none;
+}
+
+.graphNode:focus-visible circle {
+  stroke: var(--ri-color-accent);
+  stroke-width: 3;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--ri-space-3);
+}
+
+.formGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: var(--ri-font-size-body-sm);
+  color: var(--ri-color-text-secondary);
+}
+
+.checkboxRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ri-space-2);
+  font-size: var(--ri-font-size-body-sm);
+}
+
+.tonePositive {
+  color: var(--ri-color-success, #16a34a);
+}
+
+.toneWarning {
+  color: var(--ri-color-warning, #d97706);
+}
+
+.toneCritical {
+  color: var(--ri-color-danger, #dc2626);
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+@media (max-width: 960px) {
+  .split,
+  .formGrid,
+  .detailGrid {
+    grid-template-columns: 1fr;
+  }
+}

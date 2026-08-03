@@ -72,7 +72,7 @@ export function SettingsPage() {
         <Link className={connected.hubLink} to="/settings/collaboration">
           Collaboration
         </Link>
-        <Link className={connected.hubLink} to="/ai/agents">
+        <Link className={connected.hubLink} to="/agents">
           AI Agents
         </Link>
       </nav>

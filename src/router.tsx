@@ -38,6 +38,21 @@ const PolicyDetailPage = lazy(() =>
 const ReportsPage = lazy(() =>
   import('./pages/reports/ReportsPage').then((module) => ({ default: module.ReportsPage })),
 )
+const CommandCenterPage = lazy(() =>
+  import('./pages/reports/CommandCenterPage').then((module) => ({ default: module.CommandCenterPage })),
+)
+const KnowledgeGraphPage = lazy(() =>
+  import('./pages/knowledge/KnowledgeGraphPage').then((module) => ({ default: module.KnowledgeGraphPage })),
+)
+const AgentWorkspacePage = lazy(() =>
+  import('./pages/agents/AgentWorkspacePage').then((module) => ({ default: module.AgentWorkspacePage })),
+)
+const AgentBuilderPage = lazy(() =>
+  import('./pages/agents/AgentBuilderPage').then((module) => ({ default: module.AgentBuilderPage })),
+)
+const AutonomousQueuePage = lazy(() =>
+  import('./pages/agents/AutonomousQueuePage').then((module) => ({ default: module.AutonomousQueuePage })),
+)
 const SettingsPage = lazy(() =>
   import('./pages/settings/SettingsPage').then((module) => ({ default: module.SettingsPage })),
 )
@@ -117,6 +132,14 @@ export function AppRoutes() {
             element={
               <LazyPage>
                 <PolicyDetailPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="graph"
+            element={
+              <LazyPage>
+                <KnowledgeGraphPage />
               </LazyPage>
             }
           />
@@ -208,14 +231,52 @@ export function AppRoutes() {
           />
         </Route>
 
-        <Route
-          path="reports"
-          element={
-            <LazyPage>
-              <ReportsPage />
-            </LazyPage>
-          }
-        />
+        <Route path="reports">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <ReportsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="command"
+            element={
+              <LazyPage>
+                <CommandCenterPage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
+        <Route path="agents">
+          <Route
+            index
+            element={
+              <LazyPage>
+                <AgentWorkspacePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="builder"
+            element={
+              <LazyPage>
+                <AgentBuilderPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="queue"
+            element={
+              <LazyPage>
+                <AutonomousQueuePage />
+              </LazyPage>
+            }
+          />
+        </Route>
+
         <Route path="settings">
           <Route
             index
@@ -326,6 +387,11 @@ export function AppRoutes() {
               'admin-console',
               'collaboration',
               'ai-agents',
+              'agent-builder',
+              'autonomous-queue',
+              'knowledge-graph',
+              'command-center',
+              'continuous-monitoring',
             ].includes(item.id),
         ).map((item) => (
           <Route

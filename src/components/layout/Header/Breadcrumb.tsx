@@ -38,6 +38,8 @@ function useBreadcrumbTrail(): Crumb[] {
     } else if (segments[1] === 'policies') {
       trail.push({ label: 'Policies', path: '/knowledge/policies' })
       if (segments[2]) trail.push({ label: 'Policy detail' })
+    } else if (segments[1] === 'graph') {
+      trail.push({ label: 'Knowledge Graph' })
     }
 
     return trail
@@ -65,7 +67,18 @@ function useBreadcrumbTrail(): Crumb[] {
     return trail
   }
 
-  if (segments[0] === 'reports') return [{ label: 'Reports', path: '/reports' }, { label: 'Executive Dashboard' }]
+  if (segments[0] === 'reports') {
+    const trail: Crumb[] = [{ label: 'Reports', path: '/reports' }]
+    if (segments[1] === 'command') trail.push({ label: 'AI Command Center' })
+    else trail.push({ label: 'Executive Dashboard' })
+    return trail
+  }
+  if (segments[0] === 'agents') {
+    const trail: Crumb[] = [{ label: 'AI Agents', path: '/agents' }]
+    if (segments[1] === 'builder') trail.push({ label: 'Agent Builder' })
+    else if (segments[1] === 'queue') trail.push({ label: 'Work Queue' })
+    return trail
+  }
   if (segments[0] === 'integrations') return [{ label: 'Integrations' }]
   if (segments[0] === 'settings') {
     const trail: Crumb[] = [{ label: 'Settings', path: '/settings' }]
@@ -80,7 +93,7 @@ function useBreadcrumbTrail(): Crumb[] {
     const trail: Crumb[] = [{ label: 'AI Workspace', path: '/ai' }]
     if (segments[1] === 'prompts') trail.push({ label: 'Prompt library' })
     if (segments[1] === 'memory') trail.push({ label: 'Memory' })
-    if (segments[1] === 'agents') trail.push({ label: 'AI Agents' })
+    if (segments[1] === 'agents') trail.push({ label: 'Continuous Monitoring' })
     return trail
   }
 

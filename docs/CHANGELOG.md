@@ -32,9 +32,47 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 1.0.0-beta | 2026-08-03 | Autonomous Compliance — AI workforce, queue, knowledge graph |
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v1.0.0-beta — Autonomous AI Compliance Platform
+
+**Status:** Beta  
+**Sprint:** 10 (`SPRINT10_COMPLETE`)  
+**Date:** 2026-08-03
+
+RegIntel moves from AI assistant to AI workforce — autonomous agents that monitor, analyze, recommend, assign, and track compliance work under human supervision.
+
+#### Highlights
+
+##### AI Agent Workspace (P046)
+
+- Top-level `/agents` workforce with 10 autonomous specialists
+- Status, health, confidence, queue, current job, schedule
+- Pause / Resume / Run Now / View History
+- Explainability, logs, retries, activity timeline
+
+##### Agent Builder (P047)
+
+- Custom agent configuration (trigger, sources, systems, output, approvals, schedule)
+- Visual workflow: Trigger → Collect → Analyze → Decision → Create Tasks → Notify → Complete
+
+##### Autonomous Work Queue (P048)
+
+- Central queue with New → Completed/Failed states
+- Priority, confidence, estimates, linked regulation/policy, bulk approve/reject
+
+##### Knowledge Graph (P049)
+
+- Interactive SVG graph with zoom, filter, search, detail panel
+- Accessible list fallback
+
+##### Executive AI Command Center (P050)
+
+- Risk, health, critical issues, agent activity, forecasts, bottlenecks
+- Daily / weekly / monthly AI briefs with regenerate
 
 ### v0.9.0 — Connected Enterprise Platform
 

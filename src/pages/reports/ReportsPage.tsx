@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { BarChart3, Sparkles } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Button } from '../../components/ui/Button/Button'
@@ -10,6 +10,7 @@ import { useWork } from '../../hooks/useWork'
 import type { ExportFormat, ReportKind } from '../../types/governance'
 import { formatRelativeTime } from '../../utils/date'
 import { isOverdue } from '../../utils/smartDueDates'
+import connected from '../connected/connected.module.css'
 import styles from './ReportsPage.module.css'
 
 export function ReportsPage() {
@@ -67,6 +68,18 @@ export function ReportsPage() {
         description="Decision-ready governance posture for regulated financial institutions."
         icon={<BarChart3 size={20} />}
       />
+
+      <nav className={connected.hubLinks} aria-label="Executive workspaces">
+        <Link className={connected.hubLink} to="/reports/command">
+          AI Command Center
+        </Link>
+        <Link className={connected.hubLink} to="/agents">
+          AI Agents
+        </Link>
+        <Link className={connected.hubLink} to="/knowledge/graph">
+          Knowledge Graph
+        </Link>
+      </nav>
 
       <section className={g.metricGrid} aria-label="Executive metrics">
         <article className={g.metric}>

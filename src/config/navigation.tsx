@@ -133,8 +133,38 @@ export const SECONDARY_DESTINATIONS: Array<{ id: string; label: string; path: st
   {
     id: 'ai-agents',
     label: 'AI Agents',
+    path: '/agents',
+    description: 'Autonomous compliance workforce with pause, resume, run now, and history.',
+  },
+  {
+    id: 'agent-builder',
+    label: 'Agent Builder',
+    path: '/agents/builder',
+    description: 'Configure custom AI agents with triggers, sources, and approval gates.',
+  },
+  {
+    id: 'autonomous-queue',
+    label: 'Autonomous Work Queue',
+    path: '/agents/queue',
+    description: 'Central queue for AI recommendations awaiting human supervision.',
+  },
+  {
+    id: 'knowledge-graph',
+    label: 'Knowledge Graph',
+    path: '/knowledge/graph',
+    description: 'Interactive relationship explorer across the compliance graph.',
+  },
+  {
+    id: 'command-center',
+    label: 'AI Command Center',
+    path: '/reports/command',
+    description: 'Executive AI workspace with risk, health, and generated briefs.',
+  },
+  {
+    id: 'continuous-monitoring',
+    label: 'Continuous Monitoring',
     path: '/ai/agents',
-    description: 'Continuous regulatory monitoring agents and health dashboard.',
+    description: 'Regulator-specific monitoring agents and health dashboard.',
   },
 ]
 

@@ -43,7 +43,7 @@ export function IntegrationsPage() {
         <Link className={styles.hubLink} to="/settings/collaboration">
           Collaboration
         </Link>
-        <Link className={styles.hubLink} to="/ai/agents">
+        <Link className={styles.hubLink} to="/agents">
           AI Agents
         </Link>
         <Link className={styles.hubLink} to="/settings">

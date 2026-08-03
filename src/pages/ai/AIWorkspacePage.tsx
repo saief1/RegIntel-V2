@@ -132,7 +132,7 @@ export function AIWorkspacePage() {
           <Button size="sm" variant="ghost" onClick={() => navigate('/ai/memory')} leadingIcon={<BookMarked size={14} />}>
             Memory
           </Button>
-          <Button size="sm" variant="ghost" onClick={() => navigate('/ai/agents')} leadingIcon={<Bot size={14} />}>
+          <Button size="sm" variant="ghost" onClick={() => navigate('/agents')} leadingIcon={<Bot size={14} />}>
             AI Agents
           </Button>
         </div>

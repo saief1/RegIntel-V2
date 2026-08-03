@@ -25,6 +25,12 @@ export function AgentsPage() {
       />
 
       <nav className={styles.hubLinks} aria-label="Connected enterprise areas">
+        <Link className={styles.hubLink} to="/agents">
+          AI Agents
+        </Link>
+        <Link className={styles.hubLink} to="/agents/queue">
+          Work Queue
+        </Link>
         <Link className={styles.hubLink} to="/ai">
           AI Workspace
         </Link>
