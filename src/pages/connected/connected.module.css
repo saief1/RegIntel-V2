@@ -77,7 +77,8 @@
   gap: var(--ri-space-3);
 }
 
-.field label {
+.field label,
+.fieldLabel {
   display: block;
   margin-bottom: 4px;
   font-size: var(--ri-font-size-caption);

@@ -7,11 +7,22 @@ import { NAV_ITEMS, SECONDARY_DESTINATIONS } from './config/navigation'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { HomePage } from './pages/HomePage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { CollectionDetailPage } from './pages/knowledge/CollectionDetailPage'
-import { CollectionsPage } from './pages/knowledge/CollectionsPage'
-import { DocumentViewerPage } from './pages/knowledge/DocumentViewerPage'
-import { KnowledgeHomePage } from './pages/knowledge/KnowledgeHomePage'
-import { RegulationLibraryPage } from './pages/knowledge/RegulationLibraryPage'
+
+const KnowledgeHomePage = lazy(() =>
+  import('./pages/knowledge/KnowledgeHomePage').then((module) => ({ default: module.KnowledgeHomePage })),
+)
+const RegulationLibraryPage = lazy(() =>
+  import('./pages/knowledge/RegulationLibraryPage').then((module) => ({ default: module.RegulationLibraryPage })),
+)
+const DocumentViewerPage = lazy(() =>
+  import('./pages/knowledge/DocumentViewerPage').then((module) => ({ default: module.DocumentViewerPage })),
+)
+const CollectionsPage = lazy(() =>
+  import('./pages/knowledge/CollectionsPage').then((module) => ({ default: module.CollectionsPage })),
+)
+const CollectionDetailPage = lazy(() =>
+  import('./pages/knowledge/CollectionDetailPage').then((module) => ({ default: module.CollectionDetailPage })),
+)
 
 const WorkDashboardPage = lazy(() =>
   import('./pages/work/WorkDashboardPage').then((module) => ({ default: module.WorkDashboardPage })),
@@ -234,11 +245,46 @@ export function AppRoutes() {
         <Route index element={<HomePage />} />
 
         <Route path="knowledge">
-          <Route index element={<KnowledgeHomePage />} />
-          <Route path="library" element={<RegulationLibraryPage />} />
-          <Route path="library/:documentId" element={<DocumentViewerPage />} />
-          <Route path="collections" element={<CollectionsPage />} />
-          <Route path="collections/:collectionId" element={<CollectionDetailPage />} />
+          <Route
+            index
+            element={
+              <LazyPage>
+                <KnowledgeHomePage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="library"
+            element={
+              <LazyPage>
+                <RegulationLibraryPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="library/:documentId"
+            element={
+              <LazyPage>
+                <DocumentViewerPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="collections"
+            element={
+              <LazyPage>
+                <CollectionsPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="collections/:collectionId"
+            element={
+              <LazyPage>
+                <CollectionDetailPage />
+              </LazyPage>
+            }
+          />
           <Route
             path="policies"
             element={

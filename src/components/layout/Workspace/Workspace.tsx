@@ -41,10 +41,10 @@ export function Workspace() {
   return (
     <main className={cx(styles.workspace, isFlushLayout && styles.flush)} aria-label="Workspace">
       {initializing ? (
-        <div className={styles.skeletonPage} aria-hidden="true">
+        <div className={styles.skeletonPage} role="status" aria-label="Loading workspace">
           <Skeleton height={28} width="35%" />
           <Skeleton height={16} width="55%" />
-          <div className={styles.skeletonGrid}>
+          <div className={styles.skeletonGrid} aria-hidden="true">
             <Skeleton height={112} radius="lg" />
             <Skeleton height={112} radius="lg" />
             <Skeleton height={112} radius="lg" />

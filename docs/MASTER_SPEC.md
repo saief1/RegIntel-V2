@@ -7,56 +7,106 @@ This document is the single source of truth for RegIntel's product, technical, a
 ## Table of Contents
 
 - [1. Overview](#1-overview)
-- [2. Goals & Non-Goals](#2-goals--non-goals)
-- [3. Target Users & Personas](#3-target-users--personas)
-- [4. System Architecture](#4-system-architecture)
-- [5. Tech Stack](#5-tech-stack)
-- [6. Core Domain Concepts](#6-core-domain-concepts)
-- [7. Related Documents](#7-related-documents)
-- [8. Open Questions](#8-open-questions)
-- [9. Revision History](#9-revision-history)
+- [2. Release Status (v2.0.0)](#2-release-status-v200)
+- [3. Goals & Non-Goals](#3-goals--non-goals)
+- [4. Target Users & Personas](#4-target-users--personas)
+- [5. System Architecture](#5-system-architecture)
+- [6. Tech Stack](#6-tech-stack)
+- [7. Core Domain Concepts](#7-core-domain-concepts)
+- [8. Related Documents](#8-related-documents)
+- [9. Open Questions](#9-open-questions)
+- [10. Revision History](#10-revision-history)
 
 ## 1. Overview
 
-> Placeholder — describe what RegIntel is, the problem it solves, and its value proposition once defined.
+RegIntel is an enterprise regulatory intelligence and compliance workspace. The UI helps compliance, risk, and operations teams navigate knowledge, work, investigations, AI assistance, reporting, governance, and commercial/ops surfaces with a calm, dense, trustworthy interface (Apple / Linear / Harvey-inspired).
 
-## 2. Goals & Non-Goals
+At **v2.0.0**, RegIntel ships as a **Frontend Platform GA**: a complete, production-quality frontend with mock-backed domain modules. It demonstrates the product information architecture and interaction model ahead of real backend, AI orchestration, and wealth go-to-market phases.
+
+## 2. Release Status (v2.0.0)
+
+| Item | Status |
+|---|---|
+| Frontend Platform GA | ✅ v2.0.0 |
+| Finished SaaS (auth, DB, live integrations, billing) | ❌ Future (Phases B–D) |
+| Sprint numbering | **Stopped** after Sprint 20 |
+| Next planning unit | Phases A–D in [`ROADMAP.md`](./ROADMAP.md) |
+
+**Positioning statement for stakeholders:**  
+*RegIntel v2.0.0 is Frontend Platform GA — not a finished SaaS.*
+
+## 3. Goals & Non-Goals
 
 ### Goals
 
-- Placeholder
+- Ship a coherent, accessible enterprise frontend platform
+- Preserve module surfaces built in Sprints 1–19
+- Keep design-system usage consistent (single Button/Badge/Card/Modal/Table paths)
+- Document honest boundaries between demo platform and future backend/AI/commercial reality
 
-### Non-Goals
+### Non-Goals (v2.0.0)
 
-- Placeholder
+- New business modules in Sprint 20
+- Real authentication, persistence, or live third-party APIs
+- Continuing Sprint 21+
+- Wholesale redesign of completed pages
 
-## 3. Target Users & Personas
+## 4. Target Users & Personas
 
-> Placeholder — define primary and secondary user personas.
+Primary: compliance officers, AML investigators, policy owners, risk/reporting leads, and compliance ops admins at regulated financial institutions (wealth flagship first).
 
-## 4. System Architecture
+Secondary: auditors, partner implementers, developer platform consumers (API/SDK surfaces are mock/demo at GA).
 
-> Placeholder — high-level architecture diagram and description (frontend, backend, data stores, integrations).
+## 5. System Architecture
 
-## 5. Tech Stack
+See [`ARCHITECTURE.md`](./ARCHITECTURE.md) for the frontend platform diagram, layering, and GA vs future split.
+
+High level today:
+
+- **Client-only** React SPA
+- **Mock domain state** via React context providers
+- **Lazy routes** for feature pages
+- **Design tokens** in CSS custom properties
+
+Future: Backend Platform (Phase B), AI Intelligence Layer (Phase C), Wealth Launch (Phase D).
+
+## 6. Tech Stack
 
 | Layer | Technology | Notes |
 |---|---|---|
-| Frontend | React 19 + TypeScript + Vite | Confirmed from current codebase |
-| Styling | TBD | Placeholder |
-| Backend | TBD | Placeholder |
-| Database | TBD | Placeholder |
-| Hosting / Infra | TBD | Placeholder |
-| Auth | TBD | Placeholder |
+| Frontend | React 19 + TypeScript + Vite | Confirmed |
+| Routing | React Router 7 | Lazy + Suspense |
+| Styling | CSS Modules + design tokens | `src/styles/tokens/` |
+| Icons | lucide-react | Approved dependency |
+| Classnames | clsx | Approved dependency |
+| Backend | Not in GA | Phase B |
+| Database | Not in GA | Phase B |
+| Auth | Not in GA | Phase B |
+| Hosting / Infra | Static SPA capable | See [`DEPLOYMENT.md`](./DEPLOYMENT.md) |
+| E2E | Playwright | `e2e/smoke.spec.ts` |
 
-## 6. Core Domain Concepts
+Do not add dependencies without approval (`CLAUDE.md`).
 
-> Placeholder — define core entities and domain vocabulary once the product scope is confirmed.
+## 7. Core Domain Concepts
 
-## 7. Related Documents
+Workspace concepts exercised in the UI (mock-backed):
+
+- **Knowledge** — regulations, collections, policies, graph
+- **Work** — tasks, cases, workflows, calendar
+- **Investigations & regulatory change** — evidence, impact
+- **AI Workspace** — chat, prompts, memory, agents (demo)
+- **Reports / intelligence** — analytics, KPIs, board, benchmarks, command center
+- **Governance & operations** — RBAC UI, audit, automation, system health, prod ops
+- **Ecosystem & developer** — marketplace, lineage, twin, API explorer, webhooks
+- **Adoption & commercial** — onboarding, success, billing/licensing mocks
+- **Solutions** — wealth, banking, insurance, GRC packs (UI)
+
+## 8. Related Documents
 
 - [`PRODUCT.md`](./PRODUCT.md)
 - [`ROADMAP.md`](./ROADMAP.md)
+- [`ARCHITECTURE.md`](./ARCHITECTURE.md)
+- [`RELEASE_NOTES.md`](./RELEASE_NOTES.md)
 - [`FEATURES.md`](./FEATURES.md)
 - [`DATABASE.md`](./DATABASE.md)
 - [`API.md`](./API.md)
@@ -66,12 +116,16 @@ This document is the single source of truth for RegIntel's product, technical, a
 - [`DECISIONS.md`](./DECISIONS.md)
 - [`CHANGELOG.md`](./CHANGELOG.md)
 
-## 8. Open Questions
+## 9. Open Questions
 
-- Placeholder
+- Auth provider and tenancy model (Phase B)
+- Persistence strategy and audit store (Phase B)
+- Model hosting / RAG boundaries (Phase C)
+- Wealth launch packaging and environments (Phase D)
 
-## 9. Revision History
+## 10. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Sprint 20 | Frontend Platform GA status; link ARCHITECTURE / RELEASE_NOTES / Phases A–D |
 | TBD | TBD | Initial placeholder document created |

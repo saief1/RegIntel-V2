@@ -181,4 +181,12 @@ test.describe('RegIntel smoke suite', () => {
     await page.keyboard.press('Escape')
     await expect(page.getByRole('dialog')).toHaveCount(0)
   })
+
+  test('unknown route shows not-found recovery', async ({ page }) => {
+    await page.goto('/this-route-does-not-exist')
+    await waitForShell(page)
+    await expect(page.getByRole('main', { name: 'Workspace' })).toContainText(/Page not found/i)
+    await expect(page.getByRole('button', { name: 'Go to Home' })).toBeVisible()
+    await assertNoHorizontalOverflow(page)
+  })
 })

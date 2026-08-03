@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
 import { Button } from '../../components/ui/Button/Button'
+import { NetworkErrorState } from '../../components/ui/NetworkErrorState/NetworkErrorState'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { useConnected } from '../../hooks/useConnected'
@@ -108,34 +109,34 @@ export function IntegrationsPage() {
               </header>
               <div className={styles.detailGrid}>
                 <div className={styles.field}>
-                  <label>Health</label>
+                  <span className={styles.fieldLabel}>Health</span>
                   <p>{selected.health}</p>
                 </div>
                 <div className={styles.field}>
-                  <label>Owner</label>
+                  <span className={styles.fieldLabel}>Owner</span>
                   <p>{getUser(selected.ownerId)?.name ?? selected.ownerId}</p>
                 </div>
                 <div className={styles.field}>
-                  <label>Last sync</label>
+                  <span className={styles.fieldLabel}>Last sync</span>
                   <p>{selected.lastSyncAt ? formatRelativeTime(selected.lastSyncAt) : '—'}</p>
                 </div>
                 <div className={styles.field}>
-                  <label>Connected since</label>
+                  <span className={styles.fieldLabel}>Connected since</span>
                   <p>{selected.connectedSince ? formatRelativeTime(selected.connectedSince) : 'Not connected'}</p>
                 </div>
                 <div className={styles.field}>
-                  <label>Sync frequency</label>
+                  <span className={styles.fieldLabel}>Sync frequency</span>
                   <p>{selected.syncFrequency}</p>
                 </div>
                 <div className={styles.field}>
-                  <label>Permissions</label>
+                  <span className={styles.fieldLabel}>Permissions</span>
                   <p>{selected.permissions.join(', ')}</p>
                 </div>
               </div>
               <div className={g.toolbar}>
-                {selected.status === 'disconnected' ? (
+                {selected.status === 'disconnected' || selected.status === 'error' ? (
                   <Button size="sm" variant="primary" onClick={() => reconnectIntegration(selected.id)}>
-                    Connect
+                    {selected.status === 'error' ? 'Reconnect' : 'Connect'}
                   </Button>
                 ) : (
                   <Button size="sm" variant="secondary" onClick={() => disconnectIntegration(selected.id)}>
@@ -143,33 +144,44 @@ export function IntegrationsPage() {
                   </Button>
                 )}
               </div>
-              <h3>Activity log</h3>
-              <ul className={g.list}>
-                {selected.activity.length === 0 ? (
-                  <li className={g.listItem}>
-                    <span className={g.muted}>No activity yet.</span>
-                  </li>
-                ) : (
-                  selected.activity.map((entry) => (
-                    <li key={entry.id} className={g.listItem}>
-                      <span>
-                        <strong>{entry.level}</strong> · {entry.message}
-                      </span>
-                      <time dateTime={entry.at}>{formatRelativeTime(entry.at)}</time>
-                    </li>
-                  ))
-                )}
-              </ul>
-              {selected.errorHistory.length > 0 && (
+              {selected.status === 'error' ? (
+                <NetworkErrorState
+                  title="Integration unreachable"
+                  description="This connector reported a network or authentication failure. Retry when the remote service is available."
+                  onRetry={() => reconnectIntegration(selected.id)}
+                  retryLabel="Retry connection"
+                />
+              ) : (
                 <>
-                  <h3>Error history</h3>
+                  <h3>Activity log</h3>
                   <ul className={g.list}>
-                    {selected.errorHistory.map((error) => (
-                      <li key={error} className={g.listItem}>
-                        <span className={g.muted}>{error}</span>
+                    {selected.activity.length === 0 ? (
+                      <li className={g.listItem}>
+                        <span className={g.muted}>No activity yet.</span>
                       </li>
-                    ))}
+                    ) : (
+                      selected.activity.map((entry) => (
+                        <li key={entry.id} className={g.listItem}>
+                          <span>
+                            <strong>{entry.level}</strong> · {entry.message}
+                          </span>
+                          <time dateTime={entry.at}>{formatRelativeTime(entry.at)}</time>
+                        </li>
+                      ))
+                    )}
                   </ul>
+                  {selected.errorHistory.length > 0 && (
+                    <>
+                      <h3>Error history</h3>
+                      <ul className={g.list}>
+                        {selected.errorHistory.map((error) => (
+                          <li key={error} className={g.listItem}>
+                            <span className={g.muted}>{error}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </>
+                  )}
                 </>
               )}
             </section>

@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.0.0 | 2026-08-03 | Frontend Platform GA — hardening, error boundary, docs, no new modules |
 | 1.9.0-beta | 2026-08-03 | Commercial Platform — billing, customer portal, partners, usage, licensing |
 | 1.8.0-beta | 2026-08-03 | Customer Experience — onboarding, help, success, tours, community |
 | 1.7.0-beta | 2026-08-03 | Industry Solutions — wealth flagship, banking, insurance, GRC marketplace |
@@ -44,6 +45,35 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+### v2.0.0 — Frontend Platform GA
+
+**Status:** GA (Frontend Platform)  
+**Sprint:** 20 (`SPRINT20_COMPLETE`, `v2.0.0`)  
+**Date:** 2026-08-03
+
+Release Candidate / GA hardening sprint. **No new business modules.** v2.0.0 is the Frontend Platform GA — **not** a finished SaaS (real auth, persistence, live integrations, AI orchestration, and billing remain Phases B–D). Sprint numbering stops here; next work is Phases A–D.
+
+#### Added
+
+- Global React `ErrorBoundary` with “Something went wrong” recovery UI
+- Reusable `NetworkErrorState` (demoed on Integrations error connectors)
+- `docs/ARCHITECTURE.md` and `docs/RELEASE_NOTES.md`
+- Playwright coverage for unknown-route / Not Found recovery
+
+#### Changed
+
+- Knowledge routes converted to lazy + `Suspense` (consistent with other features)
+- EmptyState gains `role="status"` and decorative icon `aria-hidden`
+- Workspace initial load announces via `role="status"`
+- Not Found uses design-system `Button` for recovery
+- `package.json` version → `2.0.0`
+- Roadmap reframed to Phases A–D (no Sprint 21+)
+- Master Spec / UI Guidelines updated for Frontend Platform GA
+
+#### Fixed
+
+- Integration detail labels no longer use bare `<label>` without controls (a11y)
 
 ### v1.9.0-beta — Commercial Platform
 

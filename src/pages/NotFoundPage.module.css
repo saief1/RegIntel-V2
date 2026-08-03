@@ -4,27 +4,3 @@
   justify-content: center;
   min-height: 100%;
 }
-
-.link {
-  display: inline-flex;
-  align-items: center;
-  height: 32px;
-  padding: 0 var(--ri-space-4);
-  border: 1px solid var(--ri-color-border);
-  border-radius: var(--ri-radius-md);
-  background-color: var(--ri-color-surface);
-  color: var(--ri-color-text-primary);
-  font-size: var(--ri-font-size-body-sm);
-  font-weight: var(--ri-font-weight-medium);
-  text-decoration: none;
-  transition: var(--ri-transition-hover);
-}
-
-.link:hover {
-  background-color: var(--ri-color-hover);
-}
-
-.link:focus-visible {
-  outline: 2px solid var(--ri-color-focus-ring);
-  outline-offset: 2px;
-}
