@@ -31,8 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **Backend Architecture Contract (B000)** → then **B001** (NestJS scaffolding).  
-Do **not** start B001 coding until the contract in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) is approved.
+**Current step:** **Milestone B1 in progress** (B001–B005) → target **v2.1.0**.  
+Architecture Contract ([`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md)) is **complete** (errors, audit, flags, migrations, release discipline).
 
 **UI policy for Phase B:** UI is **frozen** except where backend integration requires minimal wiring (feature flags, API client, auth session). No redesigns, no new business modules.
 
@@ -42,7 +42,7 @@ Do **not** start B001 coding until the contract in [`BACKEND_ARCHITECTURE.md`](.
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress (planning) | 0% (B000 contract) |
+| Phase B – Backend Platform | 🔄 In Progress (B1) | ~20% (contract ✅; B001–B005 in progress) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -112,17 +112,17 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress (planning) — Architecture Contract first.
+**Status:** 🔄 In Progress — Architecture Contract ✅; Milestone B1 (B001–B005) in progress.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
-**Contract:** [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) (tech freeze: NestJS, PostgreSQL, Prisma, Redis, BullMQ, Swagger/OpenAPI, Docker Compose; JWT + Argon2; MFA/OIDC-ready later).
+**Contract:** [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) (tech freeze: NestJS, PostgreSQL, Prisma, Redis, BullMQ, Swagger/OpenAPI, Docker Compose; JWT + Argon2; MFA/OIDC-ready later; canonical error/success envelopes; audit writer interface; `USE_REAL_*` flags; Prisma-only migrations).
 
-### B000 — Architecture Contract (prerequisite)
+### B000 — Architecture Contract (prerequisite) ✅
 
 | ID | Title | Objective |
 |---|---|---|
-| **B000** | Backend Architecture Contract | Freeze stack and conventions; document B1 done criteria; update roadmap/version targets. **No NestJS/Prisma code in this ticket.** |
+| **B000** | Backend Architecture Contract | Freeze stack and conventions; document B1 done criteria; update roadmap/version targets. **Complete.** |
 
 ### B1 Foundation → v2.1.0 (B001–B005)
 
@@ -219,7 +219,6 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 - Inventing fake backend / live SaaS features in the frontend-only codebase
 - Expanding primary nav beyond 6 items without product approval
 - Wholesale redesign of completed module pages during Phase A or B (UI frozen except integration wiring)
-- Starting B001 NestJS scaffolding before B000 contract approval
 - Tagging v2.1.0 before B001–B005 implementation
 - New npm dependencies without explicit approval (`CLAUDE.md`)
 
@@ -227,6 +226,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B1 | Architecture Contract standards complete; Product Board → B1 in progress |
 | 2026-08-03 | Phase B planning | B000 Backend Architecture Contract; reband B001–B025; version targets v2.1–v3.0; Phase B → In Progress (planning) |
 | 2026-08-03 | Phase A | A001–A010 complete; Product Board Phase A ✅; tag v2.0.1 Platform Stabilized |
 | 2026-08-03 | Phase A prep | Expand to Phases A–F + Product Board + ticket IDs (A001–F015); v3.0 launch milestone |

@@ -6,7 +6,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress (planning) | 0% (B000 contract) |
+| Phase B – Backend Platform | 🔄 In Progress (B1) | ~20% (contract ✅; B001–B005 in progress) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -15,10 +15,12 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 
 ## Current step
 
-**Backend Architecture Contract (B000)** → then **B001** (NestJS scaffolding).
+**Milestone B1 in progress** (B001–B005) → target **v2.1.0**.
 
-Contract: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md).  
-Do not start B001 coding until the contract is approved. UI frozen except integration wiring.
+Architecture Contract: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) ✅ complete  
+(errors, audit, `USE_REAL_*` flags, `/api/v1`, migration policy, release discipline).
+
+UI frozen except integration wiring.
 
 ## Version targets
 
@@ -40,8 +42,8 @@ Do not start B001 coding until the contract is approved. UI frozen except integr
 RegIntel v2.x Frontend Platform GA (v2.0.0)
 → Phase A Platform Stabilization (A001–A010) ✅ v2.0.1
 → Phase B Backend Platform (B000–B025) 🔄
-    → B000 Architecture Contract
-    → B001–B005 Foundation → v2.1.0
+    → B000 Architecture Contract ✅
+    → B001–B005 Foundation → v2.1.0 (in progress)
     → B006–B015 Identity & Organizations → v2.2.0
     → B016–B020 Core Data Platform → v2.3.0
     → B021–B025 Platform Services → v2.4.0 / v2.5.0
@@ -54,11 +56,11 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 
 ## Phase B ticket bands
 
-| Band | IDs | Theme |
-|---|---|---|
-| Contract | B000 | Backend Architecture Contract (docs only) |
-| B1 Foundation | B001–B005 | Scaffolding, auth, user/org, Prisma, API + OpenAPI |
-| Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM |
-| Org structure | B011–B015 | Workspaces, Teams, Departments, Invitations, Tenant isolation |
-| First live domains | B016–B020 | Knowledge, Policies, Tasks, Notifications, Cases (mock → API) |
-| Platform services | B021–B025 | Storage, Jobs, Notification delivery, Audit, Multi-tenancy guarantees |
+| Band | IDs | Theme | Status |
+|---|---|---|---|
+| Contract | B000 | Backend Architecture Contract | ✅ |
+| B1 Foundation | B001–B005 | Scaffolding, auth, user/org, Prisma, API + OpenAPI | 🔄 |
+| Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM | ⏳ |
+| Org structure | B011–B015 | Workspaces, Teams, Departments, Invitations, Tenant isolation | ⏳ |
+| First live domains | B016–B020 | Knowledge, Policies, Tasks, Notifications, Cases (mock → API) | ⏳ |
+| Platform services | B021–B025 | Storage, Jobs, Notification delivery, Audit, Multi-tenancy guarantees | ⏳ |
