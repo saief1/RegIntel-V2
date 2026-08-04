@@ -55,6 +55,10 @@ class EnvironmentVariables {
   @IsBooleanString()
   @IsOptional()
   ALLOW_REGISTER?: string;
+
+  @IsString()
+  @IsOptional()
+  MFA_ENCRYPTION_KEY?: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

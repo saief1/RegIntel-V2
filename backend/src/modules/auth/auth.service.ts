@@ -11,7 +11,12 @@ import { Request, Response } from 'express';
 import { AuditService } from '../../common/audit/audit.service';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AppConfig } from '../../config/configuration';
-import { AuthTokenResponse, AuthUserView, JwtPayload } from './auth.types';
+import {
+  AuthMfaChallengeResponse,
+  AuthTokenResponse,
+  AuthUserView,
+  JwtPayload,
+} from './auth.types';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { PasswordService } from './password.service';
@@ -76,6 +81,7 @@ export class AuthService {
           userId: createdUser.id,
           organizationId: org.id,
           role: 'OWNER',
+          appRole: 'ORG_ADMIN',
           status: 'ACTIVE',
         },
       });
@@ -89,14 +95,14 @@ export class AuthService {
       request: req,
     });
 
-    return this.issueSession(user.id, req, res);
+    return this.issueSessionForUser(user.id, req, res);
   }
 
   async login(
     dto: LoginDto,
     req: Request,
     res: Response,
-  ): Promise<AuthTokenResponse> {
+  ): Promise<AuthTokenResponse | AuthMfaChallengeResponse> {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email.toLowerCase() },
     });
@@ -105,7 +111,7 @@ export class AuthService {
       !!user &&
       (await this.passwordService.verify(user.passwordHash, dto.password));
 
-    if (!user || !valid) {
+    if (!user || !valid || !user.active) {
       await this.auditService.record({
         action: 'auth.login_failed',
         resource: `email:${dto.email.toLowerCase()}`,
@@ -118,6 +124,27 @@ export class AuthService {
       });
     }
 
+    if (user.mfaEnabled) {
+      const jwt = this.configService.getOrThrow<AppConfig['jwt']>('jwt');
+      const mfaChallengeToken = await this.jwtService.signAsync(
+        { sub: user.id, purpose: 'mfa_challenge' },
+        {
+          secret: jwt.accessSecret,
+          expiresIn: '5m',
+        },
+      );
+      await this.auditService.record({
+        action: 'auth.login_mfa_required',
+        resource: `user:${user.id}`,
+        userId: user.id,
+        request: req,
+      });
+      return {
+        mfaRequired: true as const,
+        mfaChallengeToken,
+      };
+    }
+
     await this.auditService.record({
       action: 'auth.login',
       resource: `user:${user.id}`,
@@ -125,7 +152,16 @@ export class AuthService {
       request: req,
     });
 
-    return this.issueSession(user.id, req, res);
+    return this.issueSessionForUser(user.id, req, res);
+  }
+
+  /** Public session issuance used by MFA verify and password login. */
+  issueSessionForUser(
+    userId: string,
+    req: Request,
+    res: Response,
+  ): Promise<AuthTokenResponse> {
+    return this.issueSession(userId, req, res);
   }
 
   async refresh(req: Request, res: Response): Promise<AuthTokenResponse> {
@@ -280,11 +316,13 @@ export class AuthService {
       email: user.email,
       name: user.name,
       mfaEnabled: user.mfaEnabled,
+      isSuperAdmin: user.isSuperAdmin,
       organizations: user.memberships.map((membership) => ({
         id: membership.organization.id,
         name: membership.organization.name,
         slug: membership.organization.slug,
         role: membership.role,
+        appRole: membership.appRole,
       })),
     };
 

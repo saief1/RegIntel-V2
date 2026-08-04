@@ -28,6 +28,7 @@ export class OrganizationsService {
         name: membership.organization.name,
         slug: membership.organization.slug,
         role: membership.role,
+        appRole: membership.appRole,
         createdAt: membership.organization.createdAt,
       })),
       meta: {
@@ -66,6 +67,7 @@ export class OrganizationsService {
           userId,
           organizationId: created.id,
           role: 'OWNER',
+          appRole: 'ORG_ADMIN',
           status: 'ACTIVE',
         },
       });
@@ -85,6 +87,7 @@ export class OrganizationsService {
       name: org.name,
       slug: org.slug,
       role: 'OWNER',
+      appRole: 'ORG_ADMIN',
       createdAt: org.createdAt,
     };
   }
@@ -111,6 +114,7 @@ export class OrganizationsService {
       name: membership.organization.name,
       slug: membership.organization.slug,
       role: membership.role,
+      appRole: membership.appRole,
       createdAt: membership.organization.createdAt,
     };
   }

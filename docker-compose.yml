@@ -57,6 +57,7 @@ services:
       SEED_ADMIN_NAME: RegIntel Admin
       SEED_ORG_NAME: RegIntel Demo
       SEED_ORG_SLUG: regintel-demo
+      MFA_ENCRYPTION_KEY: dev-mfa-encryption-key-change-me-32b!
 
 volumes:
   regintel_pg_data:

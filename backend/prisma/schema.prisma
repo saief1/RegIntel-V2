@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+/// Legacy B1 membership labels retained for compatibility; prefer `appRole`.
 enum MembershipRole {
   OWNER
   ADMIN
@@ -19,13 +20,52 @@ enum MembershipStatus {
   DISABLED
 }
 
+/// Database-driven RBAC role keys (B007).
+enum AppRole {
+  SUPER_ADMIN
+  ORG_ADMIN
+  COMPLIANCE_OFFICER
+  MANAGER
+  ANALYST
+  VIEWER
+}
+
+enum SsoProviderType {
+  OIDC
+  SAML
+}
+
+enum PermissionScope {
+  ORGANIZATION
+  TEAM
+  RESOURCE
+}
+
+enum PermissionEffect {
+  ALLOW
+  DENY
+}
+
+enum ScimSyncState {
+  IDLE
+  RUNNING
+  SUCCEEDED
+  FAILED
+}
+
 model Organization {
-  id          String                   @id @default(uuid()) @db.Uuid
-  name        String
-  slug        String                   @unique
-  createdAt   DateTime                 @default(now()) @map("created_at")
-  updatedAt   DateTime                 @updatedAt @map("updated_at")
-  memberships OrganizationMembership[]
+  id                String                   @id @default(uuid()) @db.Uuid
+  name              String
+  slug              String                   @unique
+  createdAt         DateTime                 @default(now()) @map("created_at")
+  updatedAt         DateTime                 @updatedAt @map("updated_at")
+  memberships       OrganizationMembership[]
+  teams             Team[]
+  ssoConfigurations SsoConfiguration[]
+  scimConfiguration ScimConfiguration?
+  scimGroups        ScimGroup[]
+  scimSyncRuns      ScimSyncRun[]
+  permissionGrants  PermissionGrant[]
 
   @@map("organizations")
 }
@@ -35,12 +75,19 @@ model User {
   email              String                   @unique
   passwordHash       String                   @map("password_hash")
   name               String
+  isSuperAdmin       Boolean                  @default(false) @map("is_super_admin")
   mfaEnabled         Boolean                  @default(false) @map("mfa_enabled")
   mfaSecretEncrypted String?                  @map("mfa_secret_encrypted")
+  mfaEnrolledAt      DateTime?                @map("mfa_enrolled_at")
+  externalId         String?                  @unique @map("external_id")
+  active             Boolean                  @default(true)
   createdAt          DateTime                 @default(now()) @map("created_at")
   updatedAt          DateTime                 @updatedAt @map("updated_at")
   memberships        OrganizationMembership[]
   refreshTokens      RefreshToken[]
+  mfaRecoveryCodes   MfaRecoveryCode[]
+  teamMemberships    TeamMembership[]
+  permissionGrants   PermissionGrant[]
 
   @@map("users")
 }
@@ -49,7 +96,9 @@ model OrganizationMembership {
   id             String           @id @default(uuid()) @db.Uuid
   userId         String           @map("user_id") @db.Uuid
   organizationId String           @map("organization_id") @db.Uuid
+  /// Legacy B1 field — kept in sync with `appRole` by application code.
   role           MembershipRole   @default(MEMBER)
+  appRole        AppRole          @default(VIEWER) @map("app_role")
   status         MembershipStatus @default(ACTIVE)
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
@@ -59,25 +108,204 @@ model OrganizationMembership {
   @@unique([userId, organizationId])
   @@index([organizationId])
   @@index([userId])
+  @@index([appRole])
   @@map("organization_memberships")
 }
 
 model RefreshToken {
-  id               String    @id @default(uuid()) @db.Uuid
-  userId           String    @map("user_id") @db.Uuid
-  tokenHash        String    @map("token_hash")
-  familyId         String    @map("family_id") @db.Uuid
-  expiresAt        DateTime  @map("expires_at")
-  revokedAt        DateTime? @map("revoked_at")
-  replacedById     String?   @map("replaced_by_id") @db.Uuid
-  createdAt        DateTime  @default(now()) @map("created_at")
-  updatedAt        DateTime  @updatedAt @map("updated_at")
-  userAgent        String?   @map("user_agent")
-  ipAddress        String?   @map("ip_address")
-  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String    @id @default(uuid()) @db.Uuid
+  userId       String    @map("user_id") @db.Uuid
+  tokenHash    String    @map("token_hash")
+  familyId     String    @map("family_id") @db.Uuid
+  expiresAt    DateTime  @map("expires_at")
+  revokedAt    DateTime? @map("revoked_at")
+  replacedById String?   @map("replaced_by_id") @db.Uuid
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  userAgent    String?   @map("user_agent")
+  ipAddress    String?   @map("ip_address")
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([tokenHash])
   @@index([familyId])
   @@map("refresh_tokens")
+}
+
+model Role {
+  id          String           @id @default(uuid()) @db.Uuid
+  key         AppRole          @unique
+  name        String
+  description String
+  isSystem    Boolean          @default(true) @map("is_system")
+  createdAt   DateTime         @default(now()) @map("created_at")
+  updatedAt   DateTime         @updatedAt @map("updated_at")
+  permissions RolePermission[]
+
+  @@map("roles")
+}
+
+model Permission {
+  id          String             @id @default(uuid()) @db.Uuid
+  key         String             @unique
+  name        String
+  description String
+  category    String
+  createdAt   DateTime           @default(now()) @map("created_at")
+  updatedAt   DateTime           @updatedAt @map("updated_at")
+  roles       RolePermission[]
+  grants      PermissionGrant[]
+
+  @@index([category])
+  @@map("permissions")
+}
+
+model RolePermission {
+  roleId       String     @map("role_id") @db.Uuid
+  permissionId String     @map("permission_id") @db.Uuid
+  createdAt    DateTime   @default(now()) @map("created_at")
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+  @@map("role_permissions")
+}
+
+model MfaRecoveryCode {
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  codeHash  String    @map("code_hash")
+  usedAt    DateTime? @map("used_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("mfa_recovery_codes")
+}
+
+model SsoConfiguration {
+  id                     String          @id @default(uuid()) @db.Uuid
+  organizationId         String          @map("organization_id") @db.Uuid
+  providerType           SsoProviderType @map("provider_type")
+  name                   String
+  enabled                Boolean         @default(false)
+  issuer                 String?
+  clientId               String?         @map("client_id")
+  clientSecretEncrypted  String?         @map("client_secret_encrypted")
+  authorizationUrl       String?         @map("authorization_url")
+  tokenUrl               String?         @map("token_url")
+  jwksUrl                String?         @map("jwks_url")
+  scopes                 String?
+  entityId               String?         @map("entity_id")
+  acsUrl                 String?         @map("acs_url")
+  metadataUrl            String?         @map("metadata_url")
+  certificate            String?
+  /// Mock / provider-specific extras (B008 interfaces; real IdP wiring later).
+  configJson             Json?           @map("config_json")
+  createdAt              DateTime        @default(now()) @map("created_at")
+  updatedAt              DateTime        @updatedAt @map("updated_at")
+  organization           Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, providerType, name])
+  @@index([organizationId])
+  @@map("sso_configurations")
+}
+
+model ScimConfiguration {
+  id              String       @id @default(uuid()) @db.Uuid
+  organizationId  String       @unique @map("organization_id") @db.Uuid
+  enabled         Boolean      @default(false)
+  bearerTokenHash String?      @map("bearer_token_hash")
+  baseUrl         String?      @map("base_url")
+  createdAt       DateTime     @default(now()) @map("created_at")
+  updatedAt       DateTime     @updatedAt @map("updated_at")
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("scim_configurations")
+}
+
+model ScimGroup {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  externalId     String       @map("external_id")
+  displayName    String       @map("display_name")
+  /// Maps SCIM group → AppRole for provisioning.
+  mappedRole     AppRole?     @map("mapped_role")
+  memberExternalIds String[]  @default([]) @map("member_external_ids")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, externalId])
+  @@index([organizationId])
+  @@map("scim_groups")
+}
+
+model ScimSyncRun {
+  id               String        @id @default(uuid()) @db.Uuid
+  organizationId   String        @map("organization_id") @db.Uuid
+  status           ScimSyncState @default(IDLE)
+  usersCreated     Int           @default(0) @map("users_created")
+  usersUpdated     Int           @default(0) @map("users_updated")
+  usersDeactivated Int           @default(0) @map("users_deactivated")
+  groupsSynced     Int           @default(0) @map("groups_synced")
+  errorMessage     String?       @map("error_message")
+  startedAt        DateTime      @default(now()) @map("started_at")
+  finishedAt       DateTime?     @map("finished_at")
+  organization     Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@map("scim_sync_runs")
+}
+
+/// Minimal team entity for team-scoped permission grants (B010). Full org structure lands in B011.
+model Team {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  name           String
+  slug           String
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  memberships    TeamMembership[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId])
+  @@map("teams")
+}
+
+model TeamMembership {
+  id        String   @id @default(uuid()) @db.Uuid
+  teamId    String   @map("team_id") @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  createdAt DateTime @default(now()) @map("created_at")
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([teamId, userId])
+  @@index([userId])
+  @@map("team_memberships")
+}
+
+model PermissionGrant {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  permissionId   String           @map("permission_id") @db.Uuid
+  scope          PermissionScope
+  /// Team id when scope=TEAM; resource id when scope=RESOURCE; null for ORGANIZATION.
+  scopeId        String?          @map("scope_id") @db.Uuid
+  resourceType   String?          @map("resource_type")
+  userId         String?          @map("user_id") @db.Uuid
+  roleKey        AppRole?         @map("role_key")
+  effect         PermissionEffect @default(ALLOW)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  permission     Permission       @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  user           User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId])
+  @@index([userId])
+  @@index([scope, scopeId])
+  @@map("permission_grants")
 }

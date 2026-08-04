@@ -9,5 +9,7 @@ declare module 'express-serve-static-core' {
     };
     organizationId?: string;
     membershipRole?: string;
+    appRole?: string;
+    isSuperAdmin?: boolean;
   }
 }

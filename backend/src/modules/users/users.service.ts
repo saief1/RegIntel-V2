@@ -29,12 +29,14 @@ export class UsersService {
       email: user.email,
       name: user.name,
       mfaEnabled: user.mfaEnabled,
+      isSuperAdmin: user.isSuperAdmin,
       createdAt: user.createdAt,
       organizations: user.memberships.map((membership) => ({
         id: membership.organization.id,
         name: membership.organization.name,
         slug: membership.organization.slug,
         role: membership.role,
+        appRole: membership.appRole,
       })),
     };
   }
@@ -52,6 +54,7 @@ export class UsersService {
       email: user.email,
       name: user.name,
       mfaEnabled: user.mfaEnabled,
+      isSuperAdmin: user.isSuperAdmin,
       createdAt: user.createdAt,
     };
   }

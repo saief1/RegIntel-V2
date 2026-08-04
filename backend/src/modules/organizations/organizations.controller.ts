@@ -40,7 +40,7 @@ export class OrganizationsController {
   @Post()
   @ApiOperation({
     operationId: 'organizationsCreate',
-    summary: 'Create an organization and become OWNER',
+    summary: 'Create an organization and become ORG_ADMIN',
   })
   create(@Req() req: Request, @Body() dto: CreateOrganizationDto) {
     return this.organizationsService.create(req.user!.userId, dto);

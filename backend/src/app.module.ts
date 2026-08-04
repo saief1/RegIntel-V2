@@ -7,8 +7,13 @@ import configuration from './config/configuration';
 import { validateEnv } from './config/env.validation';
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
+import { MfaModule } from './modules/mfa/mfa.module';
 import { OrganizationsModule } from './modules/organizations/organizations.module';
+import { PermissionsModule } from './modules/permissions/permissions.module';
 import { QueueModule } from './modules/queue/queue.module';
+import { RbacModule } from './modules/rbac/rbac.module';
+import { ScimModule } from './modules/scim/scim.module';
+import { SsoModule } from './modules/sso/sso.module';
 import { UsersModule } from './modules/users/users.module';
 
 @Module({
@@ -25,6 +30,11 @@ import { UsersModule } from './modules/users/users.module';
     AuthModule,
     UsersModule,
     OrganizationsModule,
+    MfaModule,
+    RbacModule,
+    PermissionsModule,
+    SsoModule,
+    ScimModule,
   ],
 })
 export class AppModule implements NestModule {

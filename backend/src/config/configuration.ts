@@ -13,6 +13,8 @@ export type AppConfig = {
   cookieSecure: boolean;
   logLevel: string;
   allowRegister: boolean;
+  /** AES key material for MFA secrets / SSO client secrets at rest. */
+  mfaEncryptionKey: string;
 };
 
 export default (): AppConfig => ({
@@ -33,4 +35,8 @@ export default (): AppConfig => ({
   cookieSecure: (process.env.COOKIE_SECURE ?? 'false') === 'true',
   logLevel: process.env.LOG_LEVEL ?? 'info',
   allowRegister: (process.env.ALLOW_REGISTER ?? 'false') === 'true',
+  mfaEncryptionKey:
+    process.env.MFA_ENCRYPTION_KEY ??
+    process.env.JWT_ACCESS_SECRET ??
+    'dev-mfa-encryption-key-change-me!!',
 });

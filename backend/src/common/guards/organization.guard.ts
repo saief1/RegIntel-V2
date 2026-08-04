@@ -48,6 +48,7 @@ export class OrganizationGuard implements CanActivate {
 
     request.organizationId = organizationId;
     request.membershipRole = membership.role;
+    request.appRole = membership.appRole;
     return true;
   }
 }

@@ -33,9 +33,9 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('RegIntel API')
     .setDescription(
-      'RegIntel Backend Foundation (Milestone B1). Access tokens use Bearer auth; refresh tokens are httpOnly cookies on /api/v1/auth.',
+      'RegIntel Identity & Access API (Milestone B2). JWT Bearer access tokens; httpOnly refresh cookies on /api/v1/auth; MFA TOTP; RBAC; SSO/SCIM interfaces.',
     )
-    .setVersion('2.1.0')
+    .setVersion('2.2.0')
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
