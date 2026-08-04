@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.3.0 | 2026-08-04 | Data Layer & Notifications — Prisma domain models, repos, storage, BullMQ, notification APIs (Milestone B3) |
 | 2.2.1 | 2026-08-04 | Identity & Sessions Completeness — sessions, trusted devices, Security Center APIs |
 | 2.2.0 | 2026-08-03 | Identity & Access — MFA, RBAC, Permissions, SSO, SCIM (Milestone B2) |
 | 2.1.0 | 2026-08-03 | Backend Foundation — NestJS/Prisma/auth/orgs, OpenAPI, feature-flag stubs (Milestone B1) |
@@ -51,6 +52,31 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
 
+
+### v2.3.0 — Data Layer & Notifications (Milestone B3)
+
+**Status:** Minor (Phase B / B011–B015)  
+**Tags:** `v2.3.0`, `MILESTONE_B3_COMPLETE`  
+**Date:** 2026-08-04
+
+#### Added
+
+- Domain Prisma models: policies, policy_versions, documents, tasks, cases, notifications, notification_preferences, reports, workflows, storage_objects, attachments, audit_entries, activity_stream
+- Repository layer (interfaces + Prisma implementations); Nest modules wire controllers → services → repositories
+- Object storage abstraction with Local provider (S3/Azure/GCS stubs fall back to Local); see [`STORAGE.md`](./STORAGE.md)
+- BullMQ queues/workers: email, reminder, review-cycle, policy-expiry, notification-delivery, sync-retry, workflow-automation, audit-cleanup; `/api/v1/jobs/stats`
+- Notification APIs: list, create, preferences, bulk read, mark-all-read, archive; email delivery enqueued
+- Domain CRUD under `/api/v1`: policies, tasks, cases, knowledge, reports, workflows, audit-entries, storage
+- Feature flags `USE_REAL_*` / `VITE_USE_REAL_*` (default false); FE notifications wired when `VITE_USE_REAL_NOTIFICATIONS=true`
+- Env: `DATABASE_URL`, `DIRECT_URL`, `STORAGE_PROVIDER`, `STORAGE_LOCAL_ROOT`
+
+#### Changed
+
+- Health check reports database, redis/queue, and storage provider
+- Audit writer dual-writes `security_events` + `audit_entries`
+- Roadmap remaps B016–B020 to platform deepening (email, immutable audit, org structure, workflows, tenancy)
+
+---
 
 ### v2.2.1 — Identity & Sessions Completeness
 

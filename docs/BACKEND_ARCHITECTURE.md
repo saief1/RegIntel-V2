@@ -4,7 +4,7 @@
 
 This document is the **Backend Architecture Contract** for Phase B. It is the backend equivalent of the frontend design system: frozen technology choices, conventions, and Milestone B1 exit criteria that agents and humans must follow when implementing **B001+**.
 
-**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM); **v2.2.1** gap-fill adds sessions/Security Center APIs against this contract.
+**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM); **v2.2.1** gap-fill adds sessions/Security Center APIs; Milestone **B3** (`v2.3.0`) implements B011–B015 (data layer, repositories, storage, jobs, notifications) against this contract.
 
 **UI policy:** Frontend routes and pages stay as-is. Replace mock providers behind feature flags. No redesigns except where backend integration requires minimal wiring.
 
@@ -79,9 +79,9 @@ Later Phase B bands (see [`ROADMAP.md`](./ROADMAP.md)):
 |---|---|---|
 | B1 Foundation | B001–B005 | Scaffolding, auth, user/org, Prisma, API foundation |
 | Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM |
-| Org structure | B011–B015 | Workspaces, Teams, Departments, Invitations, Tenant isolation |
-| First live domains | B016–B020 | Replace mock providers: Knowledge, Policies, Tasks, Notifications, Cases |
-| Platform services | B021–B025 | Storage, Jobs, Notification delivery hardening, Audit log, Multi-tenancy guarantees |
+| Data Layer & Notifications | B011–B015 | Postgres domain models, repositories, storage, BullMQ, notification APIs → **v2.3.0** ✅ |
+| Platform Deepening | B016–B020 | Email delivery, immutable audit, org structure, workflow hardening, multi-tenancy → v2.4.0 |
+| Backend Beta | B021–B025 | Hardening, remaining cutovers, ops → v2.5.0 |
 
 ---
 

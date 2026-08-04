@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B2** (+ **v2.2.1** gap-fill) extends the NestJS API with identity & access (MFA, RBAC, SSO, SCIM), session management, and Security Center backends. Frontend still defaults to mock providers; domain cutovers remain **B016–B020**. Flags: `VITE_USE_REAL_AUTH`, `VITE_USE_REAL_ORGS`, `VITE_USE_REAL_RBAC`, `VITE_USE_REAL_MFA`, `VITE_USE_REAL_SSO`, `VITE_USE_REAL_SCIM`, `VITE_USE_REAL_STORAGE`, `VITE_USE_REAL_NOTIFICATIONS` (all default **false**).
+Milestone **B3 (v2.3.0)** adds domain CRUD, notifications, storage, and job monitoring on top of identity (B2 / v2.2.1). Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). Flags include auth/orgs/RBAC/MFA/SSO/SCIM plus `VITE_USE_REAL_POLICIES`, `TASKS`, `CASES`, `KNOWLEDGE`, `REPORTS`, `NOTIFICATIONS`, `STORAGE`.
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -41,7 +41,7 @@ Milestone **B2** (+ **v2.2.1** gap-fill) extends the NestJS API with identity & 
 
 | Method | Path | Description | Status |
 |---|---|---|---|
-| GET | `/api/v1/health` | Liveness + DB readiness | ✅ B1 |
+| GET | `/api/v1/health` | Liveness + DB / Redis / storage provider | ✅ B1/B3 |
 | POST | `/api/v1/auth/register` | Register (when `ALLOW_REGISTER=true`) | ✅ B1 |
 | POST | `/api/v1/auth/login` | Login; MFA challenge when enrolled | ✅ B1/B2 |
 | POST | `/api/v1/auth/mfa/verify` | Complete MFA login challenge | ✅ B2 |
@@ -77,6 +77,19 @@ Milestone **B2** (+ **v2.2.1** gap-fill) extends the NestJS API with identity & 
 | GET | `/api/v1/security/audit-trail` | Queryable audit trail (B024 full store later) | ✅ v2.2.1 |
 | GET | `/api/v1/security/password-history` | Password change metadata | ✅ v2.2.1 |
 | POST | `/api/v1/security/password` | Change password (+ history / revoke sessions) | ✅ v2.2.1 |
+| GET/POST/PATCH/DELETE | `/api/v1/policies` | Policy CRUD (+ soft delete, optimistic version) | ✅ B3 |
+| GET/POST/PATCH/DELETE | `/api/v1/tasks` | Task CRUD | ✅ B3 |
+| GET/POST/PATCH/DELETE | `/api/v1/cases` | Case CRUD | ✅ B3 |
+| GET/POST/PATCH/DELETE | `/api/v1/knowledge` | Knowledge document CRUD | ✅ B3 |
+| GET/POST/PATCH/DELETE | `/api/v1/reports` | Report CRUD | ✅ B3 |
+| GET/POST/PATCH/DELETE | `/api/v1/workflow` | Workflow definition CRUD | ✅ B3 |
+| GET/POST | `/api/v1/notifications*` | List/create; preferences; bulk read; read-all; archive | ✅ B3 |
+| GET/POST/DELETE | `/api/v1/storage*` | Upload/download/signed URL/delete/attachments | ✅ B3 |
+| GET | `/api/v1/audit-entries` | Application audit entries | ✅ B3 |
+| GET | `/api/v1/jobs/stats` | Queue monitoring (waiting/active/failed + DLQ names) | ✅ B3 |
+| POST | `/api/v1/jobs/audit-cleanup` | Enqueue audit cleanup job | ✅ B3 |
+
+List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. Storage details: [`STORAGE.md`](./STORAGE.md).
 
 ## 5. Error Handling
 
@@ -92,13 +105,10 @@ Deferred past Milestone B1; document when introduced.
 
 ## 8. Revision History
 
-| Date | Change |
-|---|---|
-| 2026-08-04 | v2.2.1 sessions + security center endpoints |
-
-
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-04 | Milestone B3 | Domain CRUD, notifications, storage, jobs endpoints |
+| 2026-08-04 | v2.2.1 | Sessions + security center endpoints |
 | 2026-08-03 | Milestone B2 | MFA, RBAC, permissions, SSO, SCIM endpoints |
 | 2026-08-03 | Milestone B1 | Document B1 routes, envelopes, Swagger URLs |
 | 2026-08-03 | Phase B planning | Point to Backend Architecture Contract; clarify B1 vs B016–B020 |

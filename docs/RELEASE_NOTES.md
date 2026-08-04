@@ -1,5 +1,37 @@
 # Release Notes
 
+## RegIntel v2.3.0 — Data Layer & Notifications (Milestone B3)
+
+**Date:** 2026-08-04  
+**Tags:** `v2.3.0`, `MILESTONE_B3_COMPLETE`  
+**Phase:** B (B011–B015)
+
+### Headline
+
+Production PostgreSQL data plane for core domains, repository-backed Nest APIs, Local object storage, BullMQ workers, and a real notification platform — without redesigning the UI. Frontend remains mock-default; flip `VITE_USE_REAL_*` per domain.
+
+### Highlights
+
+- Prisma domain models + migration `data_layer_b3` (policies, tasks, cases, knowledge, reports, workflows, notifications, storage, audit, activity)
+- Repository interfaces; controllers → services → repositories (no Prisma in controllers)
+- Local storage fully working; S3/Azure/GCS stubs fall back to Local — see [`STORAGE.md`](./STORAGE.md)
+- BullMQ job queues with retries, DLQ naming, `/api/v1/jobs/stats`
+- Notifications: in-app CRUD preferences, bulk read/archive; email delivery queued
+- FE: `WorkProvider` loads real notifications when `VITE_USE_REAL_NOTIFICATIONS=true`
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.3.0`
+- Apply: `cd backend && npx prisma migrate deploy && npx prisma db seed`
+- Set `DIRECT_URL` (defaults to same as `DATABASE_URL` locally)
+- Optional: `STORAGE_PROVIDER=local`, `STORAGE_LOCAL_ROOT=./storage`
+
+### Next
+
+**B016+** — Email delivery (real SMTP), then immutable audit, org structure, workflow hardening, multi-tenancy (→ v2.4.0). Do **not** start B016 in this release.
+
+---
+
 ## RegIntel v2.2.1 — Identity & Sessions Completeness
 
 **Date:** 2026-08-04  
@@ -26,7 +58,7 @@ Completes session management and Security Center backends on top of shipped **v2
 
 ### Next
 
-**B011+** — Org structure & isolation. Do not start data-layer renumbering; storage/jobs stay B021–B022.
+Superseded by **v2.3.0** Data Layer & Notifications.
 
 ---
 

@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **B011+** (Org structure & isolation).  
+**Current step:** **B016+** (Email delivery & platform deepening).  
+Milestone **B3** (B011–B015) complete — **v2.3.0** / `MILESTONE_B3_COMPLETE` (Data Layer & Notifications).  
 Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.  
 **v2.2.1** / `B2_SESSIONS_COMPLETE` — session management, trusted devices, Security Center APIs (gap-fill; does not retag v2.2.0).  
 Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract ✅.
@@ -44,7 +45,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~42% (B000–B010 ✅ + v2.2.1 sessions; next B011+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~60% (B000–B015 ✅ + v2.2.1; next B016+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -61,8 +62,8 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 | **v2.1.0** | Backend Foundation (B001–B005) |
 | **v2.2.0** | Identity & Access (B006–B010) ✅ |
 | **v2.2.1** | Identity & Sessions Completeness (gap-fill) ✅ |
-| **v2.3.0** | Core Data Platform (B016–B020); storage/jobs remain B021–B022 |
-| **v2.4.0** | API & Platform Services (B021–B025) |
+| **v2.3.0** | Data Layer & Notifications (B011–B015) ✅ |
+| **v2.4.0** | Platform Deepening (B016–B020) |
 | **v2.5.0** | Backend Platform Beta (Phase B exit) |
 | **v2.7.0** | AI Intelligence Beta (Phase C) |
 | **v2.9.0** | Wealth Management Beta (Phase D) |
@@ -80,9 +81,9 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B001–B005 Foundation → v2.1.0
     → B006–B010 Identity & access → v2.2.0 ✅
     → v2.2.1 Sessions / Security Center gap-fill → B2_SESSIONS_COMPLETE ✅
-    → B011–B015 Org structure & isolation → next (workspaces, teams, departments, invitations, tenant isolation)
-    → B016–B020 Core Data Platform → v2.3.0 (domain APIs; Prisma repos deepen here — not a renumber of B011)
-    → B021–B025 Platform Services → v2.4.0 / v2.5.0 beta (object storage, BullMQ jobs, audit store, multi-tenancy)
+    → B011–B015 Data Layer & Notifications → v2.3.0 ✅ (Postgres repos, domain APIs, storage, BullMQ, notifications)
+    → B016–B020 Platform Deepening → v2.4.0 (email delivery, immutable audit, org structure, workflow hardening, multi-tenancy)
+    → B021–B025 Backend Beta hardening → v2.5.0
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
 → Phase D Wealth Management Production (D001–D020) → v2.9.0
 → Phase E Enterprise Integrations (E001–E015)
@@ -117,7 +118,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — B000–B010 ✅ (`v2.1.0`, `v2.2.0`) + sessions gap-fill `v2.2.1`; next **B011+**.
+**Status:** 🔄 In Progress — B000–B015 ✅ (`v2.1.0`, `v2.2.0`, `v2.2.1`, `v2.3.0`); next **B016+**.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -141,35 +142,40 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 **B1 done:** real users/orgs in PostgreSQL; auth; versioned REST + OpenAPI; flags ready for mock→API cutover. See contract §16.
 
-### Identity & Organizations (B006–B015)
+### Identity & Access (B006–B010) + Sessions ✅
 
 | IDs | Theme | Outline | Status |
 |---|---|---|---|
 | **B006–B010** | Identity & access | MFA, RBAC, Permissions, SSO (OIDC/SAML), SCIM | ✅ **v2.2.0** |
 | **v2.2.1** | Sessions & Security Center | Session mgmt, trusted devices, Security Center APIs, role aliases, flags | ✅ gap-fill |
-| **B011–B015** | Org structure & isolation | Workspaces, Teams, Departments, Invitations, Tenant isolation hardening | ⏳ next |
 
-> **Roadmap reconciliation:** An alternate prompt mapped “B011–B015” to PostgreSQL data layer / repos / file storage / jobs. That work is already sequenced as **B016–B020** (domain data APIs) and **B021–B022** (storage + BullMQ). **B011–B015 stays org structure** so we do not invent a second plan or destroy the earlier band.
+### Data Layer & Notifications → v2.3.0 (B011–B015) ✅
 
-### Core Data Platform → v2.3.0 (B016–B020)
+| ID | Title | Outline | Status |
+|---|---|---|---|
+| **B011** | PostgreSQL data layer | Prisma models/migrations, pooling/retry, soft delete, optimistic locking, seed | ✅ |
+| **B012** | Repository layer | Interfaces + Prisma repos; controllers → services → repositories | ✅ |
+| **B013** | File storage | StorageProvider (Local full; S3/Azure/GCS stubs); attachments; signed URLs | ✅ |
+| **B014** | Background jobs | BullMQ queues/workers, retries, DLQ naming, `/jobs/stats` | ✅ |
+| **B015** | Notification platform | In-app + email queue, preferences, read/archive; FE behind `VITE_USE_REAL_NOTIFICATIONS` | ✅ |
+
+Domain CRUD APIs (policies, tasks, cases, knowledge, reports, workflows) and `audit_entries` / `activity_stream` ship with this band. FE remains mock-default. See [`STORAGE.md`](./STORAGE.md).
+
+### Platform Deepening → v2.4.0 (B016–B020)
+
+| ID | Title | Outline |
+|---|---|---|
+| **B016** | Email delivery | Real SMTP/provider adapter for queued email jobs (beyond log delivery) |
+| **B017** | Immutable audit store | Harden `audit_entries` immutability, retention, export |
+| **B018** | Org structure | Workspaces, teams CRUD, departments, invitations |
+| **B019** | Workflow automation hardening | Richer workflow runners on BullMQ; policy review/expiry schedules |
+| **B020** | Multi-tenancy guarantees | Cross-tenant regression suite, isolation runbooks → toward **v2.5.0** beta |
+
+### Backend Beta → v2.5.0 (B021–B025)
 
 | IDs | Theme | Outline |
 |---|---|---|
-| **B016** | Knowledge API | Replace Knowledge mock provider behind flag |
-| **B017** | Policies API | Replace Policies mock provider behind flag |
-| **B018** | Tasks API | Replace Tasks mock provider behind flag |
-| **B019** | Notifications API | Replace Notifications mock provider behind flag |
-| **B020** | Cases API | Replace Cases mock provider behind flag |
-
-### API & Platform Services → v2.4.0 / Backend Beta v2.5.0 (B021–B025)
-
-| IDs | Theme | Outline |
-|---|---|---|
-| **B021** | Object storage | Evidence/attachments; signed URLs |
-| **B022** | Background jobs | BullMQ workers, retries, dead-letter patterns |
-| **B023** | Notification delivery | Real email/in-app delivery backed by events |
-| **B024** | Audit log | Immutable audit trail for security-sensitive actions |
-| **B025** | Multi-tenancy guarantees | Cross-tenant regression tests, ops runbooks → **v2.5.0 Backend Platform Beta** |
+| **B021–B025** | Beta hardening | Ops runbooks, SLO checks, remaining FE domain cutovers, production readiness → **v2.5.0 Backend Platform Beta** |
 
 **Prerequisites from Phase A:** stable design system, certified frontend shell, documented API placeholders. ✅
 
@@ -234,6 +240,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-04 | Milestone B3 | B011–B015 Data Layer & Notifications → v2.3.0; B016–B020 remapped to email/audit/org/workflows/tenancy |
 | 2026-08-03 | Milestone B2 | B006–B010 complete; tag v2.2.0 / B2_COMPLETE; current step → B011+ |
 | 2026-08-03 | Milestone B1 | B001–B005 complete; tag v2.1.0; current step → B006+ |
 | 2026-08-03 | Milestone B1 | Architecture Contract standards complete; Product Board → B1 in progress |
