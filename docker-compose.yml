@@ -1,0 +1,62 @@
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: regintel
+      POSTGRES_PASSWORD: regintel
+      POSTGRES_DB: regintel
+    ports:
+      - '5432:5432'
+    volumes:
+      - regintel_pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U regintel -d regintel']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7
+    restart: unless-stopped
+    ports:
+      - '6379:6379'
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      DATABASE_URL: postgresql://regintel:regintel@db:5432/regintel?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_ACCESS_SECRET: dev-access-secret-change-me-min-32-chars!!
+      JWT_ACCESS_TTL: 15m
+      JWT_REFRESH_TTL: 7d
+      REFRESH_COOKIE_NAME: refresh_token
+      CORS_ORIGINS: http://localhost:5173,http://localhost:4173
+      COOKIE_SECURE: 'false'
+      LOG_LEVEL: info
+      ALLOW_REGISTER: 'true'
+      SEED_ADMIN_EMAIL: admin@regintel.local
+      SEED_ADMIN_PASSWORD: ChangeMeAdmin123!
+      SEED_ADMIN_NAME: RegIntel Admin
+      SEED_ORG_NAME: RegIntel Demo
+      SEED_ORG_SLUG: regintel-demo
+
+volumes:
+  regintel_pg_data:

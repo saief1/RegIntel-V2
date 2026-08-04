@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Backend
+backend/.env
+backend/coverage
+backend/.env.*
+!backend/.env.example
+
 # Local QA / tooling artifacts
 ri_screenshot.mjs
 *.playwright/
