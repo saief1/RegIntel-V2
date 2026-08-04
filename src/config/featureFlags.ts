@@ -9,6 +9,10 @@ function readFlag(name: string): boolean {
 
 export const featureFlags = {
   useRealAuth: readFlag('VITE_USE_REAL_AUTH'),
+  useRealRbac: readFlag('VITE_USE_REAL_RBAC'),
+  useRealMfa: readFlag('VITE_USE_REAL_MFA'),
+  useRealSso: readFlag('VITE_USE_REAL_SSO'),
+  useRealScim: readFlag('VITE_USE_REAL_SCIM'),
   useRealKnowledge: readFlag('VITE_USE_REAL_KNOWLEDGE'),
   useRealTasks: readFlag('VITE_USE_REAL_TASKS'),
   useRealReports: readFlag('VITE_USE_REAL_REPORTS'),

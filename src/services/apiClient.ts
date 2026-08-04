@@ -98,12 +98,22 @@ export type AuthLoginResult = {
   }
 }
 
+export type AuthLoginOrMfaResult =
+  | AuthLoginResult
+  | { mfaRequired: true; mfaChallengeToken: string }
+
 /** Real auth API helpers — only called when featureFlags.useRealAuth is true. */
 export const realAuthApi = {
   login(email: string, password: string) {
-    return apiRequest<AuthLoginResult>('/auth/login', {
+    return apiRequest<AuthLoginOrMfaResult>('/auth/login', {
       method: 'POST',
       body: { email, password },
+    })
+  },
+  verifyMfa(mfaChallengeToken: string, code: string) {
+    return apiRequest<AuthLoginResult>('/auth/mfa/verify', {
+      method: 'POST',
+      body: { mfaChallengeToken, code },
     })
   },
   refresh() {
@@ -114,5 +124,42 @@ export const realAuthApi = {
   },
   me(accessToken: string) {
     return apiRequest<AuthLoginResult['user']>('/users/me', { accessToken })
+  },
+}
+
+/** Real RBAC helpers — gated by VITE_USE_REAL_RBAC. */
+export const realRbacApi = {
+  matrix(accessToken: string) {
+    return apiRequest<{
+      roles: Array<{ key: string; permissions: string[] }>
+      matrix: Record<string, string[]>
+    }>('/rbac/matrix', { accessToken })
+  },
+  effectivePermissions(accessToken: string, organizationId: string) {
+    return apiRequest<{
+      permissions: string[]
+      appRole: string | null
+      isSuperAdmin: boolean
+    }>('/permissions/me', { accessToken, organizationId })
+  },
+  check(accessToken: string, organizationId: string, permission: string) {
+    return apiRequest<{ permission: string; allowed: boolean }>(
+      `/permissions/check?permission=${encodeURIComponent(permission)}`,
+      { accessToken, organizationId },
+    )
+  },
+}
+
+/** Real SSO helpers — gated by VITE_USE_REAL_SSO. */
+export const realSsoApi = {
+  listConfigurations(accessToken: string, organizationId: string) {
+    return apiRequest<
+      Array<{
+        id: string
+        name: string
+        providerType: string
+        enabled: boolean
+      }>
+    >('/sso/configurations', { accessToken, organizationId })
   },
 }

@@ -37,6 +37,15 @@ export function SecurityCenterPage() {
 
       <OperationsHubNav current="/settings/security" />
 
+      <nav className={styles.hubLinks} aria-label="Security configuration">
+        <Link className={styles.hubLink} to="/settings/security/sso">
+          SSO Configuration
+        </Link>
+        <Link className={styles.hubLink} to="/settings/admin">
+          Admin Console
+        </Link>
+      </nav>
+
       <div className={g.metricGrid} aria-label="Security dashboard">
         <div className={g.metric}>
           <span>Security risk score</span>

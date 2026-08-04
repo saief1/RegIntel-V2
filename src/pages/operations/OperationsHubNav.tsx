@@ -5,6 +5,7 @@ const LINKS = [
   { to: '/operations', label: 'Operations Center' },
   { to: '/settings/data', label: 'Data Management' },
   { to: '/settings/security', label: 'Security Center' },
+  { to: '/settings/security/sso', label: 'SSO Configuration' },
   { to: '/audit', label: 'Audit Center' },
   { to: '/automation', label: 'Automation Studio' },
   { to: '/automation/canvas', label: 'Workflow Canvas' },

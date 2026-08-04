@@ -78,6 +78,9 @@ const DataManagementPage = lazy(() =>
 const SecurityCenterPage = lazy(() =>
   import('./pages/settings/SecurityCenterPage').then((module) => ({ default: module.SecurityCenterPage })),
 )
+const SsoSettingsPage = lazy(() =>
+  import('./pages/settings/SsoSettingsPage').then((module) => ({ default: module.SsoSettingsPage })),
+)
 const AuditCenterPage = lazy(() =>
   import('./pages/audit/AuditCenterPage').then((module) => ({ default: module.AuditCenterPage })),
 )
@@ -550,6 +553,14 @@ export function AppRoutes() {
             element={
               <LazyPage>
                 <SecurityCenterPage />
+              </LazyPage>
+            }
+          />
+          <Route
+            path="security/sso"
+            element={
+              <LazyPage>
+                <SsoSettingsPage />
               </LazyPage>
             }
           />

@@ -30,6 +30,7 @@ const CORE_ROUTES = [
   { path: '/settings/collaboration', mustInclude: /Collaboration|Watchlists|Team channels/i },
   { path: '/settings/data', mustInclude: /Data Management Center|Data sources|Failed import queue/i },
   { path: '/settings/security', mustInclude: /Enterprise Security Center|Security alerts|Trusted devices/i },
+  { path: '/settings/security/sso', mustInclude: /SSO Configuration|Identity providers|OIDC|SAML/i },
   { path: '/audit', mustInclude: /Audit & Compliance Center|Audit lifecycle|External auditor portal/i },
   { path: '/automation', mustInclude: /Enterprise Automation Studio|Publish automation|Run history/i },
   { path: '/system', mustInclude: /System Health Center|Service health|Release notes viewer/i },
