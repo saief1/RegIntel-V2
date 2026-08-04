@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B1** ships the NestJS foundation under `backend/`. The frontend still defaults to mock providers; domain cutovers are **B016–B020** behind `VITE_USE_REAL_*` flags. Auth can be pointed at the real API with `VITE_USE_REAL_AUTH=true`.
+Milestone **B2** extends the NestJS API with identity & access (MFA, RBAC, SSO, SCIM). Frontend still defaults to mock providers; domain cutovers remain **B016–B020**. Flags: `VITE_USE_REAL_AUTH`, `VITE_USE_REAL_RBAC`, `VITE_USE_REAL_MFA`, `VITE_USE_REAL_SSO`, `VITE_USE_REAL_SCIM` (all default **false**).
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -33,7 +33,9 @@ Milestone **B1** ships the NestJS foundation under `backend/`. The frontend stil
 
 - **JWT access (Bearer)** + **httpOnly refresh cookie** (`refresh_token` on `/api/v1/auth`)
 - **Argon2id** password hashing
-- MFA/SSO interfaces stubbed (B006+)
+- **MFA TOTP** + recovery codes (B006); login returns `mfaRequired` + challenge token when enrolled
+- **SSO** OIDC/SAML configuration interfaces with mock providers (B008); real IdP wiring later
+- **SCIM** bearer-token provisioning under `/api/v1/scim/v2/*` (B009)
 
 ## 4. Endpoints
 
@@ -41,14 +43,29 @@ Milestone **B1** ships the NestJS foundation under `backend/`. The frontend stil
 |---|---|---|---|
 | GET | `/api/v1/health` | Liveness + DB readiness | ✅ B1 |
 | POST | `/api/v1/auth/register` | Register (when `ALLOW_REGISTER=true`) | ✅ B1 |
-| POST | `/api/v1/auth/login` | Login; sets refresh cookie | ✅ B1 |
+| POST | `/api/v1/auth/login` | Login; MFA challenge when enrolled | ✅ B1/B2 |
+| POST | `/api/v1/auth/mfa/verify` | Complete MFA login challenge | ✅ B2 |
 | POST | `/api/v1/auth/refresh` | Rotate refresh; new access token | ✅ B1 |
 | POST | `/api/v1/auth/logout` | Revoke refresh; clear cookie | ✅ B1 |
 | GET | `/api/v1/users/me` | Current user + orgs | ✅ B1 |
 | PATCH | `/api/v1/users/me` | Update profile | ✅ B1 |
 | GET | `/api/v1/organizations` | List memberships | ✅ B1 |
-| POST | `/api/v1/organizations` | Create org (caller becomes OWNER) | ✅ B1 |
+| POST | `/api/v1/organizations` | Create org (caller becomes ORG_ADMIN) | ✅ B1 |
 | GET | `/api/v1/organizations/:id` | Get org (`X-Organization-Id` required) | ✅ B1 |
+| GET/POST | `/api/v1/mfa/*` | MFA status, enroll, disable, recovery codes | ✅ B2 |
+| GET | `/api/v1/rbac/roles` | List roles | ✅ B2 |
+| GET | `/api/v1/rbac/permissions` | Permission catalog | ✅ B2 |
+| GET | `/api/v1/rbac/matrix` | Role × permission matrix | ✅ B2 |
+| PATCH | `/api/v1/rbac/organizations/:orgId/members/:userId/role` | Assign AppRole | ✅ B2 |
+| GET | `/api/v1/permissions/me` | Effective permissions | ✅ B2 |
+| GET | `/api/v1/permissions/check` | Permission check | ✅ B2 |
+| GET/POST/DELETE | `/api/v1/permissions/grants` | Org/team/resource grants | ✅ B2 |
+| GET/PUT/POST | `/api/v1/sso/configurations*` | SSO provider config + mock authorize/callback | ✅ B2 |
+| GET/PUT | `/api/v1/scim/configuration` | SCIM admin config | ✅ B2 |
+| GET | `/api/v1/scim/status` | Sync status | ✅ B2 |
+| GET/PUT | `/api/v1/scim/mappings` | Group → role mappings | ✅ B2 |
+| * | `/api/v1/scim/v2/Users` | SCIM user provision/deprovision | ✅ B2 |
+| * | `/api/v1/scim/v2/Groups` | SCIM group provision | ✅ B2 |
 
 ## 5. Error Handling
 
@@ -66,6 +83,7 @@ Deferred past Milestone B1; document when introduced.
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B2 | MFA, RBAC, permissions, SSO, SCIM endpoints |
 | 2026-08-03 | Milestone B1 | Document B1 routes, envelopes, Swagger URLs |
 | 2026-08-03 | Phase B planning | Point to Backend Architecture Contract; clarify B1 vs B016–B020 |
 | TBD | TBD | Initial placeholder document created |

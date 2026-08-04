@@ -6,7 +6,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~20% (B000–B005 ✅; next B006+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~40% (B000–B010 ✅; next B011+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -15,9 +15,10 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 
 ## Current step
 
-**B006+** (Identity & access) → target **v2.2.0**.
+**B011+** (Org structure & isolation) → remaining Identity & Organizations band toward full org model (teams/workspaces already partially scaffolded for permissions).
 
-Milestone B1 complete: **v2.1.0** / `MILESTONE_B1_COMPLETE`.  
+Milestone B2 complete: **v2.2.0** / `B2_COMPLETE` (B006–B010).  
+Milestone B1: **v2.1.0** / `MILESTONE_B1_COMPLETE`.  
 Architecture Contract: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) ✅.
 
 UI frozen except integration wiring.
@@ -28,7 +29,7 @@ UI frozen except integration wiring.
 |---|---|
 | v2.0.x | Frontend Platform + Stabilization ✅ |
 | v2.1.0 | Backend Foundation (B001–B005) ✅ |
-| v2.2.0 | Identity & Organizations (B006–B015) |
+| v2.2.0 | Identity & Access (B006–B010) ✅; Org structure continues B011–B015 |
 | v2.3.0 | Core Data Platform (B016–B020) |
 | v2.4.0 | API & Platform Services (B021–B025) |
 | v2.5.0 | Backend Platform Beta |
@@ -44,7 +45,8 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 → Phase B Backend Platform (B000–B025) 🔄
     → B000 Architecture Contract ✅
     → B001–B005 Foundation → v2.1.0 ✅
-    → B006–B015 Identity & Organizations → v2.2.0 (next)
+    → B006–B010 Identity & access → v2.2.0 ✅
+    → B011–B015 Org structure → next
     → B016–B020 Core Data Platform → v2.3.0
     → B021–B025 Platform Services → v2.4.0 / v2.5.0
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
@@ -60,7 +62,7 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 |---|---|---|---|
 | Contract | B000 | Backend Architecture Contract | ✅ |
 | B1 Foundation | B001–B005 | Scaffolding, auth, user/org, Prisma, API + OpenAPI | ✅ v2.1.0 |
-| Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM | ⏳ next |
-| Org structure | B011–B015 | Workspaces, Teams, Departments, Invitations, Tenant isolation | ⏳ |
+| Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM | ✅ v2.2.0 |
+| Org structure | B011–B015 | Workspaces, Teams, Departments, Invitations, Tenant isolation | ⏳ next |
 | First live domains | B016–B020 | Knowledge, Policies, Tasks, Notifications, Cases (mock → API) | ⏳ |
 | Platform services | B021–B025 | Storage, Jobs, Notification delivery, Audit, Multi-tenancy guarantees | ⏳ |

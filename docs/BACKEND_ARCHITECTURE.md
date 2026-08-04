@@ -4,7 +4,7 @@
 
 This document is the **Backend Architecture Contract** for Phase B. It is the backend equivalent of the frontend design system: frozen technology choices, conventions, and Milestone B1 exit criteria that agents and humans must follow when implementing **B001+**.
 
-**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005 against this contract.
+**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM) against this contract.
 
 **UI policy:** Frontend routes and pages stay as-is. Replace mock providers behind feature flags. No redesigns except where backend integration requires minimal wiring.
 

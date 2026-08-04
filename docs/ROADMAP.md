@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **B006+** (Identity & access) → target **v2.2.0**.  
+**Current step:** **B011+** (Org structure & isolation).  
+Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.  
 Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract ✅.
 
 **UI policy for Phase B:** UI is **frozen** except where backend integration requires minimal wiring (feature flags, API client, auth session). No redesigns, no new business modules.
@@ -42,7 +43,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~20% (B000–B005 ✅; next B006+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~40% (B000–B010 ✅; next B011+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -57,7 +58,7 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 |---|---|
 | **v2.0.x** | Frontend Platform + Stabilization ✅ |
 | **v2.1.0** | Backend Foundation (B001–B005) |
-| **v2.2.0** | Identity & Organizations (B006–B015) |
+| **v2.2.0** | Identity & Access (B006–B010) ✅; Org structure B011–B015 continues |
 | **v2.3.0** | Core Data Platform (B016–B020) |
 | **v2.4.0** | API & Platform Services (B021–B025) |
 | **v2.5.0** | Backend Platform Beta (Phase B exit) |
@@ -75,7 +76,8 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 → Phase B Backend Platform (B000–B025) 🔄
     → B000 Architecture Contract (prerequisite)
     → B001–B005 Foundation → v2.1.0
-    → B006–B015 Identity & Organizations → v2.2.0
+    → B006–B010 Identity & access → v2.2.0 ✅
+    → B011–B015 Org structure & isolation → next
     → B016–B020 Core Data Platform → v2.3.0
     → B021–B025 Platform Services → v2.4.0 / v2.5.0 beta
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
@@ -112,7 +114,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — B000–B005 ✅ (`v2.1.0`); next **B006+**.
+**Status:** 🔄 In Progress — B000–B010 ✅ (`v2.1.0`, `v2.2.0`); next **B011+**.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -136,12 +138,12 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 **B1 done:** real users/orgs in PostgreSQL; auth; versioned REST + OpenAPI; flags ready for mock→API cutover. See contract §16.
 
-### Identity & Organizations → v2.2.0 (B006–B015)
+### Identity & Organizations (B006–B015)
 
-| IDs | Theme | Outline |
-|---|---|---|
-| **B006–B010** | Identity & access | MFA, RBAC, Permissions, SSO (OIDC/SAML), SCIM |
-| **B011–B015** | Org structure & isolation | Workspaces, Teams, Departments, Invitations, Tenant isolation hardening |
+| IDs | Theme | Outline | Status |
+|---|---|---|---|
+| **B006–B010** | Identity & access | MFA, RBAC, Permissions, SSO (OIDC/SAML), SCIM | ✅ **v2.2.0** |
+| **B011–B015** | Org structure & isolation | Workspaces, Teams, Departments, Invitations, Tenant isolation hardening | ⏳ next |
 
 ### Core Data Platform → v2.3.0 (B016–B020)
 
@@ -226,6 +228,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B2 | B006–B010 complete; tag v2.2.0 / B2_COMPLETE; current step → B011+ |
 | 2026-08-03 | Milestone B1 | B001–B005 complete; tag v2.1.0; current step → B006+ |
 | 2026-08-03 | Milestone B1 | Architecture Contract standards complete; Product Board → B1 in progress |
 | 2026-08-03 | Phase B planning | B000 Backend Architecture Contract; reband B001–B025; version targets v2.1–v3.0; Phase B → In Progress (planning) |

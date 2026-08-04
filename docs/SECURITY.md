@@ -26,7 +26,7 @@ This document defines RegIntel's security posture, threat model, and compliance 
 
 ## 3. Authentication & Authorization
 
-Phase B direction is frozen in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md): JWT access + refresh, Argon2, MFA-ready / OIDC-SAML-ready interfaces later. Full RBAC/MFA/SSO are B006–B010 — not Milestone B1.
+Phase B direction is frozen in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md): JWT access + refresh, Argon2. Milestone **B2** implements TOTP MFA (+ recovery codes), DB-driven RBAC/permissions, SSO OIDC/SAML configuration interfaces (mock IdPs), and SCIM provisioning REST. Real Okta/Azure IdP wiring remains behind those interfaces.
 
 ## 4. Data Protection
 

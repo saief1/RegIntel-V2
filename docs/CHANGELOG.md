@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.2.0 | 2026-08-03 | Identity & Access — MFA, RBAC, Permissions, SSO, SCIM (Milestone B2) |
 | 2.1.0 | 2026-08-03 | Backend Foundation — NestJS/Prisma/auth/orgs, OpenAPI, feature-flag stubs (Milestone B1) |
 | 2.0.1 | 2026-08-03 | Platform Stabilized — Phase A polish (design, a11y, loading/error, docs) |
 | 2.0.0 | 2026-08-03 | Frontend Platform GA — hardening, error boundary, docs, no new modules |
@@ -48,6 +49,31 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
+
+### v2.2.0 — Identity & Access (Milestone B2)
+
+**Status:** Minor (Phase B / B006–B010)  
+**Tags:** `v2.2.0`, `B2_COMPLETE`  
+**Date:** 2026-08-03
+
+Ships identity & access management on the NestJS foundation: TOTP MFA with recovery codes, database-driven RBAC + permission grants, SSO OIDC/SAML configuration interfaces (mock providers), and SCIM 2.0-style provisioning REST. Frontend stays mock-default; minimal `/settings/security/sso` page added.
+
+#### Added
+
+- MFA endpoints (`/mfa/*`, `/auth/mfa/verify`) with encrypted TOTP secrets + recovery codes
+- RBAC catalog/matrix + member role assignment; `PermissionsGuard` / `@RequirePermissions`
+- Effective permissions API + org/team/resource grants
+- SSO configuration CRUD/enable + mock authorize/callback
+- SCIM configuration, Users/Groups, mappings, sync status
+- Prisma migration `identity_access_b2`; seed roles/permissions + mock SSO configs
+- Feature flags `VITE_USE_REAL_RBAC|MFA|SSO|SCIM` (default false)
+
+#### Changed
+
+- Memberships gain `app_role` (AppRole); users gain `is_super_admin`, `active`, `external_id`
+- Login returns MFA challenge when enrolled
+- Product Board / Roadmap: B006–B010 ✅; current step → B011+
+- `package.json` / backend version → `2.2.0`
 
 ### v2.1.0 — Backend Foundation (Milestone B1)
 

@@ -1,5 +1,37 @@
 # Release Notes
 
+## RegIntel v2.2.0 — Identity & Access (Milestone B2)
+
+**Date:** 2026-08-03  
+**Tags:** `v2.2.0`, `B2_COMPLETE`  
+**Phase:** B (B006–B010)
+
+### Headline
+
+Milestone **B2 Identity & Access Management** ships as **v2.2.0**: MFA (TOTP + recovery codes), database-driven RBAC, effective permission calculation, enterprise SSO interfaces (OIDC/SAML mock providers), and SCIM provisioning REST — continuing from the B1 NestJS foundation without redesigning the frontend.
+
+### Highlights
+
+- **MFA:** enroll/confirm/disable, login challenge + verify, hashed recovery codes
+- **RBAC:** Super Admin / Org Admin / Compliance Officer / Manager / Analyst / Viewer with DB permission matrix + `PermissionsGuard`
+- **Permissions:** org / team / resource grants, DENY overrides, `/permissions/me` + check
+- **SSO:** OIDC + SAML configuration APIs with mock IdP providers; Settings route `/settings/security/sso`
+- **SCIM:** Users/Groups provision + de-provision, mappings, sync status
+- Feature flags: `VITE_USE_REAL_RBAC`, `VITE_USE_REAL_MFA`, `VITE_USE_REAL_SSO`, `VITE_USE_REAL_SCIM` (default **false**)
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.2.0`
+- Apply migration: `cd backend && npx prisma migrate deploy && npx prisma db seed`
+- Set `MFA_ENCRYPTION_KEY` (falls back to JWT secret in dev)
+- UI unchanged except minimal SSO settings page + hub links
+
+### Next
+
+**B011+** — Org structure (workspaces, teams, departments, invitations, tenant isolation). Do not start until B2 is tagged.
+
+---
+
 ## RegIntel v2.1.0 — Backend Foundation (Milestone B1)
 
 **Date:** 2026-08-03  
@@ -28,7 +60,7 @@ Milestone **B1 Backend Foundation** ships as **v2.1.0**: a production-shaped Nes
 
 ### Next
 
-**B006+** — Identity & access (MFA, RBAC, Permissions, SSO, SCIM) toward **v2.2.0**.
+Completed by **v2.2.0** (B006–B010).
 
 ---
 

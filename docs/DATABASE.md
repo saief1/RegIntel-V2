@@ -16,7 +16,7 @@ This document describes RegIntel's data model, schema, storage technology, and m
 
 ## 1. Overview
 
-Milestone B1 introduces PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Seed creates a demo org + admin user for local development.
+Milestone B1 introduced PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Milestone **B2** adds MFA recovery codes, RBAC roles/permissions, SSO/SCIM configuration, teams (minimal for grants), and permission grants. Seed creates demo org + super-admin user, RBAC catalog, and mock SSO configs.
 
 ## 2. Technology Choice
 
@@ -33,15 +33,27 @@ Milestone B1 introduces PostgreSQL via Prisma with users, organizations, members
 | Table | Description | Status |
 |---|---|---|
 | `organizations` | Tenant root | ✅ B1 |
-| `users` | Global identity (email unique); MFA fields reserved | ✅ B1 |
-| `organization_memberships` | User↔org role/status | ✅ B1 |
+| `users` | Global identity; MFA + `is_super_admin` / `external_id` | ✅ B1/B2 |
+| `organization_memberships` | User↔org; legacy `role` + `app_role` | ✅ B1/B2 |
 | `refresh_tokens` | Hashed refresh tokens + family rotation | ✅ B1 |
+| `roles` / `permissions` / `role_permissions` | DB-driven RBAC catalog | ✅ B2 |
+| `mfa_recovery_codes` | Hashed MFA recovery codes | ✅ B2 |
+| `sso_configurations` | OIDC/SAML provider configs | ✅ B2 |
+| `scim_configurations` / `scim_groups` / `scim_sync_runs` | SCIM provisioning | ✅ B2 |
+| `teams` / `team_memberships` | Minimal teams for permission scope (full org structure in B011) | ✅ B2 |
+| `permission_grants` | Org/team/resource ALLOW/DENY grants | ✅ B2 |
 
 ## 4. Entity Relationship Diagram
 
 ```
 organizations 1──* organization_memberships *──1 users
 users 1──* refresh_tokens
+users 1──* mfa_recovery_codes
+organizations 1──* sso_configurations
+organizations 1──1 scim_configurations
+organizations 1──* teams 1──* team_memberships *──1 users
+roles *──* permissions (via role_permissions)
+organizations 1──* permission_grants *──1 permissions
 ```
 
 ## 5. Migrations
@@ -60,6 +72,7 @@ Compose uses a named volume `regintel_pg_data`. Production backup/retention TBD 
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B2 | Identity tables: RBAC, MFA recovery, SSO, SCIM, grants, teams |
 | 2026-08-03 | Milestone B1 | Document B1 Prisma models, migration policy |
 | 2026-08-03 | Phase B planning | Point to Backend Architecture Contract (Postgres + Prisma freeze) |
 | TBD | TBD | Initial placeholder document created |
