@@ -3,8 +3,10 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  /// Direct Postgres URL for migrations when DATABASE_URL uses a pooler.
+  directUrl = env("DIRECT_URL")
 }
 
 /// Legacy B1 membership labels retained for compatibility; prefer `appRole`.
@@ -72,6 +74,83 @@ enum ScimSyncState {
   FAILED
 }
 
+// ─── Milestone B3 domain enums ───────────────────────────────────────────────
+
+enum PolicyLifecycleStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+enum TaskLifecycleStatus {
+  BACKLOG
+  TODO
+  IN_PROGRESS
+  REVIEW
+  BLOCKED
+  COMPLETED
+}
+
+enum CaseLifecycleStatus {
+  OPEN
+  IN_REVIEW
+  ESCALATED
+  COMPLETED
+  CLOSED
+}
+
+enum NotificationKind {
+  DUE
+  ASSIGNMENT
+  APPROVAL
+  MENTION
+  POLICY_REVIEW
+  SECURITY_ALERT
+  AI
+  REGULATION
+  DIGEST
+  SYSTEM
+}
+
+enum NotificationChannel {
+  IN_APP
+  EMAIL
+  DIGEST
+}
+
+enum StorageProviderType {
+  LOCAL
+  S3
+  AZURE
+  GCS
+}
+
+enum WorkflowStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum ReportStatus {
+  DRAFT
+  GENERATING
+  READY
+  FAILED
+  ARCHIVED
+}
+
+enum AttachmentOwnerType {
+  POLICY
+  TASK
+  CASE
+  KNOWLEDGE
+  REPORT
+  GENERAL
+}
+
 model Organization {
   id                String                   @id @default(uuid()) @db.Uuid
   name              String
@@ -85,6 +164,18 @@ model Organization {
   scimGroups        ScimGroup[]
   scimSyncRuns      ScimSyncRun[]
   permissionGrants  PermissionGrant[]
+  policies          Policy[]
+  documents         KnowledgeDocument[]
+  tasks             Task[]
+  cases             Case[]
+  notifications     Notification[]
+  notificationPreferences NotificationPreference[]
+  reports           Report[]
+  workflows         Workflow[]
+  storageObjects    StorageObject[]
+  attachments       Attachment[]
+  auditEntries      AuditEntry[]
+  activityEvents    ActivityEvent[]
 
   @@map("organizations")
 }
@@ -111,6 +202,13 @@ model User {
   passwordHistory    PasswordHistory[]
   loginAttempts      LoginAttempt[]
   securityEvents     SecurityEvent[]
+  notifications      Notification[]
+  notificationPreferences NotificationPreference[]
+  assignedTasks      Task[]                   @relation("TaskAssignee")
+  createdTasks       Task[]                   @relation("TaskCreator")
+  ownedCases         Case[]                   @relation("CaseOwner")
+  auditEntries       AuditEntry[]
+  activityEvents     ActivityEvent[]
 
   @@map("users")
 }
@@ -406,4 +504,288 @@ model PermissionGrant {
   @@index([userId])
   @@index([scope, scopeId])
   @@map("permission_grants")
+}
+
+// ─── Milestone B3 domain models ──────────────────────────────────────────────
+
+model Policy {
+  id             String                @id @default(uuid()) @db.Uuid
+  organizationId String                @map("organization_id") @db.Uuid
+  title          String
+  description    String?
+  status         PolicyLifecycleStatus @default(DRAFT)
+  ownerName      String?               @map("owner_name")
+  category       String?
+  tags           String[]              @default([])
+  version        Int                   @default(1)
+  deletedAt      DateTime?             @map("deleted_at")
+  createdAt      DateTime              @default(now()) @map("created_at")
+  updatedAt      DateTime              @updatedAt @map("updated_at")
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  versions       PolicyVersion[]
+
+  @@index([organizationId, status])
+  @@index([organizationId, deletedAt])
+  @@index([organizationId, updatedAt])
+  @@map("policies")
+}
+
+model PolicyVersion {
+  id          String   @id @default(uuid()) @db.Uuid
+  policyId    String   @map("policy_id") @db.Uuid
+  version     Int
+  title       String
+  content     String
+  changeNotes String?  @map("change_notes")
+  createdById String?  @map("created_by_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+  policy      Policy   @relation(fields: [policyId], references: [id], onDelete: Cascade)
+
+  @@unique([policyId, version])
+  @@index([policyId])
+  @@map("policy_versions")
+}
+
+model KnowledgeDocument {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  title          String
+  summary        String?
+  body           String?
+  collection     String?
+  status         String       @default("active")
+  tags           String[]     @default([])
+  version        Int          @default(1)
+  deletedAt      DateTime?    @map("deleted_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, collection])
+  @@index([organizationId, deletedAt])
+  @@map("documents")
+}
+
+model Case {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  title          String
+  summary        String?
+  status         CaseLifecycleStatus @default(OPEN)
+  priority       String              @default("medium")
+  ownerId        String?             @map("owner_id") @db.Uuid
+  tags           String[]            @default([])
+  version        Int                 @default(1)
+  deletedAt      DateTime?           @map("deleted_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner          User?               @relation("CaseOwner", fields: [ownerId], references: [id], onDelete: SetNull)
+  tasks          Task[]
+  notifications  Notification[]
+
+  @@index([organizationId, status])
+  @@index([organizationId, deletedAt])
+  @@index([ownerId])
+  @@map("cases")
+}
+
+model Task {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  caseId         String?             @map("case_id") @db.Uuid
+  title          String
+  description    String?
+  status         TaskLifecycleStatus @default(TODO)
+  priority       String              @default("medium")
+  assigneeId     String?             @map("assignee_id") @db.Uuid
+  createdById    String?             @map("created_by_id") @db.Uuid
+  dueAt          DateTime?           @map("due_at")
+  tags           String[]            @default([])
+  version        Int                 @default(1)
+  deletedAt      DateTime?           @map("deleted_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  case           Case?               @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  assignee       User?               @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull)
+  createdBy      User?               @relation("TaskCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  notifications  Notification[]
+
+  @@index([organizationId, status])
+  @@index([organizationId, deletedAt])
+  @@index([caseId])
+  @@index([assigneeId])
+  @@index([dueAt])
+  @@map("tasks")
+}
+
+model Notification {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  userId         String              @map("user_id") @db.Uuid
+  kind           NotificationKind    @default(SYSTEM)
+  channel        NotificationChannel @default(IN_APP)
+  title          String
+  body           String
+  href           String?
+  groupLabel     String?             @map("group_label")
+  caseId         String?             @map("case_id") @db.Uuid
+  taskId         String?             @map("task_id") @db.Uuid
+  metadata       Json?
+  readAt         DateTime?           @map("read_at")
+  archivedAt     DateTime?           @map("archived_at")
+  deletedAt      DateTime?           @map("deleted_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  case           Case?               @relation(fields: [caseId], references: [id], onDelete: SetNull)
+  task           Task?               @relation(fields: [taskId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, userId, readAt])
+  @@index([userId, archivedAt, createdAt])
+  @@index([organizationId, kind])
+  @@map("notifications")
+}
+
+model NotificationPreference {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  userId         String       @map("user_id") @db.Uuid
+  inAppEnabled   Boolean      @default(true) @map("in_app_enabled")
+  emailEnabled   Boolean      @default(true) @map("email_enabled")
+  digestEnabled  Boolean      @default(false) @map("digest_enabled")
+  digestHourUtc  Int          @default(8) @map("digest_hour_utc")
+  kindsMuted     String[]     @default([]) @map("kinds_muted")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, userId])
+  @@index([userId])
+  @@map("notification_preferences")
+}
+
+model Report {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  title          String
+  description    String?
+  reportType     String       @map("report_type")
+  status         ReportStatus @default(DRAFT)
+  parameters     Json?
+  resultUrl      String?      @map("result_url")
+  generatedAt    DateTime?    @map("generated_at")
+  deletedAt      DateTime?    @map("deleted_at")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+  @@index([organizationId, deletedAt])
+  @@map("reports")
+}
+
+model Workflow {
+  id             String         @id @default(uuid()) @db.Uuid
+  organizationId String         @map("organization_id") @db.Uuid
+  name           String
+  description    String?
+  status         WorkflowStatus @default(DRAFT)
+  definition     Json
+  version        Int            @default(1)
+  deletedAt      DateTime?      @map("deleted_at")
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status])
+  @@index([organizationId, deletedAt])
+  @@map("workflows")
+}
+
+model StorageObject {
+  id               String              @id @default(uuid()) @db.Uuid
+  organizationId   String              @map("organization_id") @db.Uuid
+  provider         StorageProviderType @default(LOCAL)
+  bucket           String?
+  objectKey        String              @map("object_key")
+  filename         String
+  contentType      String              @map("content_type")
+  byteSize         Int                 @map("byte_size")
+  checksumSha256   String?             @map("checksum_sha256")
+  versionLabel     String              @default("1") @map("version_label")
+  virusScanStatus  String              @default("pending") @map("virus_scan_status")
+  metadata         Json?
+  deletedAt        DateTime?           @map("deleted_at")
+  createdAt        DateTime            @default(now()) @map("created_at")
+  updatedAt        DateTime            @updatedAt @map("updated_at")
+  organization     Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  attachments      Attachment[]
+
+  @@unique([organizationId, objectKey, versionLabel])
+  @@index([organizationId, deletedAt])
+  @@index([provider])
+  @@map("storage_objects")
+}
+
+/// Polymorphic attachment link (ownerType + ownerId). No Prisma FK to domain tables.
+model Attachment {
+  id              String              @id @default(uuid()) @db.Uuid
+  organizationId  String              @map("organization_id") @db.Uuid
+  storageObjectId String              @map("storage_object_id") @db.Uuid
+  ownerType       AttachmentOwnerType @map("owner_type")
+  ownerId         String              @map("owner_id") @db.Uuid
+  label           String?
+  deletedAt       DateTime?           @map("deleted_at")
+  createdAt       DateTime            @default(now()) @map("created_at")
+  updatedAt       DateTime            @updatedAt @map("updated_at")
+  organization    Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  storageObject   StorageObject       @relation(fields: [storageObjectId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, ownerType, ownerId])
+  @@index([storageObjectId])
+  @@map("attachments")
+}
+
+/// Durable application audit entries (complements security_events; immutable store deepens later).
+model AuditEntry {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String?      @map("organization_id") @db.Uuid
+  userId         String?      @map("user_id") @db.Uuid
+  action         String
+  resource       String
+  before         Json?
+  after          Json?
+  ipAddress      String?      @map("ip_address")
+  userAgent      String?      @map("user_agent")
+  requestId      String?      @map("request_id")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+  @@map("audit_entries")
+}
+
+model ActivityEvent {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  userId         String?      @map("user_id") @db.Uuid
+  verb           String
+  summary        String
+  entityType     String?      @map("entity_type")
+  entityId       String?      @map("entity_id") @db.Uuid
+  metadata       Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([entityType, entityId])
+  @@map("activity_stream")
 }

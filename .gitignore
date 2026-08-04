@@ -17,6 +17,10 @@ backend/.env
 backend/coverage
 backend/.env.*
 !backend/.env.example
+backend/storage/
+backend/storage/**
+backend/dump.rdb
+*.rdb
 
 # Local QA / tooling artifacts
 ri_screenshot.mjs

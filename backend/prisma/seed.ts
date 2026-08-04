@@ -197,6 +197,198 @@ async function main() {
     },
   });
 
+  // ── Milestone B3 domain seed (idempotent by title lookup) ──
+  const policyCount = await prisma.policy.count({
+    where: { organizationId: organization.id },
+  });
+  let policyId: string | undefined;
+  if (policyCount === 0) {
+    const policy = await prisma.policy.create({
+      data: {
+        organizationId: organization.id,
+        title: 'Information Security Policy',
+        description: 'Baseline security controls for RegIntel Demo.',
+        status: 'PUBLISHED',
+        ownerName: name,
+        category: 'Security',
+        tags: ['security', 'baseline'],
+      },
+    });
+    policyId = policy.id;
+    await prisma.policyVersion.create({
+      data: {
+        policyId: policy.id,
+        version: 1,
+        title: policy.title,
+        content: '# Information Security Policy\n\nDemo seeded content.',
+        changeNotes: 'Initial seed',
+        createdById: user.id,
+      },
+    });
+  }
+
+  const caseCount = await prisma.case.count({
+    where: { organizationId: organization.id },
+  });
+  let caseId: string | undefined;
+  if (caseCount === 0) {
+    const demoCase = await prisma.case.create({
+      data: {
+        organizationId: organization.id,
+        title: 'Vendor risk follow-up',
+        summary: 'Seeded case for API demos.',
+        status: 'OPEN',
+        priority: 'high',
+        ownerId: user.id,
+        tags: ['vendor', 'risk'],
+      },
+    });
+    caseId = demoCase.id;
+  } else {
+    const existingCase = await prisma.case.findFirst({
+      where: { organizationId: organization.id, deletedAt: null },
+    });
+    caseId = existingCase?.id;
+  }
+
+  const taskCount = await prisma.task.count({
+    where: { organizationId: organization.id },
+  });
+  let taskId: string | undefined;
+  if (taskCount === 0) {
+    const task = await prisma.task.create({
+      data: {
+        organizationId: organization.id,
+        caseId,
+        title: 'Collect residual risk attestation',
+        description: 'Seeded task for notification and work APIs.',
+        status: 'TODO',
+        priority: 'high',
+        assigneeId: user.id,
+        createdById: user.id,
+        dueAt: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+        tags: ['attestation'],
+      },
+    });
+    taskId = task.id;
+  } else {
+    const existingTask = await prisma.task.findFirst({
+      where: { organizationId: organization.id, deletedAt: null },
+    });
+    taskId = existingTask?.id;
+  }
+
+  const docCount = await prisma.knowledgeDocument.count({
+    where: { organizationId: organization.id },
+  });
+  if (docCount === 0) {
+    await prisma.knowledgeDocument.create({
+      data: {
+        organizationId: organization.id,
+        title: 'Control Library Overview',
+        summary: 'Seeded knowledge document.',
+        body: 'Demo knowledge content for B3 APIs.',
+        collection: 'controls',
+        tags: ['knowledge'],
+      },
+    });
+  }
+
+  const reportCount = await prisma.report.count({
+    where: { organizationId: organization.id },
+  });
+  if (reportCount === 0) {
+    await prisma.report.create({
+      data: {
+        organizationId: organization.id,
+        title: 'Monthly compliance digest',
+        description: 'Seeded report.',
+        reportType: 'compliance_digest',
+        status: 'READY',
+        parameters: { period: '2026-07' },
+        generatedAt: new Date(),
+      },
+    });
+  }
+
+  const workflowCount = await prisma.workflow.count({
+    where: { organizationId: organization.id },
+  });
+  if (workflowCount === 0) {
+    await prisma.workflow.create({
+      data: {
+        organizationId: organization.id,
+        name: 'Policy review cycle',
+        description: 'Seeded workflow definition.',
+        status: 'ACTIVE',
+        definition: {
+          trigger: 'policy.published',
+          steps: [{ type: 'notify', role: 'COMPLIANCE_OFFICER' }],
+        },
+      },
+    });
+  }
+
+  const notifCount = await prisma.notification.count({
+    where: { organizationId: organization.id, userId: user.id },
+  });
+  if (notifCount === 0) {
+    await prisma.notification.createMany({
+      data: [
+        {
+          organizationId: organization.id,
+          userId: user.id,
+          kind: 'ASSIGNMENT',
+          channel: 'IN_APP',
+          title: 'Assigned to you',
+          body: 'Collect residual risk attestation was assigned to you.',
+          groupLabel: 'Tasks',
+          taskId,
+          caseId,
+          href: taskId ? `/work/tasks/${taskId}` : '/work',
+        },
+        {
+          organizationId: organization.id,
+          userId: user.id,
+          kind: 'POLICY_REVIEW',
+          channel: 'IN_APP',
+          title: 'Policy review due',
+          body: 'Information Security Policy is due for periodic review.',
+          groupLabel: 'Policies',
+          href: policyId ? `/governance/policies/${policyId}` : '/governance',
+        },
+        {
+          organizationId: organization.id,
+          userId: user.id,
+          kind: 'SECURITY_ALERT',
+          channel: 'IN_APP',
+          title: 'Security alert',
+          body: 'Multiple failed login attempts detected (seed demo).',
+          groupLabel: 'Security',
+          href: '/settings/security',
+        },
+      ],
+    });
+  }
+
+  await prisma.notificationPreference.upsert({
+    where: {
+      organizationId_userId: {
+        organizationId: organization.id,
+        userId: user.id,
+      },
+    },
+    update: {},
+    create: {
+      organizationId: organization.id,
+      userId: user.id,
+      inAppEnabled: true,
+      emailEnabled: true,
+      digestEnabled: false,
+      digestHourUtc: 8,
+    },
+  });
+
   // eslint-disable-next-line no-console
   console.log(
     JSON.stringify({
@@ -208,6 +400,20 @@ async function main() {
       isSuperAdmin: true,
       appRole: 'ORG_ADMIN',
       rbacPermissions: PERMISSION_CATALOG.length,
+      domainSeed: {
+        policies: await prisma.policy.count({
+          where: { organizationId: organization.id },
+        }),
+        tasks: await prisma.task.count({
+          where: { organizationId: organization.id },
+        }),
+        cases: await prisma.case.count({
+          where: { organizationId: organization.id },
+        }),
+        notifications: await prisma.notification.count({
+          where: { organizationId: organization.id },
+        }),
+      },
     }),
   );
 }

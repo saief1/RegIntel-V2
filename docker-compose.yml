@@ -43,7 +43,17 @@ services:
       NODE_ENV: development
       PORT: 3000
       DATABASE_URL: postgresql://regintel:regintel@db:5432/regintel?schema=public
+      DIRECT_URL: postgresql://regintel:regintel@db:5432/regintel?schema=public
       REDIS_URL: redis://redis:6379
+      STORAGE_PROVIDER: local
+      STORAGE_LOCAL_ROOT: /app/storage
+      USE_REAL_POLICIES: 'false'
+      USE_REAL_TASKS: 'false'
+      USE_REAL_CASES: 'false'
+      USE_REAL_KNOWLEDGE: 'false'
+      USE_REAL_REPORTS: 'false'
+      USE_REAL_NOTIFICATIONS: 'false'
+      USE_REAL_STORAGE: 'false'
       JWT_ACCESS_SECRET: dev-access-secret-change-me-min-32-chars!!
       JWT_ACCESS_TTL: 15m
       JWT_REFRESH_TTL: 7d
