@@ -7,6 +7,7 @@ import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { useConnected } from '../../hooks/useConnected'
 import { useOperations } from '../../hooks/useOperations'
+import { useSecurityCenterLive } from '../../hooks/useSecurityCenterLive'
 import { useWork } from '../../hooks/useWork'
 import { formatRelativeTime } from '../../utils/date'
 import { OperationsHubNav } from '../operations/OperationsHubNav'
@@ -16,16 +17,28 @@ export function SecurityCenterPage() {
   const {
     securityAlerts,
     acknowledgeAlert,
-    trustedDevices,
-    revokeDevice,
+    trustedDevices: mockTrustedDevices,
+    revokeDevice: mockRevokeDevice,
     ipRestrictions,
     toggleIpRestriction,
     secrets,
     securityScore,
     mfaCoverage,
   } = useOperations()
-  const { deviceSessions, revokeSession, loginHistory, mfaRequired } = useConnected()
+  const {
+    deviceSessions: mockSessions,
+    revokeSession: mockRevokeSession,
+    loginHistory: mockLoginHistory,
+    mfaRequired,
+  } = useConnected()
+  const live = useSecurityCenterLive()
   const { getUser } = useWork()
+
+  const deviceSessions = live.enabled ? live.deviceSessions : mockSessions
+  const trustedDevices = live.enabled ? live.trustedDevices : mockTrustedDevices
+  const loginHistory = live.enabled ? live.loginHistory : mockLoginHistory
+  const revokeSession = live.enabled ? live.revokeSession : mockRevokeSession
+  const revokeDevice = live.enabled ? live.revokeDevice : mockRevokeDevice
 
   return (
     <PageContainer className={styles.page}>
@@ -45,6 +58,19 @@ export function SecurityCenterPage() {
           Admin Console
         </Link>
       </nav>
+
+      {live.enabled && (
+        <p className={g.muted}>
+          Live sessions &amp; devices{live.loading ? ' (loading…)' : ''}
+          {live.idleTimeoutSeconds
+            ? ` · Idle timeout ${Math.round(live.idleTimeoutSeconds / 60)} min`
+            : ''}
+          {' · '}
+          <Button size="sm" variant="secondary" onClick={() => void live.logoutEverywhere()}>
+            Logout everywhere
+          </Button>
+        </p>
+      )}
 
       <div className={g.metricGrid} aria-label="Security dashboard">
         <div className={g.metric}>

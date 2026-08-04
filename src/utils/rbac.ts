@@ -18,9 +18,9 @@ export function getPermissionsForUser(userId: string): Permission[] {
 }
 
 export function can(userId: string, permission: Permission): boolean {
-  if (featureFlags.useRealRbac) {
-    // Real checks are served by PermissionsGuard /api/v1/permissions/check.
-    // Until session wiring lands, keep mock matrix so UI stays functional.
+  if (featureFlags.useRealRbac && featureFlags.useRealAuth) {
+    // Effective checks go through /permissions/check once AuthSessionProvider has a token.
+    // Fall back to mock matrix so shell navigation stays usable before session hydrate.
     return getPermissionsForUser(userId).includes(permission)
   }
   return getPermissionsForUser(userId).includes(permission)

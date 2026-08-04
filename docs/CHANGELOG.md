@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.2.1 | 2026-08-04 | Identity & Sessions Completeness — sessions, trusted devices, Security Center APIs |
 | 2.2.0 | 2026-08-03 | Identity & Access — MFA, RBAC, Permissions, SSO, SCIM (Milestone B2) |
 | 2.1.0 | 2026-08-03 | Backend Foundation — NestJS/Prisma/auth/orgs, OpenAPI, feature-flag stubs (Milestone B1) |
 | 2.0.1 | 2026-08-03 | Platform Stabilized — Phase A polish (design, a11y, loading/error, docs) |
@@ -49,6 +50,42 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
+
+
+### v2.2.1 — Identity & Sessions Completeness
+
+**Status:** Patch (Phase B / B2 gap-fill)  
+**Tags:** `v2.2.1`, `B2_SESSIONS_COMPLETE`  
+**Date:** 2026-08-04
+
+Gap-fill on top of shipped **v2.2.0** / `B2_COMPLETE`. Does **not** retag v2.2.0. Adds session management, MFA trusted devices, Security Center backend APIs, role aliases, and feature-flag completeness. No new screens; existing Security Center / Admin Console wire when `VITE_USE_REAL_AUTH=true`.
+
+#### Gap audit (prompt B006–B010 vs shipped)
+
+| Capability | v2.2.0 | v2.2.1 |
+|---|---|---|
+| MFA TOTP + recovery | ✅ | ✅ + remember browser / trusted devices |
+| DB RBAC + permissions | ✅ | ✅ + Owner/Administrator/Reviewer/Employee/Guest aliases |
+| SSO mock OIDC/SAML | ✅ | unchanged |
+| SCIM REST | ✅ (was prompt “B009”) | unchanged |
+| Session management (list/revoke/logout-all/idle) | ❌ (refresh only) | ✅ |
+| Security Center backend | ❌ | ✅ devices, sessions, events, login/password history, audit query |
+| Security Center UI | mock page ✅ | wired behind `VITE_USE_REAL_AUTH` (no new screens) |
+| `USE_REAL_ORGS` / `USE_REAL_STORAGE` flags | ❌ | ✅ (default false) |
+
+#### Added
+
+- Session APIs: `GET/DELETE /sessions`, `POST /sessions/logout-everywhere`, `GET /sessions/policy`
+- Security APIs: devices, login-history, failed-logins, events, audit-trail, password-history, change password
+- Trusted devices + MFA `rememberBrowser`; idle timeout on refresh
+- Persisted `security_events` / `login_attempts` / `password_history` / `trusted_devices`
+- `AuthSessionProvider` + `realSecurityApi`; flags `VITE_USE_REAL_ORGS`, `VITE_USE_REAL_STORAGE`
+- Roles: `REVIEWER`, `EMPLOYEE`, `GUEST`; ORG_ADMIN display “Administrator” (aliases Owner)
+
+#### Changed
+
+- Roadmap/Product Board: v2.2.1 noted; B011–B015 remain org structure (user “data layer” ask mapped to B016–B022 sequence, not renumbered)
+- `package.json` / backend → `2.2.1`
 
 ### v2.2.0 — Identity & Access (Milestone B2)
 

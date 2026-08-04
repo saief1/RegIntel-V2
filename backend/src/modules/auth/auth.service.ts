@@ -85,6 +85,9 @@ export class AuthService {
           status: 'ACTIVE',
         },
       });
+      await tx.passwordHistory.create({
+        data: { userId: createdUser.id, passwordHash },
+      });
       return createdUser;
     });
 
@@ -103,8 +106,9 @@ export class AuthService {
     req: Request,
     res: Response,
   ): Promise<AuthTokenResponse | AuthMfaChallengeResponse> {
+    const email = dto.email.toLowerCase();
     const user = await this.prisma.user.findUnique({
-      where: { email: dto.email.toLowerCase() },
+      where: { email },
     });
 
     const valid =
@@ -112,12 +116,26 @@ export class AuthService {
       (await this.passwordService.verify(user.passwordHash, dto.password));
 
     if (!user || !valid || !user.active) {
+      await this.recordLoginAttempt({
+        userId: user?.id ?? null,
+        email,
+        result: 'FAILURE',
+        reason: !user
+          ? 'unknown_user'
+          : !user.active
+            ? 'inactive'
+            : 'bad_password',
+        req,
+      });
       await this.auditService.record({
         action: 'auth.login_failed',
-        resource: `email:${dto.email.toLowerCase()}`,
+        resource: `email:${email}`,
         userId: user?.id ?? null,
         request: req,
       });
+      if (user?.id) {
+        await this.maybeFlagSuspiciousFailures(user.id, email, req);
+      }
       throw new UnauthorizedException({
         code: 'AUTH_INVALID_CREDENTIALS',
         message: 'Email or password is incorrect.',
@@ -125,6 +143,25 @@ export class AuthService {
     }
 
     if (user.mfaEnabled) {
+      const trusted = await this.findValidTrustedDevice(user.id, req);
+      if (trusted) {
+        await this.recordLoginAttempt({
+          userId: user.id,
+          email,
+          result: 'SUCCESS',
+          reason: 'trusted_device',
+          req,
+        });
+        await this.auditService.record({
+          action: 'auth.login',
+          resource: `user:${user.id}`,
+          userId: user.id,
+          after: { via: 'trusted_device' },
+          request: req,
+        });
+        return this.issueSessionForUser(user.id, req, res, trusted.id);
+      }
+
       const jwt = this.configService.getOrThrow<AppConfig['jwt']>('jwt');
       const mfaChallengeToken = await this.jwtService.signAsync(
         { sub: user.id, purpose: 'mfa_challenge' },
@@ -133,6 +170,12 @@ export class AuthService {
           expiresIn: '5m',
         },
       );
+      await this.recordLoginAttempt({
+        userId: user.id,
+        email,
+        result: 'MFA_REQUIRED',
+        req,
+      });
       await this.auditService.record({
         action: 'auth.login_mfa_required',
         resource: `user:${user.id}`,
@@ -145,6 +188,12 @@ export class AuthService {
       };
     }
 
+    await this.recordLoginAttempt({
+      userId: user.id,
+      email,
+      result: 'SUCCESS',
+      req,
+    });
     await this.auditService.record({
       action: 'auth.login',
       resource: `user:${user.id}`,
@@ -160,8 +209,9 @@ export class AuthService {
     userId: string,
     req: Request,
     res: Response,
+    trustedDeviceId?: string | null,
   ): Promise<AuthTokenResponse> {
-    return this.issueSession(userId, req, res);
+    return this.issueSession(userId, req, res, trustedDeviceId);
   }
 
   async refresh(req: Request, res: Response): Promise<AuthTokenResponse> {
@@ -217,6 +267,26 @@ export class AuthService {
       });
     }
 
+    const idleTtl = this.configService.getOrThrow<string>('sessionIdleTimeout');
+    const idleMs = this.parseDurationMs(idleTtl);
+    if (Date.now() - stored.lastActiveAt.getTime() > idleMs) {
+      await this.prisma.refreshToken.updateMany({
+        where: { familyId: stored.familyId, revokedAt: null },
+        data: { revokedAt: new Date() },
+      });
+      await this.auditService.record({
+        action: 'session.idle_timeout',
+        resource: `refresh_family:${stored.familyId}`,
+        userId: stored.userId,
+        request: req,
+      });
+      this.clearRefreshCookie(res);
+      throw new UnauthorizedException({
+        code: 'AUTH_SESSION_IDLE',
+        message: 'Session expired due to inactivity. Please sign in again.',
+      });
+    }
+
     const { raw, hash, expiresAt } = this.createRefreshTokenMaterial();
     const replacement = await this.prisma.$transaction(async (tx) => {
       const created = await tx.refreshToken.create({
@@ -225,8 +295,11 @@ export class AuthService {
           tokenHash: hash,
           familyId: stored.familyId,
           expiresAt,
-          userAgent: req.header('user-agent') ?? null,
-          ipAddress: req.ip ?? null,
+          lastActiveAt: new Date(),
+          deviceLabel: stored.deviceLabel,
+          userAgent: req.header('user-agent') ?? stored.userAgent,
+          ipAddress: req.ip ?? stored.ipAddress,
+          trustedDeviceId: stored.trustedDeviceId,
         },
       });
       await tx.refreshToken.update({
@@ -273,20 +346,53 @@ export class AuthService {
     this.clearRefreshCookie(res);
   }
 
+  async recordMfaFailure(
+    userId: string,
+    email: string,
+    req: Request,
+  ): Promise<void> {
+    await this.recordLoginAttempt({
+      userId,
+      email,
+      result: 'MFA_FAILURE',
+      req,
+    });
+    await this.maybeFlagSuspiciousFailures(userId, email, req);
+  }
+
+  async recordLoginSuccess(
+    userId: string,
+    email: string,
+    req: Request,
+  ): Promise<void> {
+    await this.recordLoginAttempt({
+      userId,
+      email,
+      result: 'SUCCESS',
+      reason: 'mfa_verified',
+      req,
+    });
+  }
+
   private async issueSession(
     userId: string,
     req: Request,
     res: Response,
+    trustedDeviceId?: string | null,
   ): Promise<AuthTokenResponse> {
     const { raw, hash, expiresAt } = this.createRefreshTokenMaterial();
+    const deviceLabel = this.deviceLabelFromUa(req.header('user-agent'));
     await this.prisma.refreshToken.create({
       data: {
         userId,
         tokenHash: hash,
         familyId: randomUUID(),
         expiresAt,
+        lastActiveAt: new Date(),
+        deviceLabel,
         userAgent: req.header('user-agent') ?? null,
         ipAddress: req.ip ?? null,
+        trustedDeviceId: trustedDeviceId ?? null,
       },
     });
     this.setRefreshCookie(res, raw, expiresAt);
@@ -333,6 +439,87 @@ export class AuthService {
     };
   }
 
+  private async findValidTrustedDevice(
+    userId: string,
+    req: Request,
+  ): Promise<{ id: string } | null> {
+    const cookieName = this.configService.getOrThrow<string>(
+      'mfaTrustedDeviceCookieName',
+    );
+    const raw = req.cookies?.[cookieName] as string | undefined;
+    if (!raw) {
+      return null;
+    }
+    const tokenHash = this.hashToken(raw);
+    const device = await this.prisma.trustedDevice.findFirst({
+      where: {
+        userId,
+        tokenHash,
+        revokedAt: null,
+        expiresAt: { gt: new Date() },
+      },
+    });
+    if (!device) {
+      return null;
+    }
+    await this.prisma.trustedDevice.update({
+      where: { id: device.id },
+      data: {
+        lastSeenAt: new Date(),
+        ipAddress: req.ip ?? device.ipAddress,
+        userAgent: req.header('user-agent') ?? device.userAgent,
+      },
+    });
+    return { id: device.id };
+  }
+
+  private async recordLoginAttempt(params: {
+    userId: string | null;
+    email: string;
+    result: 'SUCCESS' | 'FAILURE' | 'MFA_REQUIRED' | 'MFA_FAILURE' | 'BLOCKED';
+    reason?: string;
+    req: Request;
+  }): Promise<void> {
+    await this.prisma.loginAttempt.create({
+      data: {
+        userId: params.userId,
+        email: params.email,
+        result: params.result,
+        reason: params.reason ?? null,
+        ipAddress: params.req.ip ?? null,
+        userAgent: params.req.header('user-agent') ?? null,
+      },
+    });
+  }
+
+  private async maybeFlagSuspiciousFailures(
+    userId: string,
+    email: string,
+    req: Request,
+  ): Promise<void> {
+    const threshold =
+      this.configService.get<number>('failedLoginThreshold') ?? 5;
+    const windowMinutes =
+      this.configService.get<number>('failedLoginWindowMinutes') ?? 15;
+    const since = new Date(Date.now() - windowMinutes * 60 * 1000);
+    const count = await this.prisma.loginAttempt.count({
+      where: {
+        userId,
+        result: { in: ['FAILURE', 'MFA_FAILURE'] },
+        createdAt: { gte: since },
+      },
+    });
+    if (count >= threshold) {
+      await this.auditService.record({
+        action: 'auth.suspicious_failures',
+        resource: `user:${userId}`,
+        userId,
+        after: { count, windowMinutes, email },
+        request: req,
+      });
+    }
+  }
+
   private createRefreshTokenMaterial(): {
     raw: string;
     hash: string;
@@ -347,6 +534,31 @@ export class AuthService {
 
   private hashToken(raw: string): string {
     return createHash('sha256').update(raw).digest('hex');
+  }
+
+  private deviceLabelFromUa(ua: string | undefined): string | null {
+    if (!ua) {
+      return null;
+    }
+    const browser = /Edg\//.test(ua)
+      ? 'Edge'
+      : /Chrome\//.test(ua)
+        ? 'Chrome'
+        : /Firefox\//.test(ua)
+          ? 'Firefox'
+          : /Safari\//.test(ua)
+            ? 'Safari'
+            : 'Browser';
+    const os = /Mac OS X/.test(ua)
+      ? 'macOS'
+      : /Windows/.test(ua)
+        ? 'Windows'
+        : /Android/.test(ua)
+          ? 'Android'
+          : /iPhone|iPad/.test(ua)
+            ? 'iOS'
+            : 'Device';
+    return `${os} · ${browser}`;
   }
 
   private setRefreshCookie(res: Response, raw: string, expiresAt: Date): void {

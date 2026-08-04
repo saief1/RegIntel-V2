@@ -176,6 +176,23 @@ export const ROLE_PERMISSION_MATRIX: Record<AppRole, readonly string[]> = {
     'tasks:write',
     'reports:read',
   ],
+  REVIEWER: [
+    'org:read',
+    'users:read',
+    'cases:read',
+    'policies:read',
+    'policies:approve',
+    'tasks:read',
+    'reports:read',
+    'audit:read',
+  ],
+  EMPLOYEE: [
+    'org:read',
+    'cases:read',
+    'policies:read',
+    'tasks:read',
+    'tasks:write',
+  ],
   VIEWER: [
     'org:read',
     'users:read',
@@ -184,44 +201,99 @@ export const ROLE_PERMISSION_MATRIX: Record<AppRole, readonly string[]> = {
     'tasks:read',
     'reports:read',
   ],
+  GUEST: ['org:read', 'policies:read', 'tasks:read'],
 };
 
 export const ROLE_DEFINITIONS: Array<{
   key: AppRole;
   name: string;
   description: string;
+  /** Human-facing aliases aligned to enterprise naming (Owner, Guest, …). */
+  aliases: string[];
 }> = [
   {
     key: 'SUPER_ADMIN',
     name: 'Super Admin',
     description: 'Platform-wide administrator with all permissions.',
+    aliases: ['Super Admin'],
   },
   {
     key: 'ORG_ADMIN',
-    name: 'Organization Admin',
-    description: 'Full control within an organization.',
+    name: 'Administrator',
+    description:
+      'Full control within an organization (Owner when membership legacy OWNER).',
+    aliases: ['Owner', 'Administrator', 'Organization Admin'],
   },
   {
     key: 'COMPLIANCE_OFFICER',
     name: 'Compliance Officer',
     description: 'Owns compliance cases, policies, and audit visibility.',
+    aliases: ['Compliance Officer'],
   },
   {
     key: 'MANAGER',
     name: 'Manager',
     description: 'Manages team work, cases, and reporting.',
+    aliases: ['Manager'],
   },
   {
     key: 'ANALYST',
     name: 'Analyst',
     description: 'Day-to-day case and task execution.',
+    aliases: ['Analyst'],
+  },
+  {
+    key: 'REVIEWER',
+    name: 'Reviewer',
+    description: 'Reviews and approves policies; read-heavy compliance access.',
+    aliases: ['Reviewer'],
+  },
+  {
+    key: 'EMPLOYEE',
+    name: 'Employee',
+    description: 'Standard workforce access to tasks and policy reading.',
+    aliases: ['Employee'],
   },
   {
     key: 'VIEWER',
     name: 'Viewer',
     description: 'Read-only access across compliance surfaces.',
+    aliases: ['Viewer'],
+  },
+  {
+    key: 'GUEST',
+    name: 'Guest',
+    description: 'Minimal read access for external or temporary collaborators.',
+    aliases: ['Guest'],
   },
 ];
+
+/** Resolve alias or AppRole key → AppRole (case-insensitive). */
+export function resolveRoleAlias(input: string): AppRole | null {
+  const normalized = input
+    .trim()
+    .toLowerCase()
+    .replace(/[\s-]+/g, '_');
+  const asKey = normalized.toUpperCase() as AppRole;
+  if (asKey in ROLE_PERMISSION_MATRIX) {
+    return asKey;
+  }
+  const aliasMap: Record<string, AppRole> = {
+    owner: 'ORG_ADMIN',
+    administrator: 'ORG_ADMIN',
+    organization_admin: 'ORG_ADMIN',
+    org_admin: 'ORG_ADMIN',
+    compliance_officer: 'COMPLIANCE_OFFICER',
+    manager: 'MANAGER',
+    analyst: 'ANALYST',
+    reviewer: 'REVIEWER',
+    employee: 'EMPLOYEE',
+    viewer: 'VIEWER',
+    guest: 'GUEST',
+    super_admin: 'SUPER_ADMIN',
+  };
+  return aliasMap[normalized] ?? null;
+}
 
 export function legacyRoleToAppRole(
   role: 'OWNER' | 'ADMIN' | 'MEMBER',

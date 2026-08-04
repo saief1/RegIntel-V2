@@ -75,7 +75,16 @@ export class ScimUserDto {
   active?: boolean;
 
   @ApiPropertyOptional({
-    enum: ['ORG_ADMIN', 'COMPLIANCE_OFFICER', 'MANAGER', 'ANALYST', 'VIEWER'],
+    enum: [
+      'ORG_ADMIN',
+      'COMPLIANCE_OFFICER',
+      'MANAGER',
+      'ANALYST',
+      'VIEWER',
+      'REVIEWER',
+      'EMPLOYEE',
+      'GUEST',
+    ],
   })
   @IsOptional()
   @IsEnum(AppRole)

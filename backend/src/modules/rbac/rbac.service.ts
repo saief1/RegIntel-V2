@@ -30,11 +30,15 @@ export class RbacService {
         permissions: { include: { permission: true } },
       },
     });
+    const aliasByKey = new Map(
+      ROLE_DEFINITIONS.map((role) => [role.key, role.aliases]),
+    );
     if (roles.length === 0) {
       return ROLE_DEFINITIONS.map((role) => ({
         key: role.key,
         name: role.name,
         description: role.description,
+        aliases: role.aliases,
         isSystem: true,
         permissions: [...ROLE_PERMISSION_MATRIX[role.key]],
       }));
@@ -43,6 +47,7 @@ export class RbacService {
       key: role.key,
       name: role.name,
       description: role.description,
+      aliases: aliasByKey.get(role.key) ?? [role.name],
       isSystem: role.isSystem,
       permissions: role.permissions.map((rp) => rp.permission.key).sort(),
     }));

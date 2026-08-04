@@ -59,6 +59,18 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   MFA_ENCRYPTION_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  SESSION_IDLE_TIMEOUT?: string;
+
+  @IsString()
+  @IsOptional()
+  MFA_TRUSTED_DEVICE_TTL?: string;
+
+  @IsString()
+  @IsOptional()
+  MFA_TRUSTED_DEVICE_COOKIE_NAME?: string;
 }
 
 export function validateEnv(config: Record<string, unknown>) {

@@ -2,6 +2,7 @@ import {
   ROLE_PERMISSION_MATRIX,
   appRoleToLegacyRole,
   legacyRoleToAppRole,
+  resolveRoleAlias,
 } from './rbac.constants';
 
 describe('rbac.constants', () => {
@@ -15,6 +16,15 @@ describe('rbac.constants', () => {
     expect(appRoleToLegacyRole('ORG_ADMIN')).toBe('OWNER');
     expect(appRoleToLegacyRole('MANAGER')).toBe('ADMIN');
     expect(appRoleToLegacyRole('VIEWER')).toBe('MEMBER');
+    expect(appRoleToLegacyRole('GUEST')).toBe('MEMBER');
+  });
+
+  it('resolves enterprise role aliases', () => {
+    expect(resolveRoleAlias('Owner')).toBe('ORG_ADMIN');
+    expect(resolveRoleAlias('Administrator')).toBe('ORG_ADMIN');
+    expect(resolveRoleAlias('Reviewer')).toBe('REVIEWER');
+    expect(resolveRoleAlias('Employee')).toBe('EMPLOYEE');
+    expect(resolveRoleAlias('Guest')).toBe('GUEST');
   });
 
   it('gives viewers a read-only subset of analyst permissions', () => {
@@ -33,5 +43,14 @@ describe('rbac.constants', () => {
     );
     expect(ROLE_PERMISSION_MATRIX.ORG_ADMIN).toContain('sso:manage');
     expect(ROLE_PERMISSION_MATRIX.ORG_ADMIN).toContain('scim:manage');
+  });
+
+  it('keeps guest minimal relative to employee', () => {
+    const guest = new Set(ROLE_PERMISSION_MATRIX.GUEST);
+    const employee = new Set(ROLE_PERMISSION_MATRIX.EMPLOYEE);
+    for (const key of guest) {
+      expect(employee.has(key)).toBe(true);
+    }
+    expect(guest.has('tasks:write')).toBe(false);
   });
 });

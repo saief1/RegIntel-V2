@@ -4,7 +4,7 @@
 
 This document is the **Backend Architecture Contract** for Phase B. It is the backend equivalent of the frontend design system: frozen technology choices, conventions, and Milestone B1 exit criteria that agents and humans must follow when implementing **B001+**.
 
-**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM) against this contract.
+**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM); **v2.2.1** gap-fill adds sessions/Security Center APIs against this contract.
 
 **UI policy:** Frontend routes and pages stay as-is. Replace mock providers behind feature flags. No redesigns except where backend integration requires minimal wiring.
 
@@ -464,6 +464,9 @@ Frontend keeps current pages and providers. Cutover is **flag-driven**, not a re
 | Flag | Default | Effect |
 |---|---|---|
 | `USE_REAL_AUTH` | `false` | Use real auth API vs mock session |
+| `USE_REAL_ORGS` | `false` | Organizations API vs mock tenancy |
+| `USE_REAL_RBAC` | `false` | Real permissions/RBAC API |
+| `USE_REAL_STORAGE` | `false` | Object storage (B021+) |
 | `USE_REAL_KNOWLEDGE` | `false` | Knowledge provider → API (B016+) |
 | `USE_REAL_TASKS` | `false` | Tasks → API |
 | `USE_REAL_REPORTS` | `false` | Reports → API |

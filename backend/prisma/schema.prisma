@@ -20,7 +20,8 @@ enum MembershipStatus {
   DISABLED
 }
 
-/// Database-driven RBAC role keys (B007).
+/// Database-driven RBAC role keys (B007 + v2.2.1 aliases).
+/// Display aliases: Owner/Administrator→ORG_ADMIN, Reviewer/Employee/Guest added.
 enum AppRole {
   SUPER_ADMIN
   ORG_ADMIN
@@ -28,6 +29,24 @@ enum AppRole {
   MANAGER
   ANALYST
   VIEWER
+  REVIEWER
+  EMPLOYEE
+  GUEST
+}
+
+enum SecurityEventSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
+}
+
+enum LoginAttemptResult {
+  SUCCESS
+  FAILURE
+  MFA_REQUIRED
+  MFA_FAILURE
+  BLOCKED
 }
 
 enum SsoProviderType {
@@ -88,6 +107,10 @@ model User {
   mfaRecoveryCodes   MfaRecoveryCode[]
   teamMemberships    TeamMembership[]
   permissionGrants   PermissionGrant[]
+  trustedDevices     TrustedDevice[]
+  passwordHistory    PasswordHistory[]
+  loginAttempts      LoginAttempt[]
+  securityEvents     SecurityEvent[]
 
   @@map("users")
 }
@@ -113,23 +136,98 @@ model OrganizationMembership {
 }
 
 model RefreshToken {
-  id           String    @id @default(uuid()) @db.Uuid
-  userId       String    @map("user_id") @db.Uuid
-  tokenHash    String    @map("token_hash")
-  familyId     String    @map("family_id") @db.Uuid
-  expiresAt    DateTime  @map("expires_at")
-  revokedAt    DateTime? @map("revoked_at")
-  replacedById String?   @map("replaced_by_id") @db.Uuid
-  createdAt    DateTime  @default(now()) @map("created_at")
-  updatedAt    DateTime  @updatedAt @map("updated_at")
-  userAgent    String?   @map("user_agent")
-  ipAddress    String?   @map("ip_address")
-  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id              String         @id @default(uuid()) @db.Uuid
+  userId          String         @map("user_id") @db.Uuid
+  tokenHash       String         @map("token_hash")
+  familyId        String         @map("family_id") @db.Uuid
+  expiresAt       DateTime       @map("expires_at")
+  revokedAt       DateTime?      @map("revoked_at")
+  replacedById    String?        @map("replaced_by_id") @db.Uuid
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  lastActiveAt    DateTime       @default(now()) @map("last_active_at")
+  deviceLabel     String?        @map("device_label")
+  userAgent       String?        @map("user_agent")
+  ipAddress       String?        @map("ip_address")
+  trustedDeviceId String?        @map("trusted_device_id") @db.Uuid
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  trustedDevice   TrustedDevice? @relation(fields: [trustedDeviceId], references: [id], onDelete: SetNull)
 
   @@index([userId])
   @@index([tokenHash])
   @@index([familyId])
+  @@index([trustedDeviceId])
   @@map("refresh_tokens")
+}
+
+/// MFA "remember this browser" trusted device (v2.2.1).
+model TrustedDevice {
+  id              String         @id @default(uuid()) @db.Uuid
+  userId          String         @map("user_id") @db.Uuid
+  tokenHash       String         @map("token_hash")
+  fingerprintHash String?        @map("fingerprint_hash")
+  name            String
+  userAgent       String?        @map("user_agent")
+  ipAddress       String?        @map("ip_address")
+  trustedAt       DateTime       @default(now()) @map("trusted_at")
+  lastSeenAt      DateTime       @default(now()) @map("last_seen_at")
+  expiresAt       DateTime       @map("expires_at")
+  revokedAt       DateTime?      @map("revoked_at")
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  refreshTokens   RefreshToken[]
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("trusted_devices")
+}
+
+/// Queryable security / audit trail for Security Center (v2.2.1). Full immutable store remains B024.
+model SecurityEvent {
+  id             String                @id @default(uuid()) @db.Uuid
+  userId         String?               @map("user_id") @db.Uuid
+  organizationId String?               @map("organization_id") @db.Uuid
+  action         String
+  resource       String
+  severity       SecurityEventSeverity @default(LOW)
+  detail         String?
+  ipAddress      String?               @map("ip_address")
+  userAgent      String?               @map("user_agent")
+  metadata       Json?
+  createdAt      DateTime              @default(now()) @map("created_at")
+  user           User?                 @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([organizationId, createdAt])
+  @@index([action, createdAt])
+  @@map("security_events")
+}
+
+model PasswordHistory {
+  id           String   @id @default(uuid()) @db.Uuid
+  userId       String   @map("user_id") @db.Uuid
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@map("password_history")
+}
+
+model LoginAttempt {
+  id        String             @id @default(uuid()) @db.Uuid
+  userId    String?            @map("user_id") @db.Uuid
+  email     String
+  result    LoginAttemptResult
+  reason    String?
+  ipAddress String?            @map("ip_address")
+  userAgent String?            @map("user_agent")
+  createdAt DateTime           @default(now()) @map("created_at")
+  user      User?              @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([email, createdAt])
+  @@index([result, createdAt])
+  @@map("login_attempts")
 }
 
 model Role {

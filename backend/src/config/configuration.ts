@@ -15,6 +15,16 @@ export type AppConfig = {
   allowRegister: boolean;
   /** AES key material for MFA secrets / SSO client secrets at rest. */
   mfaEncryptionKey: string;
+  /** Idle timeout for refresh sessions (e.g. 30m). */
+  sessionIdleTimeout: string;
+  /** MFA remember-browser cookie TTL (e.g. 30d). */
+  mfaTrustedDeviceTtl: string;
+  mfaTrustedDeviceCookieName: string;
+  /** How many prior password hashes to reject on change. */
+  passwordHistoryLimit: number;
+  /** Failed logins in window before suspicious event. */
+  failedLoginThreshold: number;
+  failedLoginWindowMinutes: number;
 };
 
 export default (): AppConfig => ({
@@ -39,4 +49,13 @@ export default (): AppConfig => ({
     process.env.MFA_ENCRYPTION_KEY ??
     process.env.JWT_ACCESS_SECRET ??
     'dev-mfa-encryption-key-change-me!!',
+  sessionIdleTimeout: process.env.SESSION_IDLE_TIMEOUT ?? '30m',
+  mfaTrustedDeviceTtl: process.env.MFA_TRUSTED_DEVICE_TTL ?? '30d',
+  mfaTrustedDeviceCookieName:
+    process.env.MFA_TRUSTED_DEVICE_COOKIE_NAME ?? 'mfa_trusted_device',
+  passwordHistoryLimit: Number(process.env.PASSWORD_HISTORY_LIMIT ?? 5),
+  failedLoginThreshold: Number(process.env.FAILED_LOGIN_THRESHOLD ?? 5),
+  failedLoginWindowMinutes: Number(
+    process.env.FAILED_LOGIN_WINDOW_MINUTES ?? 15,
+  ),
 });

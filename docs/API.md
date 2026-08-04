@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B2** extends the NestJS API with identity & access (MFA, RBAC, SSO, SCIM). Frontend still defaults to mock providers; domain cutovers remain **B016–B020**. Flags: `VITE_USE_REAL_AUTH`, `VITE_USE_REAL_RBAC`, `VITE_USE_REAL_MFA`, `VITE_USE_REAL_SSO`, `VITE_USE_REAL_SCIM` (all default **false**).
+Milestone **B2** (+ **v2.2.1** gap-fill) extends the NestJS API with identity & access (MFA, RBAC, SSO, SCIM), session management, and Security Center backends. Frontend still defaults to mock providers; domain cutovers remain **B016–B020**. Flags: `VITE_USE_REAL_AUTH`, `VITE_USE_REAL_ORGS`, `VITE_USE_REAL_RBAC`, `VITE_USE_REAL_MFA`, `VITE_USE_REAL_SSO`, `VITE_USE_REAL_SCIM`, `VITE_USE_REAL_STORAGE`, `VITE_USE_REAL_NOTIFICATIONS` (all default **false**).
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -66,6 +66,17 @@ Milestone **B2** extends the NestJS API with identity & access (MFA, RBAC, SSO, 
 | GET/PUT | `/api/v1/scim/mappings` | Group → role mappings | ✅ B2 |
 | * | `/api/v1/scim/v2/Users` | SCIM user provision/deprovision | ✅ B2 |
 | * | `/api/v1/scim/v2/Groups` | SCIM group provision | ✅ B2 |
+| GET | `/api/v1/sessions` | List active refresh sessions | ✅ v2.2.1 |
+| GET | `/api/v1/sessions/policy` | Idle timeout policy | ✅ v2.2.1 |
+| DELETE | `/api/v1/sessions/:sessionId` | Revoke session family | ✅ v2.2.1 |
+| POST | `/api/v1/sessions/logout-everywhere` | Revoke all sessions | ✅ v2.2.1 |
+| GET/DELETE | `/api/v1/security/devices*` | MFA trusted devices | ✅ v2.2.1 |
+| GET | `/api/v1/security/login-history` | Login history | ✅ v2.2.1 |
+| GET | `/api/v1/security/failed-logins` | Failed login attempts | ✅ v2.2.1 |
+| GET | `/api/v1/security/events` | Security events | ✅ v2.2.1 |
+| GET | `/api/v1/security/audit-trail` | Queryable audit trail (B024 full store later) | ✅ v2.2.1 |
+| GET | `/api/v1/security/password-history` | Password change metadata | ✅ v2.2.1 |
+| POST | `/api/v1/security/password` | Change password (+ history / revoke sessions) | ✅ v2.2.1 |
 
 ## 5. Error Handling
 
@@ -80,6 +91,11 @@ Locked to **`/api/v1`**. No `/api/v2` until necessary (ADR required).
 Deferred past Milestone B1; document when introduced.
 
 ## 8. Revision History
+
+| Date | Change |
+|---|---|
+| 2026-08-04 | v2.2.1 sessions + security center endpoints |
+
 
 | Date | Author | Change |
 |---|---|---|

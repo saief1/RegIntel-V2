@@ -9,6 +9,7 @@ import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
 import { useConnected } from '../../hooks/useConnected'
 import { useGovernance } from '../../hooks/useGovernance'
+import { useSecurityCenterLive } from '../../hooks/useSecurityCenterLive'
 import { useWork } from '../../hooks/useWork'
 import { formatRelativeTime } from '../../utils/date'
 import styles from '../connected/connected.module.css'
@@ -25,9 +26,9 @@ type Tab =
 export function AdminConsolePage() {
   const {
     adminUsers,
-    loginHistory,
-    deviceSessions,
-    revokeSession,
+    loginHistory: mockLoginHistory,
+    deviceSessions: mockSessions,
+    revokeSession: mockRevokeSession,
     tenantName,
     setTenantName,
     ssoEnabled,
@@ -38,6 +39,10 @@ export function AdminConsolePage() {
     toggleMfaRequired,
     globalActivity,
   } = useConnected()
+  const live = useSecurityCenterLive()
+  const loginHistory = live.enabled ? live.loginHistory : mockLoginHistory
+  const deviceSessions = live.enabled ? live.deviceSessions : mockSessions
+  const revokeSession = live.enabled ? live.revokeSession : mockRevokeSession
   const { teams, departments } = useGovernance()
   const { getUser } = useWork()
   const [tab, setTab] = useState<Tab>('tenant')
@@ -296,7 +301,9 @@ export function AdminConsolePage() {
             <h2>Security policies</h2>
             <ul className={g.list}>
               {[
-                'Idle session timeout: 30 minutes',
+                live.enabled && live.idleTimeoutSeconds
+                ? `Idle session timeout: ${Math.round(live.idleTimeoutSeconds / 60)} minutes`
+                : 'Idle session timeout: 30 minutes',
                 'Max concurrent sessions: 5',
                 'IP allowlist: corporate VPN ranges',
                 'Export of audit events requires Compliance Admin',

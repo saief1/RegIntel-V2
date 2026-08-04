@@ -33,6 +33,7 @@ Ships as a production-ready **frontend platform**: shell, design system, routed 
 
 **Current step:** **B011+** (Org structure & isolation).  
 Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.  
+**v2.2.1** / `B2_SESSIONS_COMPLETE` — session management, trusted devices, Security Center APIs (gap-fill; does not retag v2.2.0).  
 Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract ✅.
 
 **UI policy for Phase B:** UI is **frozen** except where backend integration requires minimal wiring (feature flags, API client, auth session). No redesigns, no new business modules.
@@ -43,7 +44,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~40% (B000–B010 ✅; next B011+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~42% (B000–B010 ✅ + v2.2.1 sessions; next B011+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -58,8 +59,9 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 |---|---|
 | **v2.0.x** | Frontend Platform + Stabilization ✅ |
 | **v2.1.0** | Backend Foundation (B001–B005) |
-| **v2.2.0** | Identity & Access (B006–B010) ✅; Org structure B011–B015 continues |
-| **v2.3.0** | Core Data Platform (B016–B020) |
+| **v2.2.0** | Identity & Access (B006–B010) ✅ |
+| **v2.2.1** | Identity & Sessions Completeness (gap-fill) ✅ |
+| **v2.3.0** | Core Data Platform (B016–B020); storage/jobs remain B021–B022 |
 | **v2.4.0** | API & Platform Services (B021–B025) |
 | **v2.5.0** | Backend Platform Beta (Phase B exit) |
 | **v2.7.0** | AI Intelligence Beta (Phase C) |
@@ -77,9 +79,10 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B000 Architecture Contract (prerequisite)
     → B001–B005 Foundation → v2.1.0
     → B006–B010 Identity & access → v2.2.0 ✅
-    → B011–B015 Org structure & isolation → next
-    → B016–B020 Core Data Platform → v2.3.0
-    → B021–B025 Platform Services → v2.4.0 / v2.5.0 beta
+    → v2.2.1 Sessions / Security Center gap-fill → B2_SESSIONS_COMPLETE ✅
+    → B011–B015 Org structure & isolation → next (workspaces, teams, departments, invitations, tenant isolation)
+    → B016–B020 Core Data Platform → v2.3.0 (domain APIs; Prisma repos deepen here — not a renumber of B011)
+    → B021–B025 Platform Services → v2.4.0 / v2.5.0 beta (object storage, BullMQ jobs, audit store, multi-tenancy)
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
 → Phase D Wealth Management Production (D001–D020) → v2.9.0
 → Phase E Enterprise Integrations (E001–E015)
@@ -114,7 +117,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — B000–B010 ✅ (`v2.1.0`, `v2.2.0`); next **B011+**.
+**Status:** 🔄 In Progress — B000–B010 ✅ (`v2.1.0`, `v2.2.0`) + sessions gap-fill `v2.2.1`; next **B011+**.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -143,7 +146,10 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 | IDs | Theme | Outline | Status |
 |---|---|---|---|
 | **B006–B010** | Identity & access | MFA, RBAC, Permissions, SSO (OIDC/SAML), SCIM | ✅ **v2.2.0** |
+| **v2.2.1** | Sessions & Security Center | Session mgmt, trusted devices, Security Center APIs, role aliases, flags | ✅ gap-fill |
 | **B011–B015** | Org structure & isolation | Workspaces, Teams, Departments, Invitations, Tenant isolation hardening | ⏳ next |
+
+> **Roadmap reconciliation:** An alternate prompt mapped “B011–B015” to PostgreSQL data layer / repos / file storage / jobs. That work is already sequenced as **B016–B020** (domain data APIs) and **B021–B022** (storage + BullMQ). **B011–B015 stays org structure** so we do not invent a second plan or destroy the earlier band.
 
 ### Core Data Platform → v2.3.0 (B016–B020)
 

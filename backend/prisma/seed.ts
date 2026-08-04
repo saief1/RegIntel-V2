@@ -126,6 +126,15 @@ async function main() {
     },
   });
 
+  const passwordHistoryCount = await prisma.passwordHistory.count({
+    where: { userId: user.id },
+  });
+  if (passwordHistoryCount === 0) {
+    await prisma.passwordHistory.create({
+      data: { userId: user.id, passwordHash },
+    });
+  }
+
   // Backfill appRole for any legacy memberships.
   const memberships = await prisma.organizationMembership.findMany();
   for (const membership of memberships) {

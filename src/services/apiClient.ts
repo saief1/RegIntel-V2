@@ -110,10 +110,19 @@ export const realAuthApi = {
       body: { email, password },
     })
   },
-  verifyMfa(mfaChallengeToken: string, code: string) {
+  verifyMfa(
+    mfaChallengeToken: string,
+    code: string,
+    options?: { rememberBrowser?: boolean; deviceName?: string },
+  ) {
     return apiRequest<AuthLoginResult>('/auth/mfa/verify', {
       method: 'POST',
-      body: { mfaChallengeToken, code },
+      body: {
+        mfaChallengeToken,
+        code,
+        rememberBrowser: options?.rememberBrowser,
+        deviceName: options?.deviceName,
+      },
     })
   },
   refresh() {
@@ -124,6 +133,94 @@ export const realAuthApi = {
   },
   me(accessToken: string) {
     return apiRequest<AuthLoginResult['user']>('/users/me', { accessToken })
+  },
+}
+
+export type RealSession = {
+  id: string
+  familyId: string
+  device: string
+  browser: string
+  ipAddress: string | null
+  lastActiveAt: string
+  current: boolean
+  userId: string
+}
+
+export type RealTrustedDevice = {
+  id: string
+  name: string
+  lastSeenAt: string
+  trusted: boolean
+  userAgent: string | null
+}
+
+export type RealLoginHistoryItem = {
+  id: string
+  userId: string | null
+  at: string
+  ip: string | null
+  location: string
+  result: string
+}
+
+/** Session + Security Center APIs — gated by VITE_USE_REAL_AUTH. */
+export const realSecurityApi = {
+  listSessions(accessToken: string) {
+    return apiRequest<RealSession[]>('/sessions', { accessToken })
+  },
+  revokeSession(accessToken: string, sessionId: string) {
+    return apiRequest<void>(`/sessions/${sessionId}`, {
+      method: 'DELETE',
+      accessToken,
+    })
+  },
+  logoutEverywhere(accessToken: string) {
+    return apiRequest<{ revoked: number }>('/sessions/logout-everywhere', {
+      method: 'POST',
+      accessToken,
+    })
+  },
+  sessionPolicy(accessToken: string) {
+    return apiRequest<{ idleTimeoutSeconds: number }>('/sessions/policy', {
+      accessToken,
+    })
+  },
+  listDevices(accessToken: string) {
+    return apiRequest<RealTrustedDevice[]>('/security/devices', { accessToken })
+  },
+  revokeDevice(accessToken: string, deviceId: string) {
+    return apiRequest<void>(`/security/devices/${deviceId}`, {
+      method: 'DELETE',
+      accessToken,
+    })
+  },
+  loginHistory(accessToken: string) {
+    return apiRequest<RealLoginHistoryItem[]>('/security/login-history', {
+      accessToken,
+    })
+  },
+  securityEvents(accessToken: string) {
+    return apiRequest<
+      Array<{
+        id: string
+        action: string
+        severity: string
+        detail: string | null
+        createdAt: string
+      }>
+    >('/security/events', { accessToken })
+  },
+  auditTrail(accessToken: string, organizationId?: string | null) {
+    return apiRequest<
+      Array<{
+        id: string
+        action: string
+        resource: string
+        severity: string
+        createdAt: string
+      }>
+    >('/security/audit-trail', { accessToken, organizationId })
   },
 }
 

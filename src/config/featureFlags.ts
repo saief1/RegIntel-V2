@@ -9,6 +9,7 @@ function readFlag(name: string): boolean {
 
 export const featureFlags = {
   useRealAuth: readFlag('VITE_USE_REAL_AUTH'),
+  useRealOrgs: readFlag('VITE_USE_REAL_ORGS'),
   useRealRbac: readFlag('VITE_USE_REAL_RBAC'),
   useRealMfa: readFlag('VITE_USE_REAL_MFA'),
   useRealSso: readFlag('VITE_USE_REAL_SSO'),
@@ -19,6 +20,7 @@ export const featureFlags = {
   useRealPolicies: readFlag('VITE_USE_REAL_POLICIES'),
   useRealNotifications: readFlag('VITE_USE_REAL_NOTIFICATIONS'),
   useRealCases: readFlag('VITE_USE_REAL_CASES'),
+  useRealStorage: readFlag('VITE_USE_REAL_STORAGE'),
   apiBaseUrl:
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
     'http://localhost:3000/api/v1',

@@ -1,5 +1,35 @@
 # Release Notes
 
+## RegIntel v2.2.1 — Identity & Sessions Completeness
+
+**Date:** 2026-08-04  
+**Tags:** `v2.2.1`, `B2_SESSIONS_COMPLETE`  
+**Phase:** B (B2 gap-fill; does **not** retag v2.2.0)
+
+### Headline
+
+Completes session management and Security Center backends on top of shipped **v2.2.0** Identity & Access. Existing Security Center / Admin Console surfaces wire to real APIs when `VITE_USE_REAL_AUTH=true`. No new screens.
+
+### Highlights
+
+- Active sessions list / revoke / logout everywhere / idle timeout
+- MFA trusted devices + remember browser
+- Security events, login history, failed logins, password history, audit-trail query APIs
+- Role aliases: Owner/Administrator/Reviewer/Employee/Guest (keys preserved; new REVIEWER/EMPLOYEE/GUEST)
+- Flags: `VITE_USE_REAL_ORGS`, `VITE_USE_REAL_STORAGE` (default false)
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.2.1`
+- Apply migration: `cd backend && npx prisma migrate deploy && npx prisma db seed`
+- Optional: `SESSION_IDLE_TIMEOUT`, `MFA_TRUSTED_DEVICE_TTL`
+
+### Next
+
+**B011+** — Org structure & isolation. Do not start data-layer renumbering; storage/jobs stay B021–B022.
+
+---
+
 ## RegIntel v2.2.0 — Identity & Access (Milestone B2)
 
 **Date:** 2026-08-03  

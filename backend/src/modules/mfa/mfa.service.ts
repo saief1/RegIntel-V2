@@ -20,6 +20,7 @@ import {
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { AuthService } from '../auth/auth.service';
 import { AuthTokenResponse } from '../auth/auth.types';
+import { SecurityService } from '../security/security.service';
 
 export type MfaChallengePayload = {
   sub: string;
@@ -34,6 +35,7 @@ export class MfaService {
     private readonly jwtService: JwtService,
     private readonly auditService: AuditService,
     private readonly authService: AuthService,
+    private readonly securityService: SecurityService,
   ) {}
 
   async getStatus(userId: string) {
@@ -225,7 +227,14 @@ export class MfaService {
   }
 
   async verifyLoginChallenge(
-    dto: { mfaChallengeToken: string; code?: string; recoveryCode?: string },
+    dto: {
+      mfaChallengeToken: string;
+      code?: string;
+      recoveryCode?: string;
+      rememberBrowser?: boolean;
+      deviceName?: string;
+      fingerprint?: string;
+    },
     req: Request,
     res: Response,
   ): Promise<AuthTokenResponse> {
@@ -261,8 +270,28 @@ export class MfaService {
       });
     }
 
-    await this.assertMfaFactor(user.id, user.mfaSecretEncrypted, dto);
+    try {
+      await this.assertMfaFactor(user.id, user.mfaSecretEncrypted, dto);
+    } catch (error) {
+      await this.authService.recordMfaFailure(user.id, user.email, req);
+      throw error;
+    }
 
+    let trustedDeviceId: string | null = null;
+    if (dto.rememberBrowser) {
+      const trusted = await this.securityService.trustDevice(
+        user.id,
+        req,
+        res,
+        {
+          name: dto.deviceName,
+          fingerprint: dto.fingerprint,
+        },
+      );
+      trustedDeviceId = trusted.id;
+    }
+
+    await this.authService.recordLoginSuccess(user.id, user.email, req);
     await this.auditService.record({
       action: 'mfa.verified',
       resource: `user:${user.id}`,
@@ -270,7 +299,12 @@ export class MfaService {
       request: req,
     });
 
-    return this.authService.issueSessionForUser(user.id, req, res);
+    return this.authService.issueSessionForUser(
+      user.id,
+      req,
+      res,
+      trustedDeviceId,
+    );
   }
 
   private async assertMfaFactor(

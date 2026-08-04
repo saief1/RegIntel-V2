@@ -13,6 +13,8 @@ import { PermissionsModule } from './modules/permissions/permissions.module';
 import { QueueModule } from './modules/queue/queue.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { ScimModule } from './modules/scim/scim.module';
+import { SecurityModule } from './modules/security/security.module';
+import { SessionsModule } from './modules/sessions/sessions.module';
 import { SsoModule } from './modules/sso/sso.module';
 import { UsersModule } from './modules/users/users.module';
 
@@ -35,6 +37,8 @@ import { UsersModule } from './modules/users/users.module';
     PermissionsModule,
     SsoModule,
     ScimModule,
+    SessionsModule,
+    SecurityModule,
   ],
 })
 export class AppModule implements NestModule {

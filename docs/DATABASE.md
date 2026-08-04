@@ -16,7 +16,7 @@ This document describes RegIntel's data model, schema, storage technology, and m
 
 ## 1. Overview
 
-Milestone B1 introduced PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Milestone **B2** adds MFA recovery codes, RBAC roles/permissions, SSO/SCIM configuration, teams (minimal for grants), and permission grants. Seed creates demo org + super-admin user, RBAC catalog, and mock SSO configs.
+Milestone B1 introduced PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Milestone **B2** adds MFA recovery codes, RBAC roles/permissions, SSO/SCIM configuration, teams (minimal for grants), and permission grants. **v2.2.1** adds trusted devices, security events, login attempts, password history, and session activity columns on refresh tokens. Seed creates demo org + super-admin user, RBAC catalog, and mock SSO configs.
 
 ## 2. Technology Choice
 
@@ -35,7 +35,11 @@ Milestone B1 introduced PostgreSQL via Prisma with users, organizations, members
 | `organizations` | Tenant root | ✅ B1 |
 | `users` | Global identity; MFA + `is_super_admin` / `external_id` | ✅ B1/B2 |
 | `organization_memberships` | User↔org; legacy `role` + `app_role` | ✅ B1/B2 |
-| `refresh_tokens` | Hashed refresh tokens + family rotation | ✅ B1 |
+| `refresh_tokens` | Hashed refresh tokens + family rotation + last_active / device label | ✅ B1/v2.2.1 |
+| `trusted_devices` | MFA remember-browser devices | ✅ v2.2.1 |
+| `security_events` | Queryable security/audit events (B024 immutable store later) | ✅ v2.2.1 |
+| `login_attempts` | Login / MFA attempt history | ✅ v2.2.1 |
+| `password_history` | Prior password hashes for reuse checks | ✅ v2.2.1 |
 | `roles` / `permissions` / `role_permissions` | DB-driven RBAC catalog | ✅ B2 |
 | `mfa_recovery_codes` | Hashed MFA recovery codes | ✅ B2 |
 | `sso_configurations` | OIDC/SAML provider configs | ✅ B2 |
