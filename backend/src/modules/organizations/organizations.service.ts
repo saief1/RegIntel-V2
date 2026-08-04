@@ -1,26 +1,29 @@
 import {
   ConflictException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { randomBytes } from 'crypto';
 import { AuditService } from '../../common/audit/audit.service';
+import { IOrganizationRepository } from '../../common/repositories/organization.repository';
+import { ORGANIZATION_REPOSITORY } from '../../common/repositories/tokens';
+import { withTransaction } from '../../common/prisma/prisma.transactions';
 import { PrismaService } from '../../common/prisma/prisma.service';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 
 @Injectable()
 export class OrganizationsService {
   constructor(
+    @Inject(ORGANIZATION_REPOSITORY)
+    private readonly organizations: IOrganizationRepository,
     private readonly prisma: PrismaService,
     private readonly auditService: AuditService,
   ) {}
 
   async listForUser(userId: string) {
-    const memberships = await this.prisma.organizationMembership.findMany({
-      where: { userId, status: 'ACTIVE' },
-      include: { organization: true },
-      orderBy: { createdAt: 'asc' },
-    });
+    const memberships =
+      await this.organizations.listMembershipsForUser(userId);
 
     return {
       data: memberships.map((membership) => ({
@@ -48,9 +51,7 @@ export class OrganizationsService {
         .replace(/^-|-$/g, '')
         .slice(0, 48)}-${randomBytes(2).toString('hex')}`;
 
-    const existing = await this.prisma.organization.findUnique({
-      where: { slug },
-    });
+    const existing = await this.organizations.findBySlug(slug);
     if (existing) {
       throw new ConflictException({
         code: 'ORG_SLUG_EXISTS',
@@ -58,7 +59,7 @@ export class OrganizationsService {
       });
     }
 
-    const org = await this.prisma.$transaction(async (tx) => {
+    const org = await withTransaction(this.prisma, async (tx) => {
       const created = await tx.organization.create({
         data: { name: dto.name, slug },
       });
@@ -93,14 +94,10 @@ export class OrganizationsService {
   }
 
   async getByIdForMember(userId: string, organizationId: string) {
-    const membership = await this.prisma.organizationMembership.findFirst({
-      where: {
-        userId,
-        organizationId,
-        status: 'ACTIVE',
-      },
-      include: { organization: true },
-    });
+    const membership = await this.organizations.findActiveMembership(
+      userId,
+      organizationId,
+    );
 
     if (!membership) {
       throw new NotFoundException({
@@ -109,13 +106,21 @@ export class OrganizationsService {
       });
     }
 
+    const organization = await this.organizations.findById(organizationId);
+    if (!organization) {
+      throw new NotFoundException({
+        code: 'ORG_NOT_FOUND',
+        message: 'Organization not found for this user.',
+      });
+    }
+
     return {
-      id: membership.organization.id,
-      name: membership.organization.name,
-      slug: membership.organization.slug,
+      id: organization.id,
+      name: organization.name,
+      slug: organization.slug,
       role: membership.role,
       appRole: membership.appRole,
-      createdAt: membership.organization.createdAt,
+      createdAt: organization.createdAt,
     };
   }
 }

@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SecurityEventSeverity } from '@prisma/client';
+import { Prisma, SecurityEventSeverity } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { AuditEvent, AuditWriter } from './audit.types';
 
@@ -20,8 +20,8 @@ const MEDIUM_ACTIONS = new Set([
 ]);
 
 /**
- * Persists security-relevant audit events for Security Center queries (v2.2.1).
- * Continues structured logging. Full immutable audit store remains B024.
+ * Persists security-relevant audit events for Security Center queries and
+ * application audit_entries (B3). Full immutable audit store deepens in B017.
  */
 @Injectable()
 export class PersistingAuditWriter implements AuditWriter {
@@ -55,6 +55,34 @@ export class PersistingAuditWriter implements AuditWriter {
     } catch (error) {
       this.logger.warn(
         `Failed to persist security event ${event.action}: ${
+          error instanceof Error ? error.message : 'unknown'
+        }`,
+      );
+    }
+
+    try {
+      await this.prisma.auditEntry.create({
+        data: {
+          organizationId: event.organizationId,
+          userId: event.userId,
+          action: event.action,
+          resource: event.resource,
+          before:
+            event.before === undefined
+              ? undefined
+              : (event.before as Prisma.InputJsonValue),
+          after:
+            event.after === undefined
+              ? undefined
+              : (event.after as Prisma.InputJsonValue),
+          ipAddress: event.ipAddress,
+          userAgent: event.userAgent,
+          createdAt: new Date(event.timestamp),
+        },
+      });
+    } catch (error) {
+      this.logger.warn(
+        `Failed to persist audit entry ${event.action}: ${
           error instanceof Error ? error.message : 'unknown'
         }`,
       );
