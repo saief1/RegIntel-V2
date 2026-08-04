@@ -1,4 +1,5 @@
-import { useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { featureFlags } from '../config/featureFlags'
 import { WORK_ACTIVITY } from '../data/work/activity'
 import { WORK_CASES } from '../data/work/cases'
 import { WORK_COMMENTS } from '../data/work/comments'
@@ -9,6 +10,11 @@ import { WORK_SUGGESTIONS } from '../data/work/suggestions'
 import { WORK_TASKS } from '../data/work/tasks'
 import { WORK_TIMELINE } from '../data/work/timeline'
 import { WORK_USERS, getWorkUser } from '../data/work/users'
+import { useAuthSession } from '../hooks/useAuthSession'
+import {
+  realNotificationsApi,
+  type RealNotification,
+} from '../services/apiClient'
 import { AI_ACTION_OPTIONS, defaultTitleForAction } from '../utils/aiWorkActions'
 import { createId } from '../utils/id'
 import { dueDateFromDays, estimateSmartDue } from '../utils/smartDueDates'
@@ -18,6 +24,7 @@ import type {
   CaseStatus,
   ChecklistItem,
   DecisionRecord,
+  NotificationKind,
   TimelineEvent,
   WorkCase,
   WorkComment,
@@ -25,10 +32,39 @@ import type {
 } from '../types/work'
 import { WorkContext, type CreateWorkTaskInput, type WorkContextValue } from './WorkContext'
 
+function mapRealNotification(row: RealNotification): AppNotification {
+  const raw = row.kind.toLowerCase()
+  const kindMap: Record<string, NotificationKind> = {
+    due: 'due',
+    assignment: 'assignment',
+    approval: 'approval',
+    mention: 'mention',
+    ai: 'ai',
+    regulation: 'regulation',
+    policy_review: 'regulation',
+    security_alert: 'ai',
+    digest: 'ai',
+    system: 'ai',
+  }
+  return {
+    id: row.id,
+    kind: kindMap[raw] ?? 'ai',
+    title: row.title,
+    body: row.body,
+    caseId: row.caseId ?? undefined,
+    taskId: row.taskId ?? undefined,
+    href: row.href ?? undefined,
+    read: Boolean(row.readAt),
+    createdAt: typeof row.createdAt === 'string' ? row.createdAt : String(row.createdAt),
+    group: row.groupLabel ?? 'Inbox',
+  }
+}
+
 const CURRENT_USER_ID = 'u-01'
 const DEFAULT_CASE_ID = 'case-01'
 
 export function WorkProvider({ children }: { children: ReactNode }) {
+  const auth = useAuthSession()
   const [cases, setCases] = useState<WorkCase[]>(WORK_CASES)
   const [tasks, setTasks] = useState<WorkTask[]>(WORK_TASKS)
   const [evidence] = useState(WORK_EVIDENCE)
@@ -37,6 +73,31 @@ export function WorkProvider({ children }: { children: ReactNode }) {
   const [comments, setComments] = useState<WorkComment[]>(WORK_COMMENTS)
   const [activity, setActivity] = useState<ActivityItem[]>(WORK_ACTIVITY)
   const [notifications, setNotifications] = useState<AppNotification[]>(WORK_NOTIFICATIONS)
+
+  const realNotificationsOrgId =
+    featureFlags.useRealNotifications && auth.accessToken
+      ? (auth.user?.organizations[0]?.id ?? null)
+      : null
+
+  useEffect(() => {
+    if (!featureFlags.useRealNotifications || !auth.accessToken || !realNotificationsOrgId) {
+      return
+    }
+    let cancelled = false
+    void realNotificationsApi
+      .list(auth.accessToken, realNotificationsOrgId)
+      .then((rows) => {
+        if (!cancelled) {
+          setNotifications(rows.map(mapRealNotification))
+        }
+      })
+      .catch(() => {
+        // Keep mock/local state if the API is unavailable.
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [auth.accessToken, realNotificationsOrgId])
 
   const getCase = useCallback((id: string) => cases.find((item) => item.id === id), [cases])
   const getTask = useCallback((id: string) => tasks.find((item) => item.id === id), [tasks])
@@ -444,21 +505,55 @@ export function WorkProvider({ children }: { children: ReactNode }) {
     [pushActivity, pushTimeline],
   )
 
-  const markNotificationRead = useCallback((id: string) => {
-    setNotifications((current) => current.map((item) => (item.id === id ? { ...item, read: true } : item)))
-  }, [])
+  const markNotificationRead = useCallback(
+    (id: string) => {
+      setNotifications((current) =>
+        current.map((item) => (item.id === id ? { ...item, read: true } : item)),
+      )
+      if (featureFlags.useRealNotifications && auth.accessToken && realNotificationsOrgId) {
+        void realNotificationsApi
+          .markRead(auth.accessToken, realNotificationsOrgId, [id])
+          .catch(() => undefined)
+      }
+    },
+    [auth.accessToken, realNotificationsOrgId],
+  )
 
   const markAllNotificationsRead = useCallback(() => {
     setNotifications((current) => current.map((item) => ({ ...item, read: true })))
-  }, [])
+    if (featureFlags.useRealNotifications && auth.accessToken && realNotificationsOrgId) {
+      void realNotificationsApi
+        .markAllRead(auth.accessToken, realNotificationsOrgId)
+        .catch(() => undefined)
+    }
+  }, [auth.accessToken, realNotificationsOrgId])
 
-  const dismissNotification = useCallback((id: string) => {
-    setNotifications((current) => current.filter((item) => item.id !== id))
-  }, [])
+  const dismissNotification = useCallback(
+    (id: string) => {
+      setNotifications((current) => current.filter((item) => item.id !== id))
+      if (featureFlags.useRealNotifications && auth.accessToken && realNotificationsOrgId) {
+        void realNotificationsApi
+          .archive(auth.accessToken, realNotificationsOrgId, [id])
+          .catch(() => undefined)
+      }
+    },
+    [auth.accessToken, realNotificationsOrgId],
+  )
 
   const clearAllNotifications = useCallback(() => {
+    const ids = notifications.map((item) => item.id)
     setNotifications([])
-  }, [])
+    if (
+      featureFlags.useRealNotifications &&
+      auth.accessToken &&
+      realNotificationsOrgId &&
+      ids.length > 0
+    ) {
+      void realNotificationsApi
+        .archive(auth.accessToken, realNotificationsOrgId, ids)
+        .catch(() => undefined)
+    }
+  }, [auth.accessToken, notifications, realNotificationsOrgId])
 
   const getSuggestionsForCase = useCallback(
     (caseId: string) => WORK_SUGGESTIONS.filter((item) => item.caseId === caseId),

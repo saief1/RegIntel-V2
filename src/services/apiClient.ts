@@ -260,3 +260,59 @@ export const realSsoApi = {
     >('/sso/configurations', { accessToken, organizationId })
   },
 }
+
+export type RealNotification = {
+  id: string
+  kind: string
+  title: string
+  body: string
+  href?: string | null
+  groupLabel?: string | null
+  caseId?: string | null
+  taskId?: string | null
+  readAt?: string | null
+  archivedAt?: string | null
+  createdAt: string
+}
+
+/** Real notification APIs — gated by VITE_USE_REAL_NOTIFICATIONS. */
+export const realNotificationsApi = {
+  list(accessToken: string, organizationId: string) {
+    return apiRequest<RealNotification[]>('/notifications', {
+      accessToken,
+      organizationId,
+    })
+  },
+  markRead(accessToken: string, organizationId: string, ids: string[]) {
+    return apiRequest<{ updated: number }>('/notifications/read', {
+      method: 'POST',
+      accessToken,
+      organizationId,
+      body: { ids },
+    })
+  },
+  markAllRead(accessToken: string, organizationId: string) {
+    return apiRequest<{ updated: number }>('/notifications/read-all', {
+      method: 'POST',
+      accessToken,
+      organizationId,
+    })
+  },
+  archive(accessToken: string, organizationId: string, ids: string[]) {
+    return apiRequest<{ archived: number }>('/notifications/archive', {
+      method: 'POST',
+      accessToken,
+      organizationId,
+      body: { ids },
+    })
+  },
+  getPreferences(accessToken: string, organizationId: string) {
+    return apiRequest<{
+      inAppEnabled: boolean
+      emailEnabled: boolean
+      digestEnabled: boolean
+      digestHourUtc: number
+      kindsMuted: string[]
+    }>('/notifications/preferences', { accessToken, organizationId })
+  },
+}
