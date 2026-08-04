@@ -1,5 +1,37 @@
 # Release Notes
 
+## RegIntel v2.1.0 — Backend Foundation (Milestone B1)
+
+**Date:** 2026-08-03  
+**Tags:** `v2.1.0`, `MILESTONE_B1_COMPLETE`  
+**Phase:** B (B001–B005)
+
+### Headline
+
+Milestone **B1 Backend Foundation** ships as **v2.1.0**: a production-shaped NestJS API with PostgreSQL/Prisma, JWT + Argon2 auth, users/organizations multi-tenancy, OpenAPI, and Docker Compose — while the React UI stays mock-default behind feature flags.
+
+### Highlights
+
+- `backend/` NestJS app + Compose stack (Postgres 16, Redis 7, API)
+- Auth: login / logout / refresh / gated register; refresh cookie rotation
+- Users & orgs with `X-Organization-Id` membership enforcement
+- Canonical API envelopes (`success` + `requestId`); Swagger at `/api/docs`
+- Frontend `VITE_USE_REAL_*` flags (default **false**) + API client stub
+- Architecture Contract standards locked (errors, audit stub, migrations, release discipline)
+
+### Upgrade notes
+
+- Root and backend `package.json` version → `2.1.0`
+- Local: `docker compose up --build` **or** Postgres/Redis + `cd backend && npx prisma migrate deploy && npx prisma db seed && npm run start:dev`
+- Seed admin: `admin@regintel.local` / `ChangeMeAdmin123!` (change in real environments)
+- UI unchanged unless `VITE_USE_REAL_AUTH=true`
+
+### Next
+
+**B006+** — Identity & access (MFA, RBAC, Permissions, SSO, SCIM) toward **v2.2.0**.
+
+---
+
 ## RegIntel v2.0.1 — Platform Stabilized
 
 **Date:** 2026-08-03  

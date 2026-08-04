@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document describes RegIntel's data model, schema, storage technology, and data lifecycle policies. No database has been selected or designed yet.
+This document describes RegIntel's data model, schema, storage technology, and migration policy. Source of truth for conventions: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md). Prisma schema: `backend/prisma/schema.prisma`.
 
 ## Table of Contents
 
@@ -16,41 +16,50 @@ This document describes RegIntel's data model, schema, storage technology, and d
 
 ## 1. Overview
 
-No schema implemented yet. **Technology and conventions are frozen** in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §4. Prisma schema and migrations land in **B002**.
+Milestone B1 introduces PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Seed creates a demo org + admin user for local development.
 
 ## 2. Technology Choice
 
 | Item | Decision |
 |---|---|
-| Engine | PostgreSQL |
-| ORM / migrations | Prisma |
+| Engine | PostgreSQL 16 |
+| ORM / migrations | Prisma only (no manual schema edits) |
 | PKs | UUID |
 | Tenancy | `organization_id` on tenant-scoped rows |
-| Local | Docker Compose (`db` service) |
+| Local | Docker Compose `db` service (or local Postgres) |
 
 ## 3. Schema
 
-> Placeholder — no tables/collections defined yet.
-
-| Table / Collection | Description | Status |
+| Table | Description | Status |
 |---|---|---|
-| Placeholder | TBD | Not Started |
+| `organizations` | Tenant root | ✅ B1 |
+| `users` | Global identity (email unique); MFA fields reserved | ✅ B1 |
+| `organization_memberships` | User↔org role/status | ✅ B1 |
+| `refresh_tokens` | Hashed refresh tokens + family rotation | ✅ B1 |
 
 ## 4. Entity Relationship Diagram
 
-> Placeholder — diagram to be added once schema is defined.
+```
+organizations 1──* organization_memberships *──1 users
+users 1──* refresh_tokens
+```
 
 ## 5. Migrations
 
-> Placeholder — migration tooling and process to be defined.
+- **Policy:** Prisma migrations only; seed scripts versioned (`backend/prisma/seed.ts`)
+- **Apply:** `npx prisma migrate deploy`
+- **Dev create:** `npx prisma migrate dev --name <name>`
+- **Rollback:** forward corrective migration on shared envs; `migrate reset` only on disposable local DBs
+- Details: Architecture Contract §5 and `backend/README.md`
 
 ## 6. Data Retention & Backup
 
-> Placeholder — to be defined.
+Compose uses a named volume `regintel_pg_data`. Production backup/retention TBD in deployment docs (pre-pilot).
 
 ## 7. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B1 | Document B1 Prisma models, migration policy |
 | 2026-08-03 | Phase B planning | Point to Backend Architecture Contract (Postgres + Prisma freeze) |
 | TBD | TBD | Initial placeholder document created |

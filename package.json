@@ -1,7 +1,7 @@
 {
   "name": "regintel-v2",
   "private": true,
-  "version": "2.0.1",
+  "version": "2.1.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -11,7 +11,17 @@
     "playwright": "playwright test",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:report": "playwright show-report",
+    "backend:install": "npm --prefix backend install",
+    "backend:dev": "npm --prefix backend run start:dev",
+    "backend:build": "npm --prefix backend run build",
+    "backend:lint": "npm --prefix backend run lint",
+    "backend:test": "npm --prefix backend test",
+    "backend:test:e2e": "npm --prefix backend run test:e2e",
+    "backend:verify:openapi": "npm --prefix backend run verify:openapi",
+    "check:backend": "npm run backend:lint && npm run backend:test && npm run backend:build",
+    "check:frontend": "npm run lint && npm run build && npm run playwright",
+    "check:all": "npm run check:backend && npm run check:frontend"
   },
   "dependencies": {
     "clsx": "^2.1.1",

@@ -31,8 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **Milestone B1 in progress** (B001–B005) → target **v2.1.0**.  
-Architecture Contract ([`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md)) is **complete** (errors, audit, flags, migrations, release discipline).
+**Current step:** **B006+** (Identity & access) → target **v2.2.0**.  
+Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract ✅.
 
 **UI policy for Phase B:** UI is **frozen** except where backend integration requires minimal wiring (feature flags, API client, auth session). No redesigns, no new business modules.
 
@@ -42,7 +42,7 @@ Architecture Contract ([`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md)) i
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress (B1) | ~20% (contract ✅; B001–B005 in progress) |
+| Phase B – Backend Platform | 🔄 In Progress | ~20% (B000–B005 ✅; next B006+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -112,7 +112,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — Architecture Contract ✅; Milestone B1 (B001–B005) in progress.
+**Status:** 🔄 In Progress — B000–B005 ✅ (`v2.1.0`); next **B006+**.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -124,15 +124,15 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 |---|---|---|
 | **B000** | Backend Architecture Contract | Freeze stack and conventions; document B1 done criteria; update roadmap/version targets. **Complete.** |
 
-### B1 Foundation → v2.1.0 (B001–B005)
+### B1 Foundation → v2.1.0 (B001–B005) ✅
 
 | ID | Title | Objective |
 |---|---|---|
-| **B001** | NestJS scaffolding | `backend/` app, Docker Compose (Postgres + Redis + API), health, config validation. |
-| **B002** | Prisma schema foundation | Users, organizations, memberships, refresh tokens; migrations + local seed. |
-| **B003** | Auth API | Login / logout / refresh; Argon2; JWT access + httpOnly refresh cookie. |
-| **B004** | Users & organizations API | Current user, org create/list, membership basics, `X-Organization-Id` context. |
-| **B005** | API foundation + OpenAPI | `/api/v1`, error shape, pagination, correlation IDs, Swagger, FE feature-flag stubs. |
+| **B001** | NestJS scaffolding | `backend/` app, Docker Compose (Postgres + Redis + API), health, config validation. ✅ |
+| **B002** | Prisma schema foundation | Users, organizations, memberships, refresh tokens; migrations + local seed. ✅ |
+| **B003** | Auth API | Login / logout / refresh; Argon2; JWT access + httpOnly refresh cookie. ✅ |
+| **B004** | Users & organizations API | Current user, org create/list, membership basics, `X-Organization-Id` context. ✅ |
+| **B005** | API foundation + OpenAPI | `/api/v1`, error shape, pagination, request IDs, Swagger, FE feature-flag stubs. ✅ |
 
 **B1 done:** real users/orgs in PostgreSQL; auth; versioned REST + OpenAPI; flags ready for mock→API cutover. See contract §16.
 
@@ -226,6 +226,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B1 | B001–B005 complete; tag v2.1.0; current step → B006+ |
 | 2026-08-03 | Milestone B1 | Architecture Contract standards complete; Product Board → B1 in progress |
 | 2026-08-03 | Phase B planning | B000 Backend Architecture Contract; reband B001–B025; version targets v2.1–v3.0; Phase B → In Progress (planning) |
 | 2026-08-03 | Phase A | A001–A010 complete; Product Board Phase A ✅; tag v2.0.1 Platform Stabilized |

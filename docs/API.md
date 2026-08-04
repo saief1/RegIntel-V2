@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document is the human index for RegIntel's API surface. **Authoritative conventions** (versioning, auth, errors, pagination, OpenAPI) live in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) until the NestJS API exists and this file is filled with concrete routes.
+This document is the human index for RegIntel's API surface. **Authoritative conventions** (versioning, auth, errors, pagination, OpenAPI) live in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md). Generated OpenAPI is served at `/api/docs-json`.
 
 ## Table of Contents
 
@@ -17,37 +17,46 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-No production API implementation yet (B001+). The frontend uses mock providers; first domain cutovers are **B016–B020** behind feature flags. Foundation auth/org APIs are **B003–B005**.
+Milestone **B1** ships the NestJS foundation under `backend/`. The frontend still defaults to mock providers; domain cutovers are **B016–B020** behind `VITE_USE_REAL_*` flags. Auth can be pointed at the real API with `VITE_USE_REAL_AUTH=true`.
 
-See [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) and [`ROADMAP.md`](./ROADMAP.md).
+- Local API: `http://localhost:3000/api/v1`
+- Swagger UI: `http://localhost:3000/api/docs`
 
 ## 2. Conventions
 
-Frozen in the Backend Architecture Contract:
-
 - REST JSON under **`/api/v1`**
-- List envelope `{ data, meta }` with offset pagination
-- Stable error object (see contract §8)
+- Success: `{ "success": true, "data": ... }` (lists may include `meta`)
+- Errors: `{ "success": false, "error": { code, message, requestId, timestamp } }`
+- Tenant header: `X-Organization-Id` on org-scoped routes
 
 ## 3. Authentication
 
-Frozen: **JWT access (Bearer)** + **httpOnly refresh cookie**; **Argon2** password hashing. MFA/SSO later (B006+). Details: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §6.
+- **JWT access (Bearer)** + **httpOnly refresh cookie** (`refresh_token` on `/api/v1/auth`)
+- **Argon2id** password hashing
+- MFA/SSO interfaces stubbed (B006+)
 
 ## 4. Endpoints
 
 | Method | Path | Description | Status |
 |---|---|---|---|
-| — | — | Concrete routes land with B001–B005 | Not Started |
-
-Swagger will be served at `/api/docs` once B005 lands.
+| GET | `/api/v1/health` | Liveness + DB readiness | ✅ B1 |
+| POST | `/api/v1/auth/register` | Register (when `ALLOW_REGISTER=true`) | ✅ B1 |
+| POST | `/api/v1/auth/login` | Login; sets refresh cookie | ✅ B1 |
+| POST | `/api/v1/auth/refresh` | Rotate refresh; new access token | ✅ B1 |
+| POST | `/api/v1/auth/logout` | Revoke refresh; clear cookie | ✅ B1 |
+| GET | `/api/v1/users/me` | Current user + orgs | ✅ B1 |
+| PATCH | `/api/v1/users/me` | Update profile | ✅ B1 |
+| GET | `/api/v1/organizations` | List memberships | ✅ B1 |
+| POST | `/api/v1/organizations` | Create org (caller becomes OWNER) | ✅ B1 |
+| GET | `/api/v1/organizations/:id` | Get org (`X-Organization-Id` required) | ✅ B1 |
 
 ## 5. Error Handling
 
-Stable shape documented in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §8 (`error.code`, `message`, `statusCode`, `correlationId`, `details`).
+Canonical shape in [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) §10 (`success: false`, `error.requestId`, `error.timestamp`).
 
 ## 6. Versioning
 
-URL prefix **`/api/v1`**. Breaking changes require a new major API version segment.
+Locked to **`/api/v1`**. No `/api/v2` until necessary (ADR required).
 
 ## 7. Rate Limiting
 
@@ -57,5 +66,6 @@ Deferred past Milestone B1; document when introduced.
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-03 | Milestone B1 | Document B1 routes, envelopes, Swagger URLs |
 | 2026-08-03 | Phase B planning | Point to Backend Architecture Contract; clarify B1 vs B016–B020 |
 | TBD | TBD | Initial placeholder document created |

@@ -18,11 +18,11 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 ### Added
 
-- [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) — Phase B Backend Architecture Contract (B000); tech freeze and Milestone B1 conventions. Planning only — no NestJS/Prisma code; no version bump.
+- None yet.
 
 ### Changed
 
-- [`ROADMAP.md`](./ROADMAP.md) / [`PRODUCT_BOARD.md`](./PRODUCT_BOARD.md) — Phase B → In Progress (planning); ticket bands B000–B025; version targets v2.1.0–v3.0.0.
+- None yet.
 
 ### Fixed
 
@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.1.0 | 2026-08-03 | Backend Foundation — NestJS/Prisma/auth/orgs, OpenAPI, feature-flag stubs (Milestone B1) |
 | 2.0.1 | 2026-08-03 | Platform Stabilized — Phase A polish (design, a11y, loading/error, docs) |
 | 2.0.0 | 2026-08-03 | Frontend Platform GA — hardening, error boundary, docs, no new modules |
 | 1.9.0-beta | 2026-08-03 | Commercial Platform — billing, customer portal, partners, usage, licensing |
@@ -46,6 +47,30 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.9.0 | 2026-08-02 | Connected Enterprise — integrations, API platform, AI agents |
 | 0.8.0 | 2026-08-02 | Enterprise Governance — policy lifecycle, workflows, RBAC |
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
+
+
+### v2.1.0 — Backend Foundation (Milestone B1)
+
+**Status:** Minor (Phase B / B001–B005)  
+**Tags:** `v2.1.0`, `MILESTONE_B1_COMPLETE`  
+**Date:** 2026-08-03
+
+Ships the NestJS backend foundation: Postgres + Prisma, JWT/Argon2 auth, users/orgs multi-tenancy, OpenAPI, Docker Compose, and frontend `VITE_USE_REAL_*` flags (default mock). UI unchanged except flag/API client stubs.
+
+#### Added
+
+- `backend/` NestJS API + root `docker-compose.yml` (Postgres, Redis, API)
+- Prisma models/migrations/seed for users, organizations, memberships, refresh tokens
+- Auth routes: register (gated), login, logout, refresh; MFA/OIDC/SAML stubs
+- `/api/v1` users/me + organizations; Swagger at `/api/docs`
+- Canonical envelopes (`success`/`requestId`); `AuditWriter` stub
+- Frontend feature flags + `apiClient` / `realAuthApi` stubs
+
+#### Changed
+
+- Architecture Contract standards complete (errors, audit, flags, migrations, release discipline)
+- Product Board: B000 ✅, B001–B005 ✅; current step → B006+
+- `package.json` / `backend` version → `2.1.0`
 
 ### v2.0.1 — Platform Stabilized
 
