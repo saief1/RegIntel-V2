@@ -21,8 +21,48 @@ class EnvironmentVariables {
   DATABASE_URL!: string;
 
   @IsString()
+  @IsOptional()
+  DIRECT_URL?: string;
+
+  @IsString()
   @IsNotEmpty()
   REDIS_URL!: string;
+
+  @IsString()
+  @IsOptional()
+  STORAGE_PROVIDER?: string;
+
+  @IsString()
+  @IsOptional()
+  STORAGE_LOCAL_ROOT?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_POLICIES?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_TASKS?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_CASES?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_KNOWLEDGE?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_REPORTS?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_NOTIFICATIONS?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_STORAGE?: string;
 
   @IsString()
   @IsNotEmpty()

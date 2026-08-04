@@ -2,6 +2,7 @@ export type AppConfig = {
   nodeEnv: string;
   port: number;
   databaseUrl: string;
+  directUrl: string;
   redisUrl: string;
   jwt: {
     accessSecret: string;
@@ -25,12 +26,29 @@ export type AppConfig = {
   /** Failed logins in window before suspicious event. */
   failedLoginThreshold: number;
   failedLoginWindowMinutes: number;
+  storage: {
+    provider: string;
+    localRoot: string;
+  };
+  featureFlags: {
+    useRealPolicies: boolean;
+    useRealTasks: boolean;
+    useRealCases: boolean;
+    useRealKnowledge: boolean;
+    useRealReports: boolean;
+    useRealNotifications: boolean;
+    useRealStorage: boolean;
+  };
 };
+
+const flag = (name: string, fallback = false): boolean =>
+  (process.env[name] ?? String(fallback)) === 'true';
 
 export default (): AppConfig => ({
   nodeEnv: process.env.NODE_ENV ?? 'development',
   port: Number(process.env.PORT ?? 3000),
   databaseUrl: process.env.DATABASE_URL ?? '',
+  directUrl: process.env.DIRECT_URL || process.env.DATABASE_URL || '',
   redisUrl: process.env.REDIS_URL ?? '',
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET ?? '',
@@ -58,4 +76,17 @@ export default (): AppConfig => ({
   failedLoginWindowMinutes: Number(
     process.env.FAILED_LOGIN_WINDOW_MINUTES ?? 15,
   ),
+  storage: {
+    provider: process.env.STORAGE_PROVIDER ?? 'local',
+    localRoot: process.env.STORAGE_LOCAL_ROOT ?? './storage',
+  },
+  featureFlags: {
+    useRealPolicies: flag('USE_REAL_POLICIES'),
+    useRealTasks: flag('USE_REAL_TASKS'),
+    useRealCases: flag('USE_REAL_CASES'),
+    useRealKnowledge: flag('USE_REAL_KNOWLEDGE'),
+    useRealReports: flag('USE_REAL_REPORTS'),
+    useRealNotifications: flag('USE_REAL_NOTIFICATIONS'),
+    useRealStorage: flag('USE_REAL_STORAGE'),
+  },
 });
