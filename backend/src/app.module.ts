@@ -4,6 +4,8 @@ import { AuditModule } from './common/audit/audit.module';
 import { PrismaModule } from './common/prisma/prisma.module';
 import { RepositoriesModule } from './common/repositories/repositories.module';
 import { requestIdMiddleware } from './common/request-id/request-id.middleware';
+import { GlobalRateLimitMiddleware } from './common/security/global-rate-limit.middleware';
+import { ConfigPlatformModule } from './config/config-platform.module';
 import configuration from './config/configuration';
 import { validateEnv } from './config/env.validation';
 import { AuditEntriesModule } from './modules/audit-entries/audit-entries.module';
@@ -39,6 +41,7 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
       load: [configuration],
       validate: validateEnv,
     }),
+    ConfigPlatformModule,
     PrismaModule,
     RepositoriesModule,
     AuditModule,
@@ -67,10 +70,12 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
     WorkflowModule,
     AuditEntriesModule,
   ],
+  providers: [GlobalRateLimitMiddleware],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(requestIdMiddleware).forRoutes('{*path}');
+    consumer.apply(GlobalRateLimitMiddleware).forRoutes('{*path}');
     consumer.apply(TenantRateLimitMiddleware).forRoutes('{*path}');
   }
 }

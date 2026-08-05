@@ -37,7 +37,14 @@ export class AuditEntryRepository
     const where: Prisma.AuditEntryWhereInput = {
       organizationId: query.organizationId,
       ...(query.filters?.action
-        ? { action: String(query.filters.action) }
+        ? {
+            action:
+              typeof query.filters.action === 'string' ||
+              typeof query.filters.action === 'number' ||
+              typeof query.filters.action === 'boolean'
+                ? String(query.filters.action)
+                : undefined,
+          }
         : {}),
     };
     const [total, data] = await Promise.all([

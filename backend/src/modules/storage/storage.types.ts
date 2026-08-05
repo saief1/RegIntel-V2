@@ -49,7 +49,7 @@ export interface VirusScanHook {
 }
 
 export class NoopVirusScanHook implements VirusScanHook {
-  async scan(): Promise<'clean' | 'infected' | 'pending'> {
-    return 'pending';
+  scan(): Promise<'clean' | 'infected' | 'pending'> {
+    return Promise.resolve('pending');
   }
 }

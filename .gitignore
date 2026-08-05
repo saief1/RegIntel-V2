@@ -21,6 +21,7 @@ backend/storage/
 backend/storage/**
 backend/dump.rdb
 *.rdb
+backend/openapi.generated.json
 
 # Local QA / tooling artifacts
 ri_screenshot.mjs

@@ -4,7 +4,9 @@ import { EmailModule } from '../email/email.module';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
 import { MetricsService } from './metrics.service';
+import { ObservabilityService } from './observability.service';
 import { RequestMetricsInterceptor } from './request-metrics.interceptor';
+import { TimingService } from './timing.service';
 
 @Module({
   imports: [EmailModule],
@@ -12,9 +14,11 @@ import { RequestMetricsInterceptor } from './request-metrics.interceptor';
   providers: [
     HealthService,
     MetricsService,
+    TimingService,
+    ObservabilityService,
     RequestMetricsInterceptor,
     { provide: APP_INTERCEPTOR, useClass: RequestMetricsInterceptor },
   ],
-  exports: [HealthService, MetricsService],
+  exports: [HealthService, MetricsService, TimingService, ObservabilityService],
 })
 export class HealthModule {}

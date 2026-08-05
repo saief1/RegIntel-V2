@@ -116,6 +116,15 @@ export class SecurityController {
     return this.securityService.listPasswordHistoryMeta(req.user!.userId);
   }
 
+  @Get('hardening')
+  @ApiOperation({
+    operationId: 'securityHardeningAudit',
+    summary: 'Security hardening control checklist (B023)',
+  })
+  hardeningAudit() {
+    return this.securityService.securityHardeningAudit();
+  }
+
   @Post('password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({

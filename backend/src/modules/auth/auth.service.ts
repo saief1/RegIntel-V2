@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -10,6 +11,8 @@ import { createHash, randomBytes, randomUUID } from 'crypto';
 import { Request, Response } from 'express';
 import { AuditService } from '../../common/audit/audit.service';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { validatePasswordPolicy } from '../../common/security/password-policy';
+import { sanitizeText } from '../../common/security/sanitize';
 import { AppConfig } from '../../config/configuration';
 import {
   AuthMfaChallengeResponse,
@@ -55,9 +58,24 @@ export class AuthService {
       });
     }
 
+    const policy = validatePasswordPolicy(dto.password);
+    if (!policy.ok) {
+      throw new BadRequestException({
+        code: 'PASSWORD_POLICY',
+        message: 'Password does not meet policy requirements.',
+        details: policy.errors.map((message) => ({
+          field: 'password',
+          message,
+        })),
+      });
+    }
+
     const passwordHash = await this.passwordService.hash(dto.password);
-    const orgName =
-      dto.organizationName?.trim() || `${dto.name}'s Organization`;
+    const safeName = sanitizeText(dto.name, 120);
+    const orgName = sanitizeText(
+      dto.organizationName?.trim() || `${safeName}'s Organization`,
+      120,
+    );
     const slugBase = orgName
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -70,7 +88,7 @@ export class AuthService {
         data: {
           email: dto.email.toLowerCase(),
           passwordHash,
-          name: dto.name,
+          name: safeName,
         },
       });
       const org = await tx.organization.create({

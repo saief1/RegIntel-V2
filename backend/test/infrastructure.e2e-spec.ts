@@ -60,7 +60,7 @@ describeIfDb('Infrastructure B4 (e2e)', () => {
   it('health includes email and version', async () => {
     const res = await request(app.getHttpServer()).get('/api/v1/health');
     expect(res.status).toBe(200);
-    expect(res.body.data.version).toBe('2.4.0');
+    expect(res.body.data.version).toBe('2.5.0');
     expect(res.body.data.emailProvider).toBeDefined();
   });
 

@@ -58,7 +58,14 @@ export class KnowledgeRepository
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
       ...(query.filters?.collection
-        ? { collection: String(query.filters.collection) }
+        ? {
+            collection:
+              typeof query.filters.collection === 'string' ||
+              typeof query.filters.collection === 'number' ||
+              typeof query.filters.collection === 'boolean'
+                ? String(query.filters.collection)
+                : undefined,
+          }
         : {}),
     };
     const [total, data] = await Promise.all([

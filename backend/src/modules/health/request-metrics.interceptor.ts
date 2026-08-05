@@ -38,10 +38,14 @@ export class RequestMetricsInterceptor implements NestInterceptor {
             if (req.requestId) {
               res.setHeader('X-Request-Id', req.requestId);
             }
-            const correlation = req.header('x-correlation-id') ?? req.requestId;
+            const correlation =
+              req.correlationId ??
+              req.header('x-correlation-id') ??
+              req.requestId;
             if (correlation) {
               res.setHeader('X-Correlation-Id', correlation);
             }
+            res.setHeader('X-Response-Time-Ms', String(ms));
           }
         },
         error: () => {
@@ -50,6 +54,11 @@ export class RequestMetricsInterceptor implements NestInterceptor {
             method: req.method,
             status: 'error',
           });
+          this.metrics.observe(
+            'regintel_http_request_duration_ms',
+            Date.now() - start,
+            { method: req.method, status: 'error' },
+          );
         },
       }),
     );

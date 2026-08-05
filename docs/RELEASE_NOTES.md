@@ -1,5 +1,35 @@
 # Release Notes
 
+## RegIntel v2.5.0 — Backend GA (Milestone B5)
+
+**Date:** 2026-08-05  
+**Tags:** `v2.5.0`, `BACKEND_GA_COMPLETE`  
+**Phase:** B (B021–B025)
+
+### Headline
+
+Backend platform exit: production deployment metadata, extended observability, security hardening, CI/CD scaffolding, and GA certification. UI frozen; FE `USE_REAL_*` flags remain default **false**.
+
+### Highlights
+
+- **B021 Deployment** — Docker non-root image, prod Compose overlay, config checksum, secret validation, `/ops/version|config|deployment`
+- **B022 Observability** — Correlation IDs, timing headers, `/ops/dashboard|errors|diagnostics` (extends B020)
+- **B023 Security** — Headers, global rate limit, password policy, API key hashing, `/security/hardening`
+- **B024 CI/CD** — GitHub Actions CI, migration validation, Docker build, release/deploy placeholders
+- **B025 Certification** — [`BACKEND_GA.md`](./BACKEND_GA.md) readiness report
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.5.0`
+- New optional env: `GLOBAL_RATE_LIMIT_PER_MINUTE`, `APP_VERSION`, `GIT_SHA`, `BUILD_TIME`, `DEPLOYMENT_ID`
+- Ensure `MFA_ENCRYPTION_KEY` ≥ 32 chars; production requires strong secrets + `COOKIE_SECURE=true`
+
+### Next
+
+**Phase C** — AI Intelligence Layer. Do **not** start Phase C in this release.
+
+---
+
 ## RegIntel v2.4.0 — Infrastructure & Production Readiness (Milestone B4)
 
 **Date:** 2026-08-04  

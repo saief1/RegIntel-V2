@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **B021+** (Backend Platform Beta hardening).  
+**Current step:** **Phase C** (AI Intelligence Layer) — not started in B5.  
+Milestone **B5** (B021–B025) complete — **v2.5.0** / `BACKEND_GA_COMPLETE` (Backend GA).  
 Milestone **B4** (B016–B020) complete — **v2.4.0** / `MILESTONE_B4_COMPLETE` (Infrastructure & Production Readiness).  
 Milestone **B3** (B011–B015) complete — **v2.3.0** / `MILESTONE_B3_COMPLETE` (Data Layer & Notifications).  
 Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.  
@@ -46,7 +47,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~80% (B000–B020 ✅ + v2.2.1; next B021+) |
+| Phase B – Backend Platform | ✅ Complete | 100% (B000–B025 ✅ + v2.2.1; Backend GA v2.5.0) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -65,7 +66,7 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 | **v2.2.1** | Identity & Sessions Completeness (gap-fill) ✅ |
 | **v2.3.0** | Data Layer & Notifications (B011–B015) ✅ |
 | **v2.4.0** | Infrastructure & Production Readiness (B016–B020) ✅ |
-| **v2.5.0** | Backend Platform Beta (Phase B exit) |
+| **v2.5.0** | Backend GA (B021–B025, Phase B exit) ✅ |
 | **v2.7.0** | AI Intelligence Beta (Phase C) |
 | **v2.9.0** | Wealth Management Beta (Phase D) |
 | **v3.0.0** | Commercial GA (after Phases E–F) |
@@ -77,14 +78,14 @@ Do **not** tag `v2.1.0` until B001–B005 implementation is done. This planning 
 ```
 RegIntel v2.x Frontend Platform GA (v2.0.0)
 → Phase A Platform Stabilization (A001–A010) ✅ v2.0.1
-→ Phase B Backend Platform (B000–B025) 🔄
+→ Phase B Backend Platform (B000–B025) ✅
     → B000 Architecture Contract (prerequisite)
     → B001–B005 Foundation → v2.1.0
     → B006–B010 Identity & access → v2.2.0 ✅
     → v2.2.1 Sessions / Security Center gap-fill → B2_SESSIONS_COMPLETE ✅
     → B011–B015 Data Layer & Notifications → v2.3.0 ✅ (Postgres repos, domain APIs, storage, BullMQ, notifications)
     → B016–B020 Infrastructure & Production Readiness → v2.4.0 ✅ (email, audit, search, multi-tenancy, ops)
-    → B021–B025 Backend Beta hardening → v2.5.0
+    → B021–B025 Backend GA → v2.5.0 ✅ (deploy, observability, security, CI/CD, certification)
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
 → Phase D Wealth Management Production (D001–D020) → v2.9.0
 → Phase E Enterprise Integrations (E001–E015)
@@ -119,7 +120,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — B000–B020 ✅ (`v2.1.0`, `v2.2.0`, `v2.2.1`, `v2.3.0`, `v2.4.0`); next **B021+**.
+**Status:** ✅ Complete — B000–B025 ✅ (`v2.1.0`–`v2.5.0` / `BACKEND_GA_COMPLETE`).
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -176,15 +177,21 @@ See [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.m
 
 > Prior roadmap draft mapped B018–B020 to org structure / workflow hardening / tenancy-only. **v2.4.0 remaps B016–B020 to Infrastructure & Production Readiness** (email, audit, search, multi-tenancy, ops). Org structure and workflow hardening move into later B021+ / Phase B beta as needed.
 
-### Backend Beta → v2.5.0 (B021–B025)
+### Backend GA → v2.5.0 (B021–B025) ✅
 
-| IDs | Theme | Outline |
-|---|---|---|
-| **B021–B025** | Beta hardening | Remaining FE domain cutovers, org/workspace deepening, workflow hardening, SLO/runbooks → **v2.5.0 Backend Platform Beta** |
+| ID | Title | Outline | Status |
+|---|---|---|---|
+| **B021** | Production deployment platform | Docker/Compose prod overlay, env/secret validation, config checksum, version/build metadata, graceful shutdown | ✅ |
+| **B022** | Monitoring & observability | Extends B020: correlation IDs, timing, dashboard/errors APIs, log levels, diagnostics | ✅ |
+| **B023** | Security hardening | Headers, CORS, rate limits, password policy, API key hashing, secrets audit, `/security/hardening` | ✅ |
+| **B024** | CI/CD & release pipeline | GitHub Actions CI, migration validation, Docker build, release/deploy placeholders | ✅ |
+| **B025** | Backend GA certification | Full platform audit + [`BACKEND_GA.md`](./BACKEND_GA.md) | ✅ |
 
 **Prerequisites from Phase A:** stable design system, certified frontend shell, documented API placeholders. ✅
 
-**Exit criteria (Phase B):** authenticated multi-tenant API + Postgres; frontend can run against real backend in staging; first domain providers on API; security baseline per [`SECURITY.md`](./SECURITY.md); tag **v2.5.0**.
+**Exit criteria (Phase B):** authenticated multi-tenant API + Postgres; frontend can run against real backend in staging; first domain providers on API; security baseline per [`SECURITY.md`](./SECURITY.md); tag **v2.5.0** / `BACKEND_GA_COMPLETE`. ✅
+
+FE mocks behind `USE_REAL_*=false` may remain — backend services are real.
 
 ## 7. Phase C — AI Intelligence Layer (C001–C020)
 
@@ -245,6 +252,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone B5 | B021–B025 Backend GA → v2.5.0 (deploy, observability, security, CI/CD, certification) |
 | 2026-08-04 | Milestone B4 | B016–B020 Infrastructure & Production Readiness → v2.4.0 (email, audit, search, multi-tenancy, ops) |
 | 2026-08-04 | Milestone B3 | B011–B015 Data Layer & Notifications → v2.3.0; B016–B020 remapped to email/audit/org/workflows/tenancy |
 | 2026-08-03 | Milestone B2 | B006–B010 complete; tag v2.2.0 / B2_COMPLETE; current step → B011+ |

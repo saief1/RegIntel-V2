@@ -1,0 +1,55 @@
+name: Deploy / Rollback Placeholders
+
+# B024 — intentional placeholders. Enable when production hosting is selected.
+
+on:
+  workflow_dispatch:
+    inputs:
+      action:
+        description: 'deploy or rollback'
+        required: true
+        default: deploy
+        type: choice
+        options: [deploy, rollback]
+      environment:
+        description: 'Target environment'
+        required: true
+        default: staging
+        type: choice
+        options: [staging, production]
+      version:
+        description: 'Version or image tag'
+        required: true
+        default: '2.5.0'
+
+jobs:
+  gate:
+    name: Manual gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Announce intent
+        run: |
+          echo "Action=${{ inputs.action }} env=${{ inputs.environment }} version=${{ inputs.version }}"
+          echo "This workflow is a placeholder. No remote infrastructure is mutated."
+
+  deploy:
+    if: ${{ inputs.action == 'deploy' }}
+    needs: [gate]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Deploy placeholder
+        run: |
+          echo "::notice::Would deploy RegIntel API ${{ inputs.version }} to ${{ inputs.environment }}"
+          echo "Steps (future): pull image → migrate deploy → rollout → readiness check → promote"
+
+  rollback:
+    if: ${{ inputs.action == 'rollback' }}
+    needs: [gate]
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Rollback placeholder
+        run: |
+          echo "::warning::Would rollback ${{ inputs.environment }} to ${{ inputs.version }}"
+          echo "Steps (future): retarget previous digest → migrate down only if explicitly approved → verify health"

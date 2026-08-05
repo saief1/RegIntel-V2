@@ -4,9 +4,10 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
-  Logger,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
+import { globalErrorAggregator } from '../logging/error-aggregator';
+import { structuredLog } from '../logging/structured-logger';
 
 type ErrorBody = {
   success: false;
@@ -14,6 +15,7 @@ type ErrorBody = {
     code: string;
     message: string;
     requestId: string;
+    correlationId?: string;
     timestamp: string;
     details?: Array<{ field: string; message: string }>;
   };
@@ -21,13 +23,12 @@ type ErrorBody = {
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  private readonly logger = new Logger(AllExceptionsFilter.name);
-
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
     const requestId = request.requestId ?? 'unknown';
+    const correlationId = request.correlationId ?? requestId;
     const timestamp = new Date().toISOString();
 
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
@@ -66,10 +67,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
         }
       }
     } else if (exception instanceof Error) {
-      this.logger.error(exception.message, exception.stack);
+      structuredLog('error', exception.message, {
+        requestId,
+        correlationId,
+        stack: exception.stack,
+      });
     } else {
-      this.logger.error('Unknown exception', String(exception));
+      structuredLog('error', 'Unknown exception', {
+        requestId,
+        correlationId,
+        detail: String(exception),
+      });
     }
+
+    globalErrorAggregator.record(code, message);
 
     const payload: ErrorBody = {
       success: false,
@@ -77,6 +88,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         code,
         message,
         requestId,
+        correlationId,
         timestamp,
         ...(details ? { details } : {}),
       },

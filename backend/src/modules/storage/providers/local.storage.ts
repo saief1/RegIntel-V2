@@ -63,7 +63,7 @@ export class LocalStorageProvider implements StorageProvider {
     }
   }
 
-  async getSignedUrl(
+  getSignedUrl(
     ref: StoredObjectRef,
     expiresInSeconds = 3600,
   ): Promise<SignedUrlResult> {
@@ -74,9 +74,9 @@ export class LocalStorageProvider implements StorageProvider {
     const token = Buffer.from(
       JSON.stringify({ ...ref, exp: expiresAt }),
     ).toString('base64url');
-    return {
+    return Promise.resolve({
       url: `/api/v1/storage/signed/${token}`,
       expiresAt,
-    };
+    });
   }
 }

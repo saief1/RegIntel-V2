@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B4 (v2.4.0)** adds email, immutable audit, search, multi-tenancy quotas/rate limits, and ops probes on top of B3. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). New flags: `VITE_USE_REAL_EMAIL`, `VITE_USE_REAL_AUDIT`, `VITE_USE_REAL_SEARCH`.
+Milestone **B5 (v2.5.0)** certifies Backend GA: deployment metadata, extended observability, security hardening, and CI/CD. B4 capabilities (email, audit, search, tenancy, ops) remain. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). See [`BACKEND_GA.md`](./BACKEND_GA.md).
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -46,6 +46,12 @@ Milestone **B4 (v2.4.0)** adds email, immutable audit, search, multi-tenancy quo
 | GET | `/api/v1/readiness` | Readiness + dependency checks | ✅ B4 |
 | GET | `/api/v1/metrics` | Prometheus metrics | ✅ B4 |
 | GET | `/api/v1/ops/env` | Non-secret env diagnostics | ✅ B4 |
+| GET | `/api/v1/ops/version` | Version / build / deployment metadata | ✅ B5 |
+| GET | `/api/v1/ops/config` | Config checksum + feature flags | ✅ B5 |
+| GET | `/api/v1/ops/deployment` | Deployment readiness summary | ✅ B5 |
+| GET | `/api/v1/ops/diagnostics` | System diagnostics | ✅ B5 |
+| GET | `/api/v1/ops/dashboard` | Health dashboard payload | ✅ B5 |
+| GET | `/api/v1/ops/errors` | In-process error aggregation | ✅ B5 |
 | POST | `/api/v1/auth/register` | Register (when `ALLOW_REGISTER=true`) | ✅ B1 |
 | POST | `/api/v1/auth/login` | Login; MFA challenge when enrolled | ✅ B1/B2 |
 | POST | `/api/v1/auth/mfa/verify` | Complete MFA login challenge | ✅ B2 |
@@ -78,9 +84,10 @@ Milestone **B4 (v2.4.0)** adds email, immutable audit, search, multi-tenancy quo
 | GET | `/api/v1/security/login-history` | Login history | ✅ v2.2.1 |
 | GET | `/api/v1/security/failed-logins` | Failed login attempts | ✅ v2.2.1 |
 | GET | `/api/v1/security/events` | Security events | ✅ v2.2.1 |
-| GET | `/api/v1/security/audit-trail` | Queryable audit trail (B024 full store later) | ✅ v2.2.1 |
+| GET | `/api/v1/security/audit-trail` | Queryable audit trail (immutable store in B017) | ✅ v2.2.1 |
 | GET | `/api/v1/security/password-history` | Password change metadata | ✅ v2.2.1 |
 | POST | `/api/v1/security/password` | Change password (+ history / revoke sessions) | ✅ v2.2.1 |
+| GET | `/api/v1/security/hardening` | Security hardening control checklist | ✅ B5 |
 | GET/POST/PATCH/DELETE | `/api/v1/policies` | Policy CRUD (+ soft delete, optimistic version) | ✅ B3 |
 | GET/POST/PATCH/DELETE | `/api/v1/tasks` | Task CRUD | ✅ B3 |
 | GET/POST/PATCH/DELETE | `/api/v1/cases` | Case CRUD | ✅ B3 |
@@ -112,12 +119,13 @@ Locked to **`/api/v1`**. No `/api/v2` until necessary (ADR required).
 
 ## 7. Rate Limiting
 
-Org-scoped RPM + daily API budget enforced when `X-Organization-Id` is present (B019). Responses may include `X-RateLimit-Remaining` / `X-RateLimit-Reset`. See [`MULTITENANCY.md`](./MULTITENANCY.md).
+Org-scoped RPM + daily API budget enforced when `X-Organization-Id` is present (B019). Global IP rate limit (B023) adds `X-Global-RateLimit-*`. Responses may include `X-RateLimit-Remaining` / `X-RateLimit-Reset`. See [`MULTITENANCY.md`](./MULTITENANCY.md).
 
 ## 8. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone B5 | Ops metadata/dashboard, security hardening, global rate limit |
 | 2026-08-04 | Milestone B4 | Email, audit logs/export, search, tenancy, ops probes; rate limiting |
 | 2026-08-04 | Milestone B3 | Domain CRUD, notifications, storage, jobs endpoints |
 | 2026-08-04 | v2.2.1 | Sessions + security center endpoints |

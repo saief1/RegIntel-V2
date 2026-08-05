@@ -7,7 +7,9 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/http-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { structuredLog } from './common/logging/structured-logger';
+import { securityHeadersMiddleware } from './common/security/security-headers.middleware';
 import { AppConfig } from './config/configuration';
+import { APP_VERSION, getBuildMetadata } from './config/version';
 
 function startupValidation(configService: ConfigService): void {
   const required = ['databaseUrl', 'redisUrl', 'jwt.accessSecret'] as const;
@@ -33,12 +35,30 @@ async function bootstrap() {
 
   const port = configService.getOrThrow<number>('port');
   const corsOrigins = configService.getOrThrow<string[]>('corsOrigins');
+  const build = getBuildMetadata();
 
   app.setGlobalPrefix('api/v1');
   app.use(cookieParser());
+  app.use(securityHeadersMiddleware);
   app.enableCors({
     origin: corsOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: [
+      'Authorization',
+      'Content-Type',
+      'X-Organization-Id',
+      'X-Request-Id',
+      'X-Correlation-Id',
+    ],
+    exposedHeaders: [
+      'X-Request-Id',
+      'X-Correlation-Id',
+      'X-Response-Time-Ms',
+      'X-RateLimit-Remaining',
+      'X-RateLimit-Reset',
+      'X-Global-RateLimit-Remaining',
+    ],
   });
   app.useGlobalPipes(
     new ValidationPipe({
@@ -54,9 +74,9 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('RegIntel API')
     .setDescription(
-      'RegIntel API (Milestone B4 / v2.4.0). Infrastructure & production readiness: email, immutable audit, search, multi-tenancy, ops probes. JWT Bearer; httpOnly refresh cookies; X-Organization-Id tenancy.',
+      'RegIntel API (Milestone B5 / v2.5.0 Backend GA). Production deployment, observability, security hardening, and CI/CD certification. JWT Bearer; httpOnly refresh cookies; X-Organization-Id tenancy.',
     )
-    .setVersion('2.4.0')
+    .setVersion(APP_VERSION)
     .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
@@ -68,14 +88,32 @@ async function bootstrap() {
   structuredLog('info', `RegIntel API listening on port ${port}`, {
     nodeEnv,
     swagger: '/api/docs',
-    version: '2.4.0',
+    version: APP_VERSION,
+    gitSha: build.gitSha,
+    deploymentId: build.deploymentId,
   });
 
   const shutdown = async (signal: string) => {
     structuredLog('info', 'Graceful shutdown started', { signal });
-    await app.close();
-    structuredLog('info', 'Graceful shutdown complete', { signal });
-    process.exit(0);
+    const forceTimer = setTimeout(() => {
+      structuredLog('error', 'Graceful shutdown timed out; forcing exit', {
+        signal,
+      });
+      process.exit(1);
+    }, 25_000);
+    try {
+      await app.close();
+      structuredLog('info', 'Graceful shutdown complete', { signal });
+      clearTimeout(forceTimer);
+      process.exit(0);
+    } catch (error) {
+      structuredLog('error', 'Graceful shutdown failed', {
+        signal,
+        error: error instanceof Error ? error.message : String(error),
+      });
+      clearTimeout(forceTimer);
+      process.exit(1);
+    }
   };
   process.on('SIGTERM', () => void shutdown('SIGTERM'));
   process.on('SIGINT', () => void shutdown('SIGINT'));

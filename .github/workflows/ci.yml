@@ -1,0 +1,148 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'cursor/**']
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (lint / test / build / openapi)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Prisma generate
+        run: npx prisma generate
+      - name: Lint
+        run: npm run lint
+      - name: Unit tests
+        run: npm test
+      - name: TypeScript build
+        run: npm run build
+      - name: OpenAPI verify
+        run: npm run verify:openapi
+      - name: Package artifact
+        run: |
+          mkdir -p ../artifacts
+          tar -czf ../artifacts/regintel-api-${{ github.sha }}.tgz dist prisma package.json package-lock.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-dist
+          path: artifacts/regintel-api-*.tgz
+          if-no-files-found: warn
+
+  frontend:
+    name: Frontend (lint / build)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+      - name: Build
+        run: npm run build
+
+  playwright:
+    name: Playwright
+    runs-on: ubuntu-latest
+    needs: [frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps chromium
+      - name: Build
+        run: npm run build
+      - name: E2E
+        run: npm run playwright
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    needs: [backend]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build API image
+        run: |
+          docker build \
+            --build-arg APP_VERSION=2.5.0 \
+            --build-arg GIT_SHA=${{ github.sha }} \
+            --build-arg GIT_REF=${{ github.ref }} \
+            --build-arg BUILD_TIME=$(date -u +%Y-%m-%dT%H:%M:%SZ) \
+            -t regintel-api:${{ github.sha }} \
+            ./backend
+
+  migrations:
+    name: Migration validation
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: regintel
+          POSTGRES_PASSWORD: regintel
+          POSTGRES_DB: regintel
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U regintel -d regintel"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    defaults:
+      run:
+        working-directory: backend
+    env:
+      DATABASE_URL: postgresql://regintel:regintel@localhost:5432/regintel?schema=public
+      DIRECT_URL: postgresql://regintel:regintel@localhost:5432/regintel?schema=public
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: backend/package-lock.json
+      - run: npm ci
+      - run: npx prisma migrate deploy
+      - name: Ensure migrations directory present
+        run: test -d prisma/migrations && test -n "$(ls -A prisma/migrations)"
+
+  version:
+    name: Version validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Assert package versions align
+        run: |
+          ROOT=$(node -p "require('./package.json').version")
+          API=$(node -p "require('./backend/package.json').version")
+          echo "root=$ROOT backend=$API"
+          test "$ROOT" = "$API"
+          node -e "const v=require('./package.json').version; if(!/^\d+\.\d+\.\d+$/.test(v)) process.exit(1)"

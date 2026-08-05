@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.5.0 | 2026-08-05 | Backend GA — deployment, observability, security hardening, CI/CD, certification (Milestone B5) |
 | 2.4.0 | 2026-08-04 | Infrastructure & Production Readiness — email, immutable audit, search, multi-tenancy, ops (Milestone B4) |
 | 2.3.0 | 2026-08-04 | Data Layer & Notifications — Prisma domain models, repos, storage, BullMQ, notification APIs (Milestone B3) |
 | 2.2.1 | 2026-08-04 | Identity & Sessions Completeness — sessions, trusted devices, Security Center APIs |
@@ -53,6 +54,32 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
 
+
+### v2.5.0 — Backend GA (Milestone B5)
+
+**Status:** Minor (Phase B / B021–B025)  
+**Tags:** `v2.5.0`, `BACKEND_GA_COMPLETE`  
+**Date:** 2026-08-05
+
+#### Added
+
+- Deployment platform: config checksum, secret validation, build/deployment metadata endpoints, prod Compose overlay, non-root Docker ([`DEPLOYMENT.md`](./DEPLOYMENT.md))
+- Observability extensions: correlation IDs, response timing, error aggregation, `/ops/dashboard|errors|diagnostics` ([`OPERATIONS.md`](./OPERATIONS.md))
+- Security hardening: headers, global rate limit, password policy, API key hashing, `/security/hardening` ([`SECURITY.md`](./SECURITY.md))
+- CI/CD: `.github/workflows/ci.yml`, `release.yml`, `deploy-placeholder.yml`
+- Backend GA readiness report ([`BACKEND_GA.md`](./BACKEND_GA.md))
+
+#### Changed
+
+- Health/version surfaces report `2.5.0`
+- Phase B marked complete; next is Phase C (not started)
+- Roadmap remaps B021–B025 to Backend GA (deploy/obs/security/CI/certification)
+
+#### Security
+
+- Production hard-fails on weak JWT/MFA secrets or `COOKIE_SECURE=false`
+
+---
 
 ### v2.4.0 — Infrastructure & Production Readiness (Milestone B4)
 

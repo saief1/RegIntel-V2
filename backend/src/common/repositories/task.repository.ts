@@ -55,10 +55,24 @@ export class TaskRepository extends BaseRepository implements ITaskRepository {
       ...this.notDeleted(query.includeDeleted),
       ...(query.filters?.status ? { status: query.filters.status } : {}),
       ...(query.filters?.caseId
-        ? { caseId: String(query.filters.caseId) }
+        ? {
+            caseId:
+              typeof query.filters.caseId === 'string' ||
+              typeof query.filters.caseId === 'number' ||
+              typeof query.filters.caseId === 'boolean'
+                ? String(query.filters.caseId)
+                : undefined,
+          }
         : {}),
       ...(query.filters?.assigneeId
-        ? { assigneeId: String(query.filters.assigneeId) }
+        ? {
+            assigneeId:
+              typeof query.filters.assigneeId === 'string' ||
+              typeof query.filters.assigneeId === 'number' ||
+              typeof query.filters.assigneeId === 'boolean'
+                ? String(query.filters.assigneeId)
+                : undefined,
+          }
         : {}),
     };
     const [total, data] = await Promise.all([

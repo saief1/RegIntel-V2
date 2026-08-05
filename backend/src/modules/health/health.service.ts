@@ -1,6 +1,7 @@
 import { Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaService } from '../../common/prisma/prisma.service';
+import { APP_VERSION } from '../../config/version';
 import { EmailService } from '../email/email.service';
 import { JobsService } from '../queue/jobs.service';
 
@@ -20,6 +21,7 @@ export class HealthService {
     return {
       status: 'ok' as const,
       service: 'regintel-api',
+      version: APP_VERSION,
       timestamp: new Date().toISOString(),
     };
   }
@@ -51,7 +53,7 @@ export class HealthService {
       status,
       service: 'regintel-api',
       ...checks,
-      version: '2.4.0',
+      version: APP_VERSION,
       timestamp: new Date().toISOString(),
     };
   }

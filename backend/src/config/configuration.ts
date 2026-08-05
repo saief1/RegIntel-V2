@@ -53,6 +53,7 @@ export type AppConfig = {
     defaultPlan: string;
     defaultRateLimitPerMinute: number;
   };
+  globalRateLimitPerMinute: number;
   featureFlags: {
     useRealPolicies: boolean;
     useRealTasks: boolean;
@@ -131,6 +132,9 @@ export default (): AppConfig => ({
       process.env.TENANT_RATE_LIMIT_PER_MINUTE ?? 120,
     ),
   },
+  globalRateLimitPerMinute: Number(
+    process.env.GLOBAL_RATE_LIMIT_PER_MINUTE ?? 300,
+  ),
   featureFlags: {
     useRealPolicies: flag('USE_REAL_POLICIES'),
     useRealTasks: flag('USE_REAL_TASKS'),

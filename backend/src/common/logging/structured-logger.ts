@@ -1,3 +1,5 @@
+import { shouldLog } from './log-level';
+
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 
 export function structuredLog(
@@ -5,6 +7,7 @@ export function structuredLog(
   message: string,
   fields?: Record<string, unknown>,
 ): void {
+  if (!shouldLog(level)) return;
   const line = JSON.stringify({
     level,
     message,

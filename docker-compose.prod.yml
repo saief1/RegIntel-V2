@@ -1,0 +1,29 @@
+# Production-oriented Compose overlay (B021).
+# Usage: docker compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+services:
+  api:
+    restart: always
+    environment:
+      NODE_ENV: production
+      COOKIE_SECURE: 'true'
+      ALLOW_REGISTER: 'false'
+      LOG_LEVEL: info
+      EMAIL_PROVIDER: ${EMAIL_PROVIDER:-smtp}
+      APP_VERSION: ${APP_VERSION:-2.5.0}
+      GIT_SHA: ${GIT_SHA:-unknown}
+      GIT_REF: ${GIT_REF:-unknown}
+      BUILD_TIME: ${BUILD_TIME:-unknown}
+      DEPLOYMENT_ID: ${DEPLOYMENT_ID:-compose-prod}
+      GLOBAL_RATE_LIMIT_PER_MINUTE: ${GLOBAL_RATE_LIMIT_PER_MINUTE:-300}
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://127.0.0.1:3000/api/v1/liveness').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 40s
