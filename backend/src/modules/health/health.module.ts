@@ -1,5 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { APP_INTERCEPTOR } from '@nestjs/core';
+import { AiModule } from '../ai/ai.module';
 import { EmailModule } from '../email/email.module';
 import { HealthController } from './health.controller';
 import { HealthService } from './health.service';
@@ -9,7 +10,7 @@ import { RequestMetricsInterceptor } from './request-metrics.interceptor';
 import { TimingService } from './timing.service';
 
 @Module({
-  imports: [EmailModule],
+  imports: [EmailModule, forwardRef(() => AiModule)],
   controllers: [HealthController],
   providers: [
     HealthService,

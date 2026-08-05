@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.6.0 | 2026-08-05 | AI Foundation — providers, embeddings, vectors, prompts, gateway (Milestone C1) |
 | 2.5.0 | 2026-08-05 | Backend GA — deployment, observability, security hardening, CI/CD, certification (Milestone B5) |
 | 2.4.0 | 2026-08-04 | Infrastructure & Production Readiness — email, immutable audit, search, multi-tenancy, ops (Milestone B4) |
 | 2.3.0 | 2026-08-04 | Data Layer & Notifications — Prisma domain models, repos, storage, BullMQ, notification APIs (Milestone B3) |
@@ -54,6 +55,30 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
 
+
+### v2.6.0 — AI Foundation (Milestone C1)
+
+**Status:** Minor (Phase C / C001–C005)  
+**Tags:** `v2.6.0`, `AI_FOUNDATION_COMPLETE`  
+**Date:** 2026-08-05
+
+#### Added
+
+- **C001** AI provider architecture — `AIProvider` + mock / OpenAI / Azure / Anthropic / Gemini; timeouts, retries, health, token/cost helpers; `USE_REAL_AI` (default false)
+- **C002** Embeddings platform — chunking, batch/incremental embed, rebuild metadata endpoint, repository persistence
+- **C003** Vector layer — `VectorStore` with PgVector (JSON cosine + optional extension) and Pinecone/Qdrant stubs; hybrid keyword boost; re-index
+- **C004** Prompt orchestration — templates, variables, history budgeting, versioning, audit logs
+- **C005** AI gateway — conversations, chat, retrieval context, usage/cost/provider logs, health + metrics
+- Prisma migration `20260805160000_ai_foundation_c1`
+- Docs: `AI_ARCHITECTURE.md`, `EMBEDDINGS.md`, `VECTOR_SEARCH.md`, `PROMPTS.md`, `AI_GATEWAY.md`
+- Frontend: `VITE_USE_REAL_AI` + `realAiApi` minimal CopilotProvider wiring (no UI redesign)
+
+#### Changed
+
+- Phase C roadmap ladder: v2.6 foundation → v2.7 RAG → v2.8 memory → v2.9 autonomous → v3.0
+- Root/backend `package.json` → `2.6.0`
+
+---
 
 ### v2.5.0 — Backend GA (Milestone B5)
 

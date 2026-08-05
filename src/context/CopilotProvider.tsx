@@ -1,9 +1,12 @@
 import { useCallback, useMemo, useRef, useState, type ReactNode } from 'react'
+import { featureFlags } from '../config/featureFlags'
 import { CONVERSATION_FOLDERS, DEFAULT_CONVERSATIONS } from '../data/ai/conversations'
 import { AI_MEMORY } from '../data/ai/memory'
 import { PROMPT_TEMPLATES } from '../data/ai/prompts'
 import { AI_RECOMMENDATIONS } from '../data/ai/recommendations'
+import { useAuthSession } from '../hooks/useAuthSession'
 import { useLocalStorageState } from '../hooks/useLocalStorageState'
+import { realAiApi } from '../services/apiClient'
 import type { AiRecommendation, Conversation, PromptTemplate } from '../types/ai'
 import { DEFAULT_AI_SETTINGS } from '../types/ai'
 import { answerCopilotPrompt, buildAssistantMessage } from '../utils/aiAssistant'
@@ -12,7 +15,19 @@ import { CopilotContext, type CopilotContextValue } from './CopilotContext'
 
 const STREAM_DELAY_MS = 700
 
+function mapApiRole(role: string): 'user' | 'assistant' | 'system' {
+  if (role === 'USER') return 'user'
+  if (role === 'SYSTEM') return 'system'
+  return 'assistant'
+}
+
 export function CopilotProvider({ children }: { children: ReactNode }) {
+  const auth = useAuthSession()
+  const realAiOrgId =
+    featureFlags.useRealAi && auth.accessToken
+      ? (auth.user?.organizations[0]?.id ?? null)
+      : null
+
   const [conversations, setConversations] = useLocalStorageState<Conversation[]>(
     'ri-ai-conversations',
     DEFAULT_CONVERSATIONS,
@@ -126,6 +141,63 @@ export function CopilotProvider({ children }: { children: ReactNode }) {
 
       setIsStreaming(true)
       window.clearTimeout(streamTimer.current)
+
+      if (featureFlags.useRealAi && auth.accessToken && realAiOrgId) {
+        void realAiApi
+          .chat(auth.accessToken, realAiOrgId, {
+            message: userContent,
+            conversationId: conversationId.startsWith('conv') ? undefined : conversationId,
+            title: userContent.slice(0, 64),
+          })
+          .then((result) => {
+            const assistant = {
+              id: result.message.id,
+              role: mapApiRole(result.message.role),
+              content: result.message.content,
+              createdAt: result.message.createdAt,
+              confidence: 0.82,
+            }
+            setConversations((current) =>
+              current.map((item) =>
+                item.id === conversationId
+                  ? {
+                      ...item,
+                      id: result.conversationId,
+                      updatedAt: new Date().toISOString(),
+                      messages: [
+                        ...item.messages.filter((m) => m.id !== userMessage.id),
+                        {
+                          ...userMessage,
+                          id: createId('msg'),
+                        },
+                        assistant,
+                      ],
+                    }
+                  : item,
+              ),
+            )
+            setActiveConversationId(result.conversationId)
+            setIsStreaming(false)
+          })
+          .catch(() => {
+            // Fall back to local mock if gateway unavailable.
+            const assistant = buildAssistantMessage(userContent, settings)
+            setConversations((current) =>
+              current.map((item) =>
+                item.id === conversationId
+                  ? {
+                      ...item,
+                      updatedAt: new Date().toISOString(),
+                      messages: [...item.messages, assistant],
+                    }
+                  : item,
+              ),
+            )
+            setIsStreaming(false)
+          })
+        return
+      }
+
       streamTimer.current = window.setTimeout(() => {
         const assistant = buildAssistantMessage(userContent, settings)
         const enrich = answerCopilotPrompt(userContent, settings)
@@ -166,7 +238,7 @@ export function CopilotProvider({ children }: { children: ReactNode }) {
         setIsStreaming(false)
       }, STREAM_DELAY_MS)
     },
-    [setConversations, settings],
+    [auth.accessToken, realAiOrgId, setActiveConversationId, setConversations, settings],
   )
 
   const sendMessage = useCallback(

@@ -1,5 +1,38 @@
 # Release Notes
 
+## RegIntel v2.6.0 — AI Foundation (Milestone C1)
+
+**Date:** 2026-08-05  
+**Tags:** `v2.6.0`, `AI_FOUNDATION_COMPLETE`  
+**Phase:** C (C001–C005)
+
+### Headline
+
+AI Intelligence Platform foundation: provider adapters, embeddings, vector store, prompt orchestration, and a unified gateway — wired behind feature flags with mock-default behavior. No frontend redesign.
+
+### Highlights
+
+- **C001 Providers** — Mock (no keys) + OpenAI real path; Azure/Anthropic/Gemini interfaces with clear unconfigured errors
+- **C002 Embeddings** — Chunking, batch/incremental updates, rebuild endpoint
+- **C003 Vectors** — PgVector/JSON cosine search; Pinecone/Qdrant stubs; tenant namespaces
+- **C004 Prompts** — Builtin templates, variables, versioning, audit
+- **C005 Gateway** — Chat + conversations + health/metrics + usage/cost accounting
+- Minimal FE flag `VITE_USE_REAL_AI` → `realAiApi` in CopilotProvider
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.6.0`
+- Apply Prisma migration `20260805160000_ai_foundation_c1`
+- New env (all optional; defaults safe): `USE_REAL_AI=false`, `AI_PROVIDER=mock`, `VECTOR_STORE=pgvector`, `OPENAI_API_KEY`, etc. (see `backend/.env.example`)
+- Frontend: `VITE_USE_REAL_AI=false` by default
+- **No new npm packages** — OpenAI via native `fetch`
+
+### Next
+
+**C006–C010** — Retrieval / RAG (v2.7.0). Do **not** start C006 in this release.
+
+---
+
 ## RegIntel v2.5.0 — Backend GA (Milestone B5)
 
 **Date:** 2026-08-05  

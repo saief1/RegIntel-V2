@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B5 (v2.5.0)** certifies Backend GA: deployment metadata, extended observability, security hardening, and CI/CD. B4 capabilities (email, audit, search, tenancy, ops) remain. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). See [`BACKEND_GA.md`](./BACKEND_GA.md).
+Milestone **C1 (v2.6.0)** adds the AI gateway under `/api/v1/ai/*` (providers, embeddings, vectors, prompts). Backend GA (v2.5.0) capabilities remain. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**), including `VITE_USE_REAL_AI`. See [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md).
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -106,8 +106,19 @@ Milestone **B5 (v2.5.0)** certifies Backend GA: deployment metadata, extended ob
 | GET/PATCH/POST | `/api/v1/tenancy*` | Tenant context, limits, feature flags | ✅ B4 |
 | GET | `/api/v1/jobs/stats` | Queue monitoring (waiting/active/failed + DLQ names) | ✅ B3 |
 | POST | `/api/v1/jobs/audit-cleanup` | Enqueue audit cleanup job | ✅ B3 |
+| GET | `/api/v1/ai/health` | AI provider + vector store health | ✅ C1 |
+| GET | `/api/v1/ai/metrics` | Gateway in-process metrics | ✅ C1 |
+| GET/POST | `/api/v1/ai/conversations` | List / create conversations | ✅ C1 |
+| GET/DELETE | `/api/v1/ai/conversations/:id` | Get / soft-delete conversation | ✅ C1 |
+| POST | `/api/v1/ai/chat` | Chat via AI gateway | ✅ C1 |
+| GET | `/api/v1/ai/prompts` | List prompt templates | ✅ C1 |
+| POST | `/api/v1/ai/embeddings` | Embed entity | ✅ C1 |
+| POST | `/api/v1/ai/embeddings/batch` | Batch embed | ✅ C1 |
+| POST | `/api/v1/ai/embeddings/rebuild` | Rebuild namespace metadata | ✅ C1 |
+| POST | `/api/v1/ai/vectors/search` | Similarity / hybrid search | ✅ C1 |
+| POST | `/api/v1/ai/vectors/reindex` | Re-index metadata touch | ✅ C1 |
 
-List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. See [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.md), [`MULTITENANCY.md`](./MULTITENANCY.md), [`OPERATIONS.md`](./OPERATIONS.md), [`STORAGE.md`](./STORAGE.md).
+List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. See [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md), [`AI_GATEWAY.md`](./AI_GATEWAY.md), [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.md), [`MULTITENANCY.md`](./MULTITENANCY.md), [`OPERATIONS.md`](./OPERATIONS.md), [`STORAGE.md`](./STORAGE.md).
 
 ## 5. Error Handling
 
@@ -125,6 +136,7 @@ Org-scoped RPM + daily API budget enforced when `X-Organization-Id` is present (
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone C1 | `/api/v1/ai/*` gateway, embeddings, vectors, prompts |
 | 2026-08-05 | Milestone B5 | Ops metadata/dashboard, security hardening, global rate limit |
 | 2026-08-04 | Milestone B4 | Email, audit logs/export, search, tenancy, ops probes; rate limiting |
 | 2026-08-04 | Milestone B3 | Domain CRUD, notifications, storage, jobs endpoints |

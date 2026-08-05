@@ -9,7 +9,7 @@ services:
       ALLOW_REGISTER: 'false'
       LOG_LEVEL: info
       EMAIL_PROVIDER: ${EMAIL_PROVIDER:-smtp}
-      APP_VERSION: ${APP_VERSION:-2.5.0}
+      APP_VERSION: ${APP_VERSION:-2.6.0}
       GIT_SHA: ${GIT_SHA:-unknown}
       GIT_REF: ${GIT_REF:-unknown}
       BUILD_TIME: ${BUILD_TIME:-unknown}

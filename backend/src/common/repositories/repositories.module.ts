@@ -1,4 +1,5 @@
 import { Global, Module } from '@nestjs/common';
+import { AiRepository } from './ai.repository';
 import { AuditEntryRepository } from './audit-entry.repository';
 import { AuditLogRepository } from './audit-log.repository';
 import { CaseRepository } from './case.repository';
@@ -14,6 +15,7 @@ import { StorageObjectRepository } from './storage-object.repository';
 import { TaskRepository } from './task.repository';
 import { TenantRepository } from './tenant.repository';
 import {
+  AI_REPOSITORY,
   AUDIT_ENTRY_REPOSITORY,
   AUDIT_LOG_REPOSITORY,
   CASE_REPOSITORY,
@@ -53,6 +55,7 @@ import { WorkflowRepository } from './workflow.repository';
     { provide: SECURITY_EVENT_REPOSITORY, useClass: SecurityEventRepository },
     { provide: WORKFLOW_REPOSITORY, useClass: WorkflowRepository },
     { provide: STORAGE_OBJECT_REPOSITORY, useClass: StorageObjectRepository },
+    { provide: AI_REPOSITORY, useClass: AiRepository },
     UserRepository,
     OrganizationRepository,
     PolicyRepository,
@@ -69,6 +72,7 @@ import { WorkflowRepository } from './workflow.repository';
     SecurityEventRepository,
     WorkflowRepository,
     StorageObjectRepository,
+    AiRepository,
   ],
   exports: [
     USER_REPOSITORY,
@@ -87,6 +91,7 @@ import { WorkflowRepository } from './workflow.repository';
     SECURITY_EVENT_REPOSITORY,
     WORKFLOW_REPOSITORY,
     STORAGE_OBJECT_REPOSITORY,
+    AI_REPOSITORY,
     UserRepository,
     OrganizationRepository,
     PolicyRepository,
@@ -103,6 +108,7 @@ import { WorkflowRepository } from './workflow.repository';
     SecurityEventRepository,
     WorkflowRepository,
     StorageObjectRepository,
+    AiRepository,
   ],
 })
 export class RepositoriesModule {}

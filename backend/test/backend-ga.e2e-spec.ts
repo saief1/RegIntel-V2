@@ -50,7 +50,7 @@ describeIfDb('Backend GA B5 (e2e)', () => {
       '/api/v1/ops/version',
     );
     expect(version.status).toBe(200);
-    expect(version.body.data.version).toBe('2.5.0');
+    expect(version.body.data.version).toBe('2.6.0');
 
     const deployment = await request(app.getHttpServer()).get(
       '/api/v1/ops/deployment',
@@ -65,7 +65,7 @@ describeIfDb('Backend GA B5 (e2e)', () => {
       '/api/v1/ops/dashboard',
     );
     expect(dash.status).toBe(200);
-    expect(dash.body.data.version).toBe('2.5.0');
+    expect(dash.body.data.version).toBe('2.6.0');
     expect(dash.body.data.errors).toBeDefined();
 
     const errors = await request(app.getHttpServer()).get('/api/v1/ops/errors');

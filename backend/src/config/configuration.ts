@@ -49,6 +49,21 @@ export type AppConfig = {
   search: {
     provider: string;
   };
+  ai: {
+    provider: string;
+    vectorStore: string;
+    timeoutMs: number;
+    maxRetries: number;
+    historyTokenBudget: number;
+    chatModel: string;
+    embeddingModel: string;
+    openaiApiKey: string;
+    openaiBaseUrl: string;
+    azureOpenAiApiKey: string;
+    azureOpenAiEndpoint: string;
+    anthropicApiKey: string;
+    geminiApiKey: string;
+  };
   tenant: {
     defaultPlan: string;
     defaultRateLimitPerMinute: number;
@@ -65,6 +80,7 @@ export type AppConfig = {
     useRealEmail: boolean;
     useRealAudit: boolean;
     useRealSearch: boolean;
+    useRealAi: boolean;
   };
 };
 
@@ -126,6 +142,21 @@ export default (): AppConfig => ({
   search: {
     provider: process.env.SEARCH_PROVIDER ?? 'postgres',
   },
+  ai: {
+    provider: process.env.AI_PROVIDER ?? 'mock',
+    vectorStore: process.env.VECTOR_STORE ?? 'pgvector',
+    timeoutMs: Number(process.env.AI_TIMEOUT_MS ?? 30000),
+    maxRetries: Number(process.env.AI_MAX_RETRIES ?? 2),
+    historyTokenBudget: Number(process.env.AI_HISTORY_TOKEN_BUDGET ?? 2500),
+    chatModel: process.env.AI_CHAT_MODEL ?? 'gpt-4o-mini',
+    embeddingModel: process.env.AI_EMBEDDING_MODEL ?? 'text-embedding-3-small',
+    openaiApiKey: process.env.OPENAI_API_KEY ?? '',
+    openaiBaseUrl: process.env.OPENAI_BASE_URL ?? 'https://api.openai.com/v1',
+    azureOpenAiApiKey: process.env.AZURE_OPENAI_API_KEY ?? '',
+    azureOpenAiEndpoint: process.env.AZURE_OPENAI_ENDPOINT ?? '',
+    anthropicApiKey: process.env.ANTHROPIC_API_KEY ?? '',
+    geminiApiKey: process.env.GOOGLE_GEMINI_API_KEY ?? '',
+  },
   tenant: {
     defaultPlan: process.env.TENANT_DEFAULT_PLAN ?? 'STARTER',
     defaultRateLimitPerMinute: Number(
@@ -146,5 +177,6 @@ export default (): AppConfig => ({
     useRealEmail: flag('USE_REAL_EMAIL'),
     useRealAudit: flag('USE_REAL_AUDIT'),
     useRealSearch: flag('USE_REAL_SEARCH'),
+    useRealAi: flag('USE_REAL_AI'),
   },
 });

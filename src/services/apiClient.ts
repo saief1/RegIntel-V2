@@ -331,6 +331,100 @@ export const realSearchApi = {
   },
 }
 
+/** Real AI gateway APIs — gated by VITE_USE_REAL_AI. */
+export type RealAiMessage = {
+  id: string
+  role: 'SYSTEM' | 'USER' | 'ASSISTANT' | 'TOOL'
+  content: string
+  createdAt: string
+  model?: string | null
+  confidence?: number
+}
+
+export type RealAiConversation = {
+  id: string
+  title: string
+  mode: string
+  isPinned: boolean
+  isFavorite: boolean
+  isSaved: boolean
+  createdAt: string
+  updatedAt: string
+  messages?: RealAiMessage[]
+}
+
+export type RealAiChatResult = {
+  conversationId: string
+  message: RealAiMessage
+  provider: string
+  model: string
+  usage: {
+    promptTokens: number
+    completionTokens: number
+    totalTokens: number
+  }
+  costUsd: number
+  latencyMs: number
+}
+
+export const realAiApi = {
+  listConversations(accessToken: string, organizationId: string) {
+    return apiRequest<RealAiConversation[]>('/ai/conversations', {
+      accessToken,
+      organizationId,
+    })
+  },
+  getConversation(accessToken: string, organizationId: string, id: string) {
+    return apiRequest<RealAiConversation & { messages: RealAiMessage[] }>(
+      `/ai/conversations/${id}`,
+      { accessToken, organizationId },
+    )
+  },
+  createConversation(
+    accessToken: string,
+    organizationId: string,
+    body?: { title?: string; mode?: string },
+  ) {
+    return apiRequest<RealAiConversation>('/ai/conversations', {
+      method: 'POST',
+      accessToken,
+      organizationId,
+      body: body ?? {},
+    })
+  },
+  deleteConversation(accessToken: string, organizationId: string, id: string) {
+    return apiRequest<{ deleted: boolean }>(`/ai/conversations/${id}`, {
+      method: 'DELETE',
+      accessToken,
+      organizationId,
+    })
+  },
+  chat(
+    accessToken: string,
+    organizationId: string,
+    body: {
+      message: string
+      conversationId?: string
+      mode?: string
+      title?: string
+      context?: Record<string, string>
+    },
+  ) {
+    return apiRequest<RealAiChatResult>('/ai/chat', {
+      method: 'POST',
+      accessToken,
+      organizationId,
+      body,
+    })
+  },
+  health(accessToken: string, organizationId: string) {
+    return apiRequest<{
+      status: string
+      provider: { provider: string; status: string }
+    }>('/ai/health', { accessToken, organizationId })
+  },
+}
+
 /** Real notification APIs — gated by VITE_USE_REAL_NOTIFICATIONS. */
 export const realNotificationsApi = {
   list(accessToken: string, organizationId: string) {

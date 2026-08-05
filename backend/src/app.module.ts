@@ -8,6 +8,7 @@ import { GlobalRateLimitMiddleware } from './common/security/global-rate-limit.m
 import { ConfigPlatformModule } from './config/config-platform.module';
 import configuration from './config/configuration';
 import { validateEnv } from './config/env.validation';
+import { AiModule } from './modules/ai/ai.module';
 import { AuditEntriesModule } from './modules/audit-entries/audit-entries.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CasesModule } from './modules/cases/cases.module';
@@ -48,6 +49,7 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
     QueueModule,
     HealthModule,
     EmailModule,
+    AiModule,
     SearchModule,
     TenancyModule,
     AuthModule,

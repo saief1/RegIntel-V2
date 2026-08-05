@@ -2,7 +2,7 @@
  * Deployment / build metadata for B021.
  * Overridable via env at container build or runtime.
  */
-export const APP_VERSION = process.env.APP_VERSION ?? '2.5.0';
+export const APP_VERSION = process.env.APP_VERSION ?? '2.6.0';
 export const APP_NAME = 'regintel-api';
 export const API_CONTRACT_VERSION = 'v1';
 

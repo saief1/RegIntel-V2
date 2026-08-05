@@ -24,6 +24,7 @@ export const featureFlags = {
   useRealEmail: readFlag('VITE_USE_REAL_EMAIL'),
   useRealAudit: readFlag('VITE_USE_REAL_AUDIT'),
   useRealSearch: readFlag('VITE_USE_REAL_SEARCH'),
+  useRealAi: readFlag('VITE_USE_REAL_AI'),
   apiBaseUrl:
     (import.meta.env.VITE_API_BASE_URL as string | undefined) ??
     'http://localhost:3000/api/v1',

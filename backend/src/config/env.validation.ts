@@ -120,6 +120,50 @@ class EnvironmentVariables {
   @IsOptional()
   USE_REAL_SEARCH?: string;
 
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_AI?: string;
+
+  @IsString()
+  @IsOptional()
+  AI_PROVIDER?: string;
+
+  @IsString()
+  @IsOptional()
+  VECTOR_STORE?: string;
+
+  @IsString()
+  @IsOptional()
+  OPENAI_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  OPENAI_BASE_URL?: string;
+
+  @IsString()
+  @IsOptional()
+  AZURE_OPENAI_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  AZURE_OPENAI_ENDPOINT?: string;
+
+  @IsString()
+  @IsOptional()
+  ANTHROPIC_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  GOOGLE_GEMINI_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  AI_TIMEOUT_MS?: string;
+
+  @IsString()
+  @IsOptional()
+  AI_MAX_RETRIES?: string;
+
   @IsString()
   @IsNotEmpty()
   JWT_ACCESS_SECRET!: string;

@@ -74,7 +74,7 @@ async function bootstrap() {
   const swaggerConfig = new DocumentBuilder()
     .setTitle('RegIntel API')
     .setDescription(
-      'RegIntel API (Milestone B5 / v2.5.0 Backend GA). Production deployment, observability, security hardening, and CI/CD certification. JWT Bearer; httpOnly refresh cookies; X-Organization-Id tenancy.',
+      'RegIntel API (Milestone C1 / v2.6.0 AI Foundation). AI gateway, providers, embeddings, and vector search behind USE_REAL_AI. JWT Bearer; httpOnly refresh cookies; X-Organization-Id tenancy.',
     )
     .setVersion(APP_VERSION)
     .addBearerAuth()

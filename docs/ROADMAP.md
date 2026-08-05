@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **Phase C** (AI Intelligence Layer) — not started in B5.  
+**Current step:** **Phase C** next band **C006–C010** (RAG / retrieval).  
+Milestone **C1** (C001–C005) complete — **v2.6.0** / `AI_FOUNDATION_COMPLETE` (AI Foundation).  
 Milestone **B5** (B021–B025) complete — **v2.5.0** / `BACKEND_GA_COMPLETE` (Backend GA).  
 Milestone **B4** (B016–B020) complete — **v2.4.0** / `MILESTONE_B4_COMPLETE` (Infrastructure & Production Readiness).  
 Milestone **B3** (B011–B015) complete — **v2.3.0** / `MILESTONE_B3_COMPLETE` (Data Layer & Notifications).  
@@ -39,7 +40,7 @@ Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.
 **v2.2.1** / `B2_SESSIONS_COMPLETE` — session management, trusted devices, Security Center APIs (gap-fill; does not retag v2.2.0).  
 Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract ✅.
 
-**UI policy for Phase B:** UI is **frozen** except where backend integration requires minimal wiring (feature flags, API client, auth session). No redesigns, no new business modules.
+**UI policy for Phase C:** UI remains **frozen** except minimal AI Workspace wiring behind `VITE_USE_REAL_AI` (default false). No redesigns, no new pages/nav.
 
 ## 2. Product Board
 
@@ -48,7 +49,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
 | Phase B – Backend Platform | ✅ Complete | 100% (B000–B025 ✅ + v2.2.1; Backend GA v2.5.0) |
-| Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
+| Phase C – AI Intelligence Layer | 🔄 In Progress | 25% (C001–C005 ✅ → v2.6.0) |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
 | Phase F – Pilot Customers | ⏳ Planned | 0% |
@@ -67,9 +68,11 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 | **v2.3.0** | Data Layer & Notifications (B011–B015) ✅ |
 | **v2.4.0** | Infrastructure & Production Readiness (B016–B020) ✅ |
 | **v2.5.0** | Backend GA (B021–B025, Phase B exit) ✅ |
-| **v2.7.0** | AI Intelligence Beta (Phase C) |
-| **v2.9.0** | Wealth Management Beta (Phase D) |
-| **v3.0.0** | Commercial GA (after Phases E–F) |
+| **v2.6.0** | AI Foundation (C001–C005) ✅ |
+| **v2.7.0** | AI Retrieval / RAG (C006–C010) |
+| **v2.8.0** | AI Memory (C011–C015 agents band starts; memory track) |
+| **v2.9.0** | AI Autonomous + Wealth Management Beta (C016–C020 / Phase D) |
+| **v3.0.0** | Commercial GA / Phase D+ (after Phases E–F) |
 
 Do **not** tag `v2.1.0` until B001–B005 implementation is done. This planning PR does not bump the app version.
 
@@ -86,8 +89,12 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B011–B015 Data Layer & Notifications → v2.3.0 ✅ (Postgres repos, domain APIs, storage, BullMQ, notifications)
     → B016–B020 Infrastructure & Production Readiness → v2.4.0 ✅ (email, audit, search, multi-tenancy, ops)
     → B021–B025 Backend GA → v2.5.0 ✅ (deploy, observability, security, CI/CD, certification)
-→ Phase C AI Intelligence Layer (C001–C020) → v2.7.0
-→ Phase D Wealth Management Production (D001–D020) → v2.9.0
+→ Phase C AI Intelligence Layer (C001–C020)
+    → C001–C005 AI Foundation → v2.6.0 ✅
+    → C006–C010 Retrieval / RAG → v2.7.0
+    → C011–C015 Agents / memory track → v2.8.0
+    → C016–C020 Audit & safety / autonomous → v2.9.0
+→ Phase D Wealth Management Production (D001–D020) → v3.0 band
 → Phase E Enterprise Integrations (E001–E015)
 → Phase F Pilot Customers (F001–F015)
 → RegIntel v3.0 Commercial Launch
@@ -195,14 +202,16 @@ FE mocks behind `USE_REAL_*=false` may remain — backend services are real.
 
 ## 7. Phase C — AI Intelligence Layer (C001–C020)
 
-**Objective:** Replace demo AI surfaces with orchestrated, auditable intelligence. **Version target:** v2.7.0.
+**Objective:** Replace demo AI surfaces with orchestrated, auditable intelligence.
 
-| IDs | Theme | Outline |
-|---|---|---|
-| **C001–C005** | Model orchestration | Provider adapters, prompt governance, eval harness, cost/latency budgets |
-| **C006–C010** | Retrieval | Tenant knowledge indexing, RAG pipelines, citation UX wired to real sources |
-| **C011–C015** | Agents | Agent runtime, tool permissions, human-in-the-loop controls |
-| **C016–C020** | Audit & safety | AI action audit trail, redaction, policy guardrails, incident playbooks |
+| IDs | Theme | Version | Status |
+|---|---|---|---|
+| **C001–C005** | AI Foundation — providers, embeddings, vectors, prompts, gateway | **v2.6.0** | ✅ |
+| **C006–C010** | Retrieval / RAG — tenant indexing, citations to real sources | **v2.7.0** | ⏳ Next |
+| **C011–C015** | Agents + memory track — runtime, tools, HITL | **v2.8.0** | ⏳ |
+| **C016–C020** | Audit & safety / autonomous — redaction, guardrails, playbooks | **v2.9.0** | ⏳ |
+
+Then Phase D (Wealth) toward **v3.0**. Do **not** start C006 in the v2.6.0 release.
 
 ## 8. Phase D — Wealth Management Production (D001–D020)
 
@@ -252,6 +261,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone C1 | C001–C005 AI Foundation → v2.6.0; Phase C ladder v2.6→v2.7 RAG→v2.8 memory→v2.9 autonomous→v3.0 |
 | 2026-08-05 | Milestone B5 | B021–B025 Backend GA → v2.5.0 (deploy, observability, security, CI/CD, certification) |
 | 2026-08-04 | Milestone B4 | B016–B020 Infrastructure & Production Readiness → v2.4.0 (email, audit, search, multi-tenancy, ops) |
 | 2026-08-04 | Milestone B3 | B011–B015 Data Layer & Notifications → v2.3.0; B016–B020 remapped to email/audit/org/workflows/tenancy |
