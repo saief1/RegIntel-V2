@@ -1,5 +1,35 @@
 # Release Notes
 
+## RegIntel v2.4.0 — Infrastructure & Production Readiness (Milestone B4)
+
+**Date:** 2026-08-04  
+**Tags:** `v2.4.0`, `MILESTONE_B4_COMPLETE`  
+**Phase:** B (B016–B020)
+
+### Headline
+
+Enterprise email, immutable audit engine, search indexing, multi-tenant quotas/rate limits, and production ops probes — without redesigning the UI. Feature flags default off (`USE_REAL_EMAIL`, `USE_REAL_AUDIT`, `USE_REAL_SEARCH` + `VITE_` counterparts).
+
+### Highlights
+
+- **B016 Email** — Console/SMTP/Resend/SendGrid/SES providers, 10 system templates, BullMQ delivery + logging ([`EMAIL.md`](./EMAIL.md))
+- **B017 Audit** — Immutable `audit_logs` hash chain, export/retention, Audit Center platform log panel when flagged ([`AUDIT.md`](./AUDIT.md))
+- **B018 Search** — `search_documents` indexer, rebuild/incremental queue, Search API with highlighting ([`SEARCH.md`](./SEARCH.md))
+- **B019 Multi-tenancy** — Tenant limits/usage, rate limiting, seat/storage/API quotas ([`MULTITENANCY.md`](./MULTITENANCY.md))
+- **B020 Ops** — `/health`, `/readiness`, `/liveness`, `/metrics`, env diagnostics, graceful shutdown ([`OPERATIONS.md`](./OPERATIONS.md))
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.4.0`
+- Apply: `cd backend && npx prisma migrate deploy && npx prisma db seed`
+- New optional env: `EMAIL_PROVIDER`, `AUDIT_RETENTION_DAYS`, `SEARCH_PROVIDER`, `TENANT_*`, `USE_REAL_EMAIL|AUDIT|SEARCH`
+
+### Next
+
+**B021+** — Backend Platform Beta hardening. Do **not** start B021 in this release.
+
+---
+
 ## RegIntel v2.3.0 — Data Layer & Notifications (Milestone B3)
 
 **Date:** 2026-08-04  
@@ -28,7 +58,7 @@ Production PostgreSQL data plane for core domains, repository-backed Nest APIs, 
 
 ### Next
 
-**B016+** — Email delivery (real SMTP), then immutable audit, org structure, workflow hardening, multi-tenancy (→ v2.4.0). Do **not** start B016 in this release.
+Completed by **v2.4.0** (B016–B020).
 
 ---
 

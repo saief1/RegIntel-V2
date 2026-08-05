@@ -20,7 +20,7 @@ describe('NotificationsService', () => {
   };
 
   const service = new NotificationsService(
-    repo as never,
+    repo,
     auditService as never,
     jobsService as never,
   );

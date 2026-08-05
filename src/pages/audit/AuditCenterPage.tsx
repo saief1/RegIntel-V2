@@ -1,10 +1,13 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { ClipboardList } from 'lucide-react'
 import g from '../../components/governance/governance.module.css'
 import { Badge } from '../../components/ui/Badge/Badge'
 import { PageContainer } from '../../components/ui/PageContainer/PageContainer'
 import { PageHeader } from '../../components/ui/PageHeader/PageHeader'
+import { featureFlags } from '../../config/featureFlags'
+import { useAuthSession } from '../../hooks/useAuthSession'
 import { useOperations } from '../../hooks/useOperations'
+import { realAuditApi, type RealAuditLog } from '../../services/apiClient'
 import type { AuditLifecycleStage } from '../../types/operations'
 import { formatRelativeTime } from '../../utils/date'
 import { OperationsHubNav } from '../operations/OperationsHubNav'
@@ -14,8 +17,11 @@ const STAGES: AuditLifecycleStage[] = ['planning', 'fieldwork', 'reporting', 're
 
 export function AuditCenterPage() {
   const { audits, findings, evidenceRequests, auditUniverse } = useOperations()
+  const auth = useAuthSession()
   const [selectedId, setSelectedId] = useState(audits[0]?.id ?? '')
   const selected = audits.find((item) => item.id === selectedId) ?? audits[0]
+  const [platformLogs, setPlatformLogs] = useState<RealAuditLog[]>([])
+  const [platformLogError, setPlatformLogError] = useState<string | null>(null)
 
   const selectedFindings = useMemo(
     () => findings.filter((item) => item.auditId === selected?.id),
@@ -25,6 +31,33 @@ export function AuditCenterPage() {
     () => evidenceRequests.filter((item) => item.auditId === selected?.id),
     [evidenceRequests, selected?.id],
   )
+
+  useEffect(() => {
+    if (!featureFlags.useRealAudit || !auth.accessToken) {
+      return
+    }
+    const orgId = auth.user?.organizations[0]?.id
+    if (!orgId) {
+      return
+    }
+    let cancelled = false
+    void realAuditApi
+      .list(auth.accessToken, orgId, 1, 15)
+      .then((rows) => {
+        if (!cancelled) {
+          setPlatformLogs(rows)
+          setPlatformLogError(null)
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          setPlatformLogError(error instanceof Error ? error.message : 'Failed to load audit logs')
+        }
+      })
+    return () => {
+      cancelled = true
+    }
+  }, [auth.accessToken, auth.user?.organizations])
 
   return (
     <PageContainer className={styles.page}>
@@ -98,6 +131,39 @@ export function AuditCenterPage() {
           </section>
         </aside>
       </div>
+
+      {featureFlags.useRealAudit && (
+        <section className={g.panel} aria-label="Platform audit log">
+          <h2>Platform audit log</h2>
+          <p className={g.muted}>
+            Immutable application audit trail from the API (VITE_USE_REAL_AUDIT). Engagement planning above remains
+            mock until a dedicated engagements API ships.
+          </p>
+          {platformLogError ? (
+            <p className={g.muted}>{platformLogError}</p>
+          ) : platformLogs.length === 0 ? (
+            <p className={g.muted}>No audit log entries yet.</p>
+          ) : (
+            <ul className={g.list}>
+              {platformLogs.map((entry) => (
+                <li key={entry.id} className={g.listItem}>
+                  <span>
+                    <strong>{entry.action}</strong>
+                    <br />
+                    <span className={g.muted}>
+                      {entry.resource}
+                      {entry.category ? ` · ${entry.category}` : ''}
+                      {' · '}
+                      {formatRelativeTime(entry.createdAt)}
+                    </span>
+                  </span>
+                  <Badge variant="neutral">{entry.requestId ? 'traced' : 'logged'}</Badge>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      )}
 
       {selected && (
         <div className={styles.split}>

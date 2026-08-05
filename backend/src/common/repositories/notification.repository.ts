@@ -26,28 +26,61 @@ export type CreateNotificationInput = {
 };
 
 export interface INotificationRepository {
-  listForUser(query: ListQuery & { userId: string; unreadOnly?: boolean; includeArchived?: boolean }): Promise<PageResult<Notification>>;
-  findById(organizationId: string, userId: string, id: string): Promise<Notification | null>;
+  listForUser(
+    query: ListQuery & {
+      userId: string;
+      unreadOnly?: boolean;
+      includeArchived?: boolean;
+    },
+  ): Promise<PageResult<Notification>>;
+  findById(
+    organizationId: string,
+    userId: string,
+    id: string,
+  ): Promise<Notification | null>;
   create(input: CreateNotificationInput): Promise<Notification>;
-  markRead(organizationId: string, userId: string, ids: string[]): Promise<number>;
+  markRead(
+    organizationId: string,
+    userId: string,
+    ids: string[],
+  ): Promise<number>;
   markAllRead(organizationId: string, userId: string): Promise<number>;
-  archive(organizationId: string, userId: string, ids: string[]): Promise<number>;
-  getPreferences(organizationId: string, userId: string): Promise<NotificationPreference | null>;
+  archive(
+    organizationId: string,
+    userId: string,
+    ids: string[],
+  ): Promise<number>;
+  getPreferences(
+    organizationId: string,
+    userId: string,
+  ): Promise<NotificationPreference | null>;
   upsertPreferences(
     organizationId: string,
     userId: string,
-    data: Partial<Omit<NotificationPreference, 'id' | 'organizationId' | 'userId' | 'createdAt' | 'updatedAt'>>,
+    data: Partial<
+      Omit<
+        NotificationPreference,
+        'id' | 'organizationId' | 'userId' | 'createdAt' | 'updatedAt'
+      >
+    >,
   ): Promise<NotificationPreference>;
 }
 
 @Injectable()
-export class NotificationRepository extends BaseRepository implements INotificationRepository {
+export class NotificationRepository
+  extends BaseRepository
+  implements INotificationRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
 
   async listForUser(
-    query: ListQuery & { userId: string; unreadOnly?: boolean; includeArchived?: boolean },
+    query: ListQuery & {
+      userId: string;
+      unreadOnly?: boolean;
+      includeArchived?: boolean;
+    },
   ): Promise<PageResult<Notification>> {
     const { page, pageSize, skip, sortBy, sortOrder } = this.pageParams(query);
     const where: Prisma.NotificationWhereInput = {
@@ -56,9 +89,7 @@ export class NotificationRepository extends BaseRepository implements INotificat
       deletedAt: null,
       ...(query.includeArchived ? {} : { archivedAt: null }),
       ...(query.unreadOnly ? { readAt: null } : {}),
-      ...(query.filters?.kind
-        ? { kind: query.filters.kind as NotificationKind }
-        : {}),
+      ...(query.filters?.kind ? { kind: query.filters.kind } : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.notification.count({ where }),

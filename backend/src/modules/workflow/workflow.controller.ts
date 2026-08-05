@@ -62,7 +62,10 @@ export class WorkflowController {
   }
 
   @Delete(':id')
-  @ApiOperation({ operationId: 'workflowDelete', summary: 'Soft-delete Workflow' })
+  @ApiOperation({
+    operationId: 'workflowDelete',
+    summary: 'Soft-delete Workflow',
+  })
   remove(@Req() req: Request, @Param('id', ParseUUIDPipe) id: string) {
     return this.service.remove(req.organizationId!, req.user!.userId, id);
   }

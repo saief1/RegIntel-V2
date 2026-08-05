@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  ICaseRepository,
-} from '../../common/repositories/case.repository';
+import { ICaseRepository } from '../../common/repositories/case.repository';
 import { CASE_REPOSITORY } from '../../common/repositories/tokens';
 import { CreateCasesDto } from './dto/create.dto';
 import { ListCasesQueryDto } from './dto/list-query.dto';
@@ -31,8 +29,6 @@ export class CasesService {
       cursor: query.cursor,
       filters: {
         status: query.status,
-        
-        
       },
     });
   }
@@ -51,7 +47,12 @@ export class CasesService {
   async create(organizationId: string, userId: string, dto: CreateCasesDto) {
     const row = await this.repo.create({
       organizationId,
-      title: dto.title, summary: dto.summary, status: dto.status as never, priority: dto.priority, ownerId: dto.ownerId, tags: dto.tags,
+      title: dto.title,
+      summary: dto.summary,
+      status: dto.status as never,
+      priority: dto.priority,
+      ownerId: dto.ownerId,
+      tags: dto.tags,
     });
     await this.auditService.record({
       action: 'case.create',
@@ -70,7 +71,13 @@ export class CasesService {
     dto: UpdateCasesDto,
   ) {
     const row = await this.repo.update(organizationId, id, {
-      title: dto.title, summary: dto.summary, status: dto.status as never, priority: dto.priority, ownerId: dto.ownerId, tags: dto.tags, expectedVersion: dto.expectedVersion,
+      title: dto.title,
+      summary: dto.summary,
+      status: dto.status as never,
+      priority: dto.priority,
+      ownerId: dto.ownerId,
+      tags: dto.tags,
+      expectedVersion: dto.expectedVersion,
     });
     if (!row) {
       throw new ConflictException({

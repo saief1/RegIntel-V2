@@ -25,12 +25,19 @@ export interface IWorkflowRepository {
   list(query: ListQuery): Promise<PageResult<Workflow>>;
   findById(organizationId: string, id: string): Promise<Workflow | null>;
   create(input: CreateWorkflowInput): Promise<Workflow>;
-  update(organizationId: string, id: string, input: UpdateWorkflowInput): Promise<Workflow | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdateWorkflowInput,
+  ): Promise<Workflow | null>;
   softDelete(organizationId: string, id: string): Promise<Workflow | null>;
 }
 
 @Injectable()
-export class WorkflowRepository extends BaseRepository implements IWorkflowRepository {
+export class WorkflowRepository
+  extends BaseRepository
+  implements IWorkflowRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
@@ -40,9 +47,7 @@ export class WorkflowRepository extends BaseRepository implements IWorkflowRepos
     const where: Prisma.WorkflowWhereInput = {
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
-      ...(query.filters?.status
-        ? { status: query.filters.status as WorkflowStatus }
-        : {}),
+      ...(query.filters?.status ? { status: query.filters.status } : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.workflow.count({ where }),
@@ -69,7 +74,10 @@ export class WorkflowRepository extends BaseRepository implements IWorkflowRepos
   async update(organizationId: string, id: string, input: UpdateWorkflowInput) {
     const existing = await this.findById(organizationId, id);
     if (!existing) return null;
-    if (input.expectedVersion !== undefined && existing.version !== input.expectedVersion) {
+    if (
+      input.expectedVersion !== undefined &&
+      existing.version !== input.expectedVersion
+    ) {
       return null;
     }
     const { expectedVersion: _ev, ...fields } = input;

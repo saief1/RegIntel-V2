@@ -36,6 +36,50 @@ class EnvironmentVariables {
   @IsOptional()
   STORAGE_LOCAL_ROOT?: string;
 
+  @IsString()
+  @IsOptional()
+  EMAIL_PROVIDER?: string;
+
+  @IsString()
+  @IsOptional()
+  EMAIL_FROM_ADDRESS?: string;
+
+  @IsString()
+  @IsOptional()
+  SMTP_HOST?: string;
+
+  @IsString()
+  @IsOptional()
+  SMTP_PORT?: string;
+
+  @IsString()
+  @IsOptional()
+  RESEND_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  SENDGRID_API_KEY?: string;
+
+  @IsString()
+  @IsOptional()
+  AWS_SES_REGION?: string;
+
+  @IsString()
+  @IsOptional()
+  AUDIT_RETENTION_DAYS?: string;
+
+  @IsString()
+  @IsOptional()
+  SEARCH_PROVIDER?: string;
+
+  @IsString()
+  @IsOptional()
+  TENANT_DEFAULT_PLAN?: string;
+
+  @IsString()
+  @IsOptional()
+  TENANT_RATE_LIMIT_PER_MINUTE?: string;
+
   @IsBooleanString()
   @IsOptional()
   USE_REAL_POLICIES?: string;
@@ -63,6 +107,18 @@ class EnvironmentVariables {
   @IsBooleanString()
   @IsOptional()
   USE_REAL_STORAGE?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_EMAIL?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_AUDIT?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_REAL_SEARCH?: string;
 
   @IsString()
   @IsNotEmpty()

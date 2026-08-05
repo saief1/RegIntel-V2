@@ -62,7 +62,10 @@ export class PoliciesController {
   }
 
   @Delete(':id')
-  @ApiOperation({ operationId: 'policiesDelete', summary: 'Soft-delete Policy' })
+  @ApiOperation({
+    operationId: 'policiesDelete',
+    summary: 'Soft-delete Policy',
+  })
   remove(@Req() req: Request, @Param('id', ParseUUIDPipe) id: string) {
     return this.service.remove(req.organizationId!, req.user!.userId, id);
   }

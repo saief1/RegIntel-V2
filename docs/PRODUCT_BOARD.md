@@ -6,7 +6,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~60% (B000–B015 ✅ + v2.2.1; next B016+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~80% (B000–B020 ✅ + v2.2.1; next B021+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -15,8 +15,9 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 
 ## Current step
 
-**B016+** — Email delivery & platform deepening (immutable audit, org structure, workflow hardening, multi-tenancy).
+**B021+** — Backend Platform Beta hardening (remaining FE cutovers, org/workspace deepening, workflow hardening, SLOs).
 
+Milestone B4 complete: **v2.4.0** / `MILESTONE_B4_COMPLETE` (B016–B020 Infrastructure & Production Readiness).  
 Milestone B3 complete: **v2.3.0** / `MILESTONE_B3_COMPLETE` (B011–B015 Data Layer & Notifications).  
 Milestone B2 complete: **v2.2.0** / `B2_COMPLETE` (B006–B010).  
 Sessions gap-fill: **v2.2.1** / `B2_SESSIONS_COMPLETE`.  
@@ -34,7 +35,7 @@ UI frozen except integration wiring. Domain FE providers remain mock-default (`V
 | v2.2.0 | Identity & Access (B006–B010) ✅ |
 | v2.2.1 | Identity & Sessions Completeness ✅ |
 | v2.3.0 | Data Layer & Notifications (B011–B015) ✅ |
-| v2.4.0 | Platform Deepening (B016–B020) |
+| v2.4.0 | Infrastructure & Production Readiness (B016–B020) ✅ |
 | v2.5.0 | Backend Platform Beta |
 | v2.7.0 | AI Intelligence Beta |
 | v2.9.0 | Wealth Management Beta |
@@ -51,7 +52,7 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B006–B010 Identity & access → v2.2.0 ✅
     → v2.2.1 Sessions / Security Center gap-fill ✅
     → B011–B015 Data Layer & Notifications → v2.3.0 ✅
-    → B016–B020 Platform Deepening → v2.4.0 (email, audit, org structure, workflows, tenancy)
+    → B016–B020 Infrastructure & Production Readiness → v2.4.0 ✅
     → B021–B025 Backend Beta hardening → v2.5.0
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
 → Phase D Wealth Management Production (D001–D020) → v2.9.0
@@ -69,5 +70,5 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 | Identity & access | B006–B010 | MFA, RBAC, Permissions, SSO, SCIM | ✅ v2.2.0 |
 | Sessions gap-fill | v2.2.1 | Sessions, trusted devices, Security Center APIs | ✅ |
 | Data Layer & Notifications | B011–B015 | Postgres/repos, domain APIs, storage, BullMQ, notifications | ✅ v2.3.0 |
-| Platform Deepening | B016–B020 | Email, immutable audit, org structure, workflows, tenancy | ⏳ next |
+| Infrastructure & Production Readiness | B016–B020 | Email, audit, search, multi-tenancy, ops | ✅ v2.4.0 |
 | Backend Beta | B021–B025 | Hardening → v2.5.0 | ⏳ |

@@ -14,7 +14,7 @@ describe('JobsService', () => {
     expect(jobs.getInProcessFallback()).toHaveLength(1);
 
     const stats = await jobs.getQueueStats();
-    expect(stats.queues).toHaveLength(8);
+    expect(stats.queues).toHaveLength(9);
     expect(stats.inProcessPending).toBe(1);
   });
 });

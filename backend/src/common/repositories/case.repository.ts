@@ -29,7 +29,11 @@ export interface ICaseRepository {
   list(query: ListQuery): Promise<PageResult<Case>>;
   findById(organizationId: string, id: string): Promise<Case | null>;
   create(input: CreateCaseInput): Promise<Case>;
-  update(organizationId: string, id: string, input: UpdateCaseInput): Promise<Case | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdateCaseInput,
+  ): Promise<Case | null>;
   softDelete(organizationId: string, id: string): Promise<Case | null>;
 }
 
@@ -44,9 +48,7 @@ export class CaseRepository extends BaseRepository implements ICaseRepository {
     const where: Prisma.CaseWhereInput = {
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
-      ...(query.filters?.status
-        ? { status: query.filters.status as CaseLifecycleStatus }
-        : {}),
+      ...(query.filters?.status ? { status: query.filters.status } : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.case.count({ where }),
@@ -67,7 +69,9 @@ export class CaseRepository extends BaseRepository implements ICaseRepository {
   }
 
   create(input: CreateCaseInput): Promise<Case> {
-    return this.prisma.case.create({ data: { ...input, tags: input.tags ?? [] } });
+    return this.prisma.case.create({
+      data: { ...input, tags: input.tags ?? [] },
+    });
   }
 
   async update(

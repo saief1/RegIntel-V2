@@ -10,6 +10,7 @@ import {
   PolicyExpiryProcessor,
   ReminderProcessor,
   ReviewCycleProcessor,
+  SearchIndexProcessor,
   SyncRetryProcessor,
   WorkflowAutomationProcessor,
 } from './processors/domain.processors';
@@ -50,6 +51,7 @@ const queueRegistrations = Object.values(QUEUE_NAMES).map((name) =>
     SyncRetryProcessor,
     WorkflowAutomationProcessor,
     AuditCleanupProcessor,
+    SearchIndexProcessor,
   ],
   exports: [JobsService, BullModule],
 })

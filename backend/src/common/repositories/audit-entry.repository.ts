@@ -24,7 +24,10 @@ export interface IAuditEntryRepository {
 }
 
 @Injectable()
-export class AuditEntryRepository extends BaseRepository implements IAuditEntryRepository {
+export class AuditEntryRepository
+  extends BaseRepository
+  implements IAuditEntryRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
@@ -33,7 +36,9 @@ export class AuditEntryRepository extends BaseRepository implements IAuditEntryR
     const { page, pageSize, skip, sortBy, sortOrder } = this.pageParams(query);
     const where: Prisma.AuditEntryWhereInput = {
       organizationId: query.organizationId,
-      ...(query.filters?.action ? { action: String(query.filters.action) } : {}),
+      ...(query.filters?.action
+        ? { action: String(query.filters.action) }
+        : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.auditEntry.count({ where }),

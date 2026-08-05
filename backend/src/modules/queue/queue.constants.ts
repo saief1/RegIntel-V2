@@ -7,6 +7,7 @@ export const QUEUE_NAMES = {
   syncRetry: 'sync-retry',
   workflowAutomation: 'workflow-automation',
   auditCleanup: 'audit-cleanup',
+  searchIndex: 'search-index',
 } as const;
 
 export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];

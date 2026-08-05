@@ -27,14 +27,27 @@ export type UpdateKnowledgeInput = {
 
 export interface IKnowledgeRepository {
   list(query: ListQuery): Promise<PageResult<KnowledgeDocument>>;
-  findById(organizationId: string, id: string): Promise<KnowledgeDocument | null>;
+  findById(
+    organizationId: string,
+    id: string,
+  ): Promise<KnowledgeDocument | null>;
   create(input: CreateKnowledgeInput): Promise<KnowledgeDocument>;
-  update(organizationId: string, id: string, input: UpdateKnowledgeInput): Promise<KnowledgeDocument | null>;
-  softDelete(organizationId: string, id: string): Promise<KnowledgeDocument | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdateKnowledgeInput,
+  ): Promise<KnowledgeDocument | null>;
+  softDelete(
+    organizationId: string,
+    id: string,
+  ): Promise<KnowledgeDocument | null>;
 }
 
 @Injectable()
-export class KnowledgeRepository extends BaseRepository implements IKnowledgeRepository {
+export class KnowledgeRepository
+  extends BaseRepository
+  implements IKnowledgeRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
@@ -72,10 +85,17 @@ export class KnowledgeRepository extends BaseRepository implements IKnowledgeRep
     });
   }
 
-  async update(organizationId: string, id: string, input: UpdateKnowledgeInput) {
+  async update(
+    organizationId: string,
+    id: string,
+    input: UpdateKnowledgeInput,
+  ) {
     const existing = await this.findById(organizationId, id);
     if (!existing) return null;
-    if (input.expectedVersion !== undefined && existing.version !== input.expectedVersion) {
+    if (
+      input.expectedVersion !== undefined &&
+      existing.version !== input.expectedVersion
+    ) {
       return null;
     }
     const { expectedVersion: _ev, ...fields } = input;

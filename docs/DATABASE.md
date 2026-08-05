@@ -16,7 +16,7 @@ This document describes RegIntel's data model, schema, storage technology, and m
 
 ## 1. Overview
 
-Milestone B1 introduced PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Milestone **B2** adds MFA recovery codes, RBAC roles/permissions, SSO/SCIM configuration, teams (minimal for grants), and permission grants. **v2.2.1** adds trusted devices, security events, login attempts, password history, and session activity columns on refresh tokens. Milestone **B3 (v2.3.0)** expands the domain data plane: policies, documents, tasks, cases, notifications, reports, workflows, storage objects/attachments, audit entries, and activity stream. Seed creates demo org + super-admin user, RBAC catalog, mock SSO configs, and sample domain rows.
+Milestone B1 introduced PostgreSQL via Prisma with users, organizations, memberships, and refresh tokens. Milestone **B2** adds MFA recovery codes, RBAC roles/permissions, SSO/SCIM configuration, teams (minimal for grants), and permission grants. **v2.2.1** adds trusted devices, security events, login attempts, password history, and session activity columns on refresh tokens. Milestone **B3 (v2.3.0)** expands the domain data plane: policies, documents, tasks, cases, notifications, reports, workflows, storage objects/attachments, audit entries, and activity stream. Milestone **B4 (v2.4.0)** adds infrastructure tables: immutable audit logs/exports, email templates/deliveries, search documents, tenant limits/usage, rate limits, and feature flags. Seed creates demo org + super-admin user, RBAC catalog, mock SSO configs, and sample domain rows.
 
 ## 2. Technology Choice
 
@@ -44,7 +44,7 @@ Milestone B1 introduced PostgreSQL via Prisma with users, organizations, members
 | `mfa_recovery_codes` | Hashed MFA recovery codes | ✅ B2 |
 | `sso_configurations` | OIDC/SAML provider configs | ✅ B2 |
 | `scim_configurations` / `scim_groups` / `scim_sync_runs` | SCIM provisioning | ✅ B2 |
-| `teams` / `team_memberships` | Minimal teams for permission scope (full org structure in B018) | ✅ B2 |
+| `teams` / `team_memberships` | Minimal teams for permission scope | ✅ B2 |
 | `permission_grants` | Org/team/resource ALLOW/DENY grants | ✅ B2 |
 | `policies` / `policy_versions` | Policy lifecycle + version history; soft delete + optimistic `version` | ✅ B3 |
 | `documents` | Knowledge documents | ✅ B3 |
@@ -55,6 +55,13 @@ Milestone B1 introduced PostgreSQL via Prisma with users, organizations, members
 | `storage_objects` / `attachments` | Object metadata + polymorphic attachments | ✅ B3 |
 | `audit_entries` | Application audit trail (complements `security_events`) | ✅ B3 |
 | `activity_stream` | Org activity feed events | ✅ B3 |
+| `audit_logs` | Immutable hash-chained audit store | ✅ B4 |
+| `audit_exports` | Audit export jobs | ✅ B4 |
+| `email_templates` / `email_deliveries` | Email templates + delivery log | ✅ B4 |
+| `search_documents` | Search index documents | ✅ B4 |
+| `tenant_limits` / `tenant_usage` | Plan quotas + daily metering | ✅ B4 |
+| `rate_limits` | In-DB rate limit buckets | ✅ B4 |
+| `feature_flags` | Global/org feature flags | ✅ B4 |
 
 ## 4. Entity Relationship Diagram
 
@@ -71,6 +78,9 @@ organizations 1──* policies 1──* policy_versions
 organizations 1──* documents | cases 1──* tasks | notifications
 organizations 1──* storage_objects 1──* attachments
 organizations 1──* reports | workflows | audit_entries | activity_stream
+organizations 1──* audit_logs | audit_exports | email_* | search_documents
+organizations 1──1 tenant_limits
+organizations 1──* tenant_usage | feature_flags
 ```
 
 Connection: `DATABASE_URL` (pooled app traffic) + `DIRECT_URL` (migrations). PrismaService retries connect with exponential backoff.
@@ -82,16 +92,18 @@ Connection: `DATABASE_URL` (pooled app traffic) + `DIRECT_URL` (migrations). Pri
 - **Dev create:** `npx prisma migrate dev --name <name>`
 - **Rollback:** forward corrective migration on shared envs; `migrate reset` only on disposable local DBs
 - **B3 migration:** `20260804204835_data_layer_b3`
+- **B4 migration:** `20260804211411_infrastructure_b4` (+ `audit_logs` immutability triggers)
 - Details: Architecture Contract §5 and `backend/README.md`
 
 ## 6. Data Retention & Backup
 
-Compose uses a named volume `regintel_pg_data`. Production backup/retention TBD in deployment docs (pre-pilot). Audit cleanup job can purge old `audit_entries` (queued via `/api/v1/jobs/audit-cleanup`).
+Compose uses a named volume `regintel_pg_data`. Production backup/retention TBD in deployment docs (pre-pilot). Audit cleanup job can purge old `audit_entries` / `audit_logs` under retention policy (queued via `/api/v1/jobs/audit-cleanup`; purge gated by `regintel.allow_audit_purge`).
 
 ## 7. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-04 | Milestone B4 | audit_logs/exports, email_*, search_documents, tenant_*, rate_limits, feature_flags |
 | 2026-08-04 | Milestone B3 | Domain tables, storage, notifications, audit_entries, activity_stream; DIRECT_URL |
 | 2026-08-03 | Milestone B2 | Identity tables: RBAC, MFA recovery, SSO, SCIM, grants, teams |
 | 2026-08-03 | Milestone B1 | Document B1 Prisma models, migration policy |

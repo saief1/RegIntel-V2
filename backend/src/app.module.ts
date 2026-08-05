@@ -9,6 +9,7 @@ import { validateEnv } from './config/env.validation';
 import { AuditEntriesModule } from './modules/audit-entries/audit-entries.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { CasesModule } from './modules/cases/cases.module';
+import { EmailModule } from './modules/email/email.module';
 import { HealthModule } from './modules/health/health.module';
 import { KnowledgeModule } from './modules/knowledge/knowledge.module';
 import { MfaModule } from './modules/mfa/mfa.module';
@@ -20,11 +21,14 @@ import { QueueModule } from './modules/queue/queue.module';
 import { RbacModule } from './modules/rbac/rbac.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { ScimModule } from './modules/scim/scim.module';
+import { SearchModule } from './modules/search/search.module';
 import { SecurityModule } from './modules/security/security.module';
 import { SessionsModule } from './modules/sessions/sessions.module';
 import { SsoModule } from './modules/sso/sso.module';
 import { StorageModule } from './modules/storage/storage.module';
 import { TasksModule } from './modules/tasks/tasks.module';
+import { TenancyModule } from './modules/tenancy/tenancy.module';
+import { TenantRateLimitMiddleware } from './modules/tenancy/tenant-rate-limit.middleware';
 import { UsersModule } from './modules/users/users.module';
 import { WorkflowModule } from './modules/workflow/workflow.module';
 
@@ -40,6 +44,9 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
     AuditModule,
     QueueModule,
     HealthModule,
+    EmailModule,
+    SearchModule,
+    TenancyModule,
     AuthModule,
     UsersModule,
     OrganizationsModule,
@@ -64,5 +71,6 @@ import { WorkflowModule } from './modules/workflow/workflow.module';
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer): void {
     consumer.apply(requestIdMiddleware).forRoutes('{*path}');
+    consumer.apply(TenantRateLimitMiddleware).forRoutes('{*path}');
   }
 }

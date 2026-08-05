@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  ITaskRepository,
-} from '../../common/repositories/task.repository';
+import { ITaskRepository } from '../../common/repositories/task.repository';
 import { TASK_REPOSITORY } from '../../common/repositories/tokens';
 import { CreateTasksDto } from './dto/create.dto';
 import { ListTasksQueryDto } from './dto/list-query.dto';
@@ -31,8 +29,9 @@ export class TasksService {
       cursor: query.cursor,
       filters: {
         status: query.status,
-        
-        caseId: (query as any).caseId, assigneeId: (query as any).assigneeId,
+
+        caseId: (query as any).caseId,
+        assigneeId: (query as any).assigneeId,
       },
     });
   }
@@ -51,7 +50,15 @@ export class TasksService {
   async create(organizationId: string, userId: string, dto: CreateTasksDto) {
     const row = await this.repo.create({
       organizationId,
-      title: dto.title, description: dto.description, status: dto.status as never, priority: dto.priority, caseId: dto.caseId, assigneeId: dto.assigneeId, createdById: userId, dueAt: dto.dueAt ? new Date(dto.dueAt) : undefined, tags: dto.tags,
+      title: dto.title,
+      description: dto.description,
+      status: dto.status as never,
+      priority: dto.priority,
+      caseId: dto.caseId,
+      assigneeId: dto.assigneeId,
+      createdById: userId,
+      dueAt: dto.dueAt ? new Date(dto.dueAt) : undefined,
+      tags: dto.tags,
     });
     await this.auditService.record({
       action: 'task.create',
@@ -70,7 +77,20 @@ export class TasksService {
     dto: UpdateTasksDto,
   ) {
     const row = await this.repo.update(organizationId, id, {
-      title: dto.title, description: dto.description, status: dto.status as never, priority: dto.priority, caseId: dto.caseId, assigneeId: dto.assigneeId, dueAt: dto.dueAt === undefined ? undefined : dto.dueAt ? new Date(dto.dueAt) : null, tags: dto.tags, expectedVersion: dto.expectedVersion,
+      title: dto.title,
+      description: dto.description,
+      status: dto.status as never,
+      priority: dto.priority,
+      caseId: dto.caseId,
+      assigneeId: dto.assigneeId,
+      dueAt:
+        dto.dueAt === undefined
+          ? undefined
+          : dto.dueAt
+            ? new Date(dto.dueAt)
+            : null,
+      tags: dto.tags,
+      expectedVersion: dto.expectedVersion,
     });
     if (!row) {
       throw new ConflictException({

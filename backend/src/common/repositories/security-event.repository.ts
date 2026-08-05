@@ -30,7 +30,7 @@ export class SecurityEventRepository
         where,
         skip,
         take: pageSize,
-        orderBy: { createdAt: sortOrder as 'asc' | 'desc' },
+        orderBy: { createdAt: sortOrder },
       }),
     ]);
     return this.toPageResult(data, total, page, pageSize);

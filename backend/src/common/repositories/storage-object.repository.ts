@@ -1,5 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { Attachment, Prisma, StorageObject, StorageProviderType } from '@prisma/client';
+import {
+  Attachment,
+  Prisma,
+  StorageObject,
+  StorageProviderType,
+} from '@prisma/client';
 import { PageResult } from '../dto/pagination-query.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { BaseRepository } from './base.repository';
@@ -31,11 +36,18 @@ export interface IStorageObjectRepository {
     ownerId: string;
     label?: string | null;
   }): Promise<Attachment>;
-  listAttachments(organizationId: string, ownerType: Attachment['ownerType'], ownerId: string): Promise<Attachment[]>;
+  listAttachments(
+    organizationId: string,
+    ownerType: Attachment['ownerType'],
+    ownerId: string,
+  ): Promise<Attachment[]>;
 }
 
 @Injectable()
-export class StorageObjectRepository extends BaseRepository implements IStorageObjectRepository {
+export class StorageObjectRepository
+  extends BaseRepository
+  implements IStorageObjectRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }

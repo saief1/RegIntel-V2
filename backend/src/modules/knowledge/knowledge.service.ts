@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  IKnowledgeRepository,
-} from '../../common/repositories/knowledge.repository';
+import { IKnowledgeRepository } from '../../common/repositories/knowledge.repository';
 import { KNOWLEDGE_REPOSITORY } from '../../common/repositories/tokens';
 import { CreateKnowledgeDto } from './dto/create.dto';
 import { ListKnowledgeQueryDto } from './dto/list-query.dto';
@@ -46,10 +44,19 @@ export class KnowledgeService {
     return row;
   }
 
-  async create(organizationId: string, userId: string, dto: CreateKnowledgeDto) {
+  async create(
+    organizationId: string,
+    userId: string,
+    dto: CreateKnowledgeDto,
+  ) {
     const row = await this.repo.create({
       organizationId,
-      title: dto.title, summary: dto.summary, body: dto.body, collection: dto.collection, status: dto.status, tags: dto.tags,
+      title: dto.title,
+      summary: dto.summary,
+      body: dto.body,
+      collection: dto.collection,
+      status: dto.status,
+      tags: dto.tags,
     });
     await this.auditService.record({
       action: 'knowledge.create',
@@ -68,7 +75,13 @@ export class KnowledgeService {
     dto: UpdateKnowledgeDto,
   ) {
     const row = await this.repo.update(organizationId, id, {
-      title: dto.title, summary: dto.summary, body: dto.body, collection: dto.collection, status: dto.status, tags: dto.tags, expectedVersion: dto.expectedVersion,
+      title: dto.title,
+      summary: dto.summary,
+      body: dto.body,
+      collection: dto.collection,
+      status: dto.status,
+      tags: dto.tags,
+      expectedVersion: dto.expectedVersion,
     });
     if (!row) {
       throw new ConflictException({

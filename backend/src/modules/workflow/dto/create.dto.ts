@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateWorkflowDto {
-
   @ApiProperty()
   @IsString()
   @MinLength(1)
@@ -28,5 +27,4 @@ export class CreateWorkflowDto {
 
   @ApiProperty({ type: Object })
   definition!: Record<string, unknown>;
-
 }

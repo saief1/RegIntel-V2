@@ -30,6 +30,29 @@ export type AppConfig = {
     provider: string;
     localRoot: string;
   };
+  email: {
+    provider: string;
+    fromAddress: string;
+    fromName: string;
+    smtpHost: string;
+    smtpPort: number;
+    smtpUser: string;
+    smtpPass: string;
+    smtpSecure: boolean;
+    resendApiKey: string;
+    sendgridApiKey: string;
+    sesRegion: string;
+  };
+  audit: {
+    retentionDays: number;
+  };
+  search: {
+    provider: string;
+  };
+  tenant: {
+    defaultPlan: string;
+    defaultRateLimitPerMinute: number;
+  };
   featureFlags: {
     useRealPolicies: boolean;
     useRealTasks: boolean;
@@ -38,6 +61,9 @@ export type AppConfig = {
     useRealReports: boolean;
     useRealNotifications: boolean;
     useRealStorage: boolean;
+    useRealEmail: boolean;
+    useRealAudit: boolean;
+    useRealSearch: boolean;
   };
 };
 
@@ -80,6 +106,31 @@ export default (): AppConfig => ({
     provider: process.env.STORAGE_PROVIDER ?? 'local',
     localRoot: process.env.STORAGE_LOCAL_ROOT ?? './storage',
   },
+  email: {
+    provider: process.env.EMAIL_PROVIDER ?? 'console',
+    fromAddress: process.env.EMAIL_FROM_ADDRESS ?? 'noreply@regintel.local',
+    fromName: process.env.EMAIL_FROM_NAME ?? 'RegIntel',
+    smtpHost: process.env.SMTP_HOST ?? 'localhost',
+    smtpPort: Number(process.env.SMTP_PORT ?? 1025),
+    smtpUser: process.env.SMTP_USER ?? '',
+    smtpPass: process.env.SMTP_PASS ?? '',
+    smtpSecure: (process.env.SMTP_SECURE ?? 'false') === 'true',
+    resendApiKey: process.env.RESEND_API_KEY ?? '',
+    sendgridApiKey: process.env.SENDGRID_API_KEY ?? '',
+    sesRegion: process.env.AWS_SES_REGION ?? 'us-east-1',
+  },
+  audit: {
+    retentionDays: Number(process.env.AUDIT_RETENTION_DAYS ?? 365),
+  },
+  search: {
+    provider: process.env.SEARCH_PROVIDER ?? 'postgres',
+  },
+  tenant: {
+    defaultPlan: process.env.TENANT_DEFAULT_PLAN ?? 'STARTER',
+    defaultRateLimitPerMinute: Number(
+      process.env.TENANT_RATE_LIMIT_PER_MINUTE ?? 120,
+    ),
+  },
   featureFlags: {
     useRealPolicies: flag('USE_REAL_POLICIES'),
     useRealTasks: flag('USE_REAL_TASKS'),
@@ -88,5 +139,8 @@ export default (): AppConfig => ({
     useRealReports: flag('USE_REAL_REPORTS'),
     useRealNotifications: flag('USE_REAL_NOTIFICATIONS'),
     useRealStorage: flag('USE_REAL_STORAGE'),
+    useRealEmail: flag('USE_REAL_EMAIL'),
+    useRealAudit: flag('USE_REAL_AUDIT'),
+    useRealSearch: flag('USE_REAL_SEARCH'),
   },
 });

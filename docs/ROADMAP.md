@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **B016+** (Email delivery & platform deepening).  
+**Current step:** **B021+** (Backend Platform Beta hardening).  
+Milestone **B4** (B016–B020) complete — **v2.4.0** / `MILESTONE_B4_COMPLETE` (Infrastructure & Production Readiness).  
 Milestone **B3** (B011–B015) complete — **v2.3.0** / `MILESTONE_B3_COMPLETE` (Data Layer & Notifications).  
 Milestone **B2** (B006–B010) complete — **v2.2.0** / `B2_COMPLETE`.  
 **v2.2.1** / `B2_SESSIONS_COMPLETE` — session management, trusted devices, Security Center APIs (gap-fill; does not retag v2.2.0).  
@@ -45,7 +46,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 |---|---|---|
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
-| Phase B – Backend Platform | 🔄 In Progress | ~60% (B000–B015 ✅ + v2.2.1; next B016+) |
+| Phase B – Backend Platform | 🔄 In Progress | ~80% (B000–B020 ✅ + v2.2.1; next B021+) |
 | Phase C – AI Intelligence Layer | ⏳ Planned | 0% |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
@@ -63,7 +64,7 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 | **v2.2.0** | Identity & Access (B006–B010) ✅ |
 | **v2.2.1** | Identity & Sessions Completeness (gap-fill) ✅ |
 | **v2.3.0** | Data Layer & Notifications (B011–B015) ✅ |
-| **v2.4.0** | Platform Deepening (B016–B020) |
+| **v2.4.0** | Infrastructure & Production Readiness (B016–B020) ✅ |
 | **v2.5.0** | Backend Platform Beta (Phase B exit) |
 | **v2.7.0** | AI Intelligence Beta (Phase C) |
 | **v2.9.0** | Wealth Management Beta (Phase D) |
@@ -82,7 +83,7 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B006–B010 Identity & access → v2.2.0 ✅
     → v2.2.1 Sessions / Security Center gap-fill → B2_SESSIONS_COMPLETE ✅
     → B011–B015 Data Layer & Notifications → v2.3.0 ✅ (Postgres repos, domain APIs, storage, BullMQ, notifications)
-    → B016–B020 Platform Deepening → v2.4.0 (email delivery, immutable audit, org structure, workflow hardening, multi-tenancy)
+    → B016–B020 Infrastructure & Production Readiness → v2.4.0 ✅ (email, audit, search, multi-tenancy, ops)
     → B021–B025 Backend Beta hardening → v2.5.0
 → Phase C AI Intelligence Layer (C001–C020) → v2.7.0
 → Phase D Wealth Management Production (D001–D020) → v2.9.0
@@ -118,7 +119,7 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 ## 6. Phase B — Backend Platform (B000–B025)
 
-**Status:** 🔄 In Progress — B000–B015 ✅ (`v2.1.0`, `v2.2.0`, `v2.2.1`, `v2.3.0`); next **B016+**.
+**Status:** 🔄 In Progress — B000–B020 ✅ (`v2.1.0`, `v2.2.0`, `v2.2.1`, `v2.3.0`, `v2.4.0`); next **B021+**.
 
 **Objective:** Introduce the real application backend and data plane. Replace mock providers with APIs over Postgres. No fake SaaS features in the frontend-only path.
 
@@ -161,21 +162,25 @@ See [`PERFORMANCE.md`](./PERFORMANCE.md). Routes are broadly lazy; shell entry c
 
 Domain CRUD APIs (policies, tasks, cases, knowledge, reports, workflows) and `audit_entries` / `activity_stream` ship with this band. FE remains mock-default. See [`STORAGE.md`](./STORAGE.md).
 
-### Platform Deepening → v2.4.0 (B016–B020)
+### Infrastructure & Production Readiness → v2.4.0 (B016–B020) ✅
 
-| ID | Title | Outline |
-|---|---|---|
-| **B016** | Email delivery | Real SMTP/provider adapter for queued email jobs (beyond log delivery) |
-| **B017** | Immutable audit store | Harden `audit_entries` immutability, retention, export |
-| **B018** | Org structure | Workspaces, teams CRUD, departments, invitations |
-| **B019** | Workflow automation hardening | Richer workflow runners on BullMQ; policy review/expiry schedules |
-| **B020** | Multi-tenancy guarantees | Cross-tenant regression suite, isolation runbooks → toward **v2.5.0** beta |
+| ID | Title | Outline | Status |
+|---|---|---|---|
+| **B016** | Enterprise email platform | SMTP/Resend/SendGrid/SES providers, templates, queue, delivery log | ✅ |
+| **B017** | Enterprise audit engine | Immutable `audit_logs`, export, retention, FE Audit Center wire | ✅ |
+| **B018** | Search indexing platform | `search_documents`, rebuild/incremental, Search API | ✅ |
+| **B019** | Multi-tenant platform | Quotas, metering, rate limits, plan enforcement, isolation | ✅ |
+| **B020** | Production operations | Health/ready/live, metrics, tracing hooks, graceful shutdown | ✅ |
+
+See [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.md), [`MULTITENANCY.md`](./MULTITENANCY.md), [`OPERATIONS.md`](./OPERATIONS.md).
+
+> Prior roadmap draft mapped B018–B020 to org structure / workflow hardening / tenancy-only. **v2.4.0 remaps B016–B020 to Infrastructure & Production Readiness** (email, audit, search, multi-tenancy, ops). Org structure and workflow hardening move into later B021+ / Phase B beta as needed.
 
 ### Backend Beta → v2.5.0 (B021–B025)
 
 | IDs | Theme | Outline |
 |---|---|---|
-| **B021–B025** | Beta hardening | Ops runbooks, SLO checks, remaining FE domain cutovers, production readiness → **v2.5.0 Backend Platform Beta** |
+| **B021–B025** | Beta hardening | Remaining FE domain cutovers, org/workspace deepening, workflow hardening, SLO/runbooks → **v2.5.0 Backend Platform Beta** |
 
 **Prerequisites from Phase A:** stable design system, certified frontend shell, documented API placeholders. ✅
 
@@ -240,6 +245,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-04 | Milestone B4 | B016–B020 Infrastructure & Production Readiness → v2.4.0 (email, audit, search, multi-tenancy, ops) |
 | 2026-08-04 | Milestone B3 | B011–B015 Data Layer & Notifications → v2.3.0; B016–B020 remapped to email/audit/org/workflows/tenancy |
 | 2026-08-03 | Milestone B2 | B006–B010 complete; tag v2.2.0 / B2_COMPLETE; current step → B011+ |
 | 2026-08-03 | Milestone B1 | B001–B005 complete; tag v2.1.0; current step → B006+ |

@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreatePoliciesDto {
-
   @ApiProperty()
   @IsString()
   @MinLength(1)
@@ -21,7 +20,9 @@ export class CreatePoliciesDto {
   @IsString()
   description?: string;
 
-  @ApiPropertyOptional({ enum: ['DRAFT','IN_REVIEW','APPROVED','PUBLISHED','ARCHIVED'] })
+  @ApiPropertyOptional({
+    enum: ['DRAFT', 'IN_REVIEW', 'APPROVED', 'PUBLISHED', 'ARCHIVED'],
+  })
   @IsOptional()
   @IsString()
   status?: string;
@@ -41,5 +42,4 @@ export class CreatePoliciesDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
-
 }

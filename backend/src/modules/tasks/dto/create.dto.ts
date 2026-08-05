@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateTasksDto {
-
   @ApiProperty()
   @IsString()
   @MinLength(1)
@@ -51,5 +50,4 @@ export class CreateTasksDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
-
 }

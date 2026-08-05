@@ -22,8 +22,7 @@ export class OrganizationsService {
   ) {}
 
   async listForUser(userId: string) {
-    const memberships =
-      await this.organizations.listMembershipsForUser(userId);
+    const memberships = await this.organizations.listMembershipsForUser(userId);
 
     return {
       data: memberships.map((membership) => ({

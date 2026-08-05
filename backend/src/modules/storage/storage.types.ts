@@ -42,7 +42,10 @@ export interface StorageProvider {
 
 /** Placeholder hook for virus scanning integrations. */
 export interface VirusScanHook {
-  scan(buffer: Buffer, filename: string): Promise<'clean' | 'infected' | 'pending'>;
+  scan(
+    buffer: Buffer,
+    filename: string,
+  ): Promise<'clean' | 'infected' | 'pending'>;
 }
 
 export class NoopVirusScanHook implements VirusScanHook {

@@ -6,11 +6,16 @@ export interface IOrganizationRepository {
   findById(id: string): Promise<Organization | null>;
   findBySlug(slug: string): Promise<Organization | null>;
   create(data: { name: string; slug: string }): Promise<Organization>;
-  listMembershipsForUser(userId: string): Promise<
-    Array<OrganizationMembership & { organization: Organization }>
-  >;
-  findActiveMembership(userId: string, organizationId: string): Promise<OrganizationMembership | null>;
-  createMembership(data: Prisma.OrganizationMembershipCreateInput): Promise<OrganizationMembership>;
+  listMembershipsForUser(
+    userId: string,
+  ): Promise<Array<OrganizationMembership & { organization: Organization }>>;
+  findActiveMembership(
+    userId: string,
+    organizationId: string,
+  ): Promise<OrganizationMembership | null>;
+  createMembership(
+    data: Prisma.OrganizationMembershipCreateInput,
+  ): Promise<OrganizationMembership>;
 }
 
 @Injectable()

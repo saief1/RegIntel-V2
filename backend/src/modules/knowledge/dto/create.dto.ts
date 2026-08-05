@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateKnowledgeDto {
-
   @ApiProperty()
   @IsString()
   @MinLength(1)
@@ -41,5 +40,4 @@ export class CreateKnowledgeDto {
   @IsArray()
   @IsString({ each: true })
   tags?: string[];
-
 }

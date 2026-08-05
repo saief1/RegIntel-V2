@@ -54,6 +54,14 @@ services:
       USE_REAL_REPORTS: 'false'
       USE_REAL_NOTIFICATIONS: 'false'
       USE_REAL_STORAGE: 'false'
+      USE_REAL_EMAIL: 'false'
+      USE_REAL_AUDIT: 'false'
+      USE_REAL_SEARCH: 'false'
+      EMAIL_PROVIDER: console
+      AUDIT_RETENTION_DAYS: 365
+      SEARCH_PROVIDER: postgres
+      TENANT_DEFAULT_PLAN: STARTER
+      TENANT_RATE_LIMIT_PER_MINUTE: 120
       JWT_ACCESS_SECRET: dev-access-secret-change-me-min-32-chars!!
       JWT_ACCESS_TTL: 15m
       JWT_REFRESH_TTL: 7d

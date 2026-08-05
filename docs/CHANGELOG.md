@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.4.0 | 2026-08-04 | Infrastructure & Production Readiness — email, immutable audit, search, multi-tenancy, ops (Milestone B4) |
 | 2.3.0 | 2026-08-04 | Data Layer & Notifications — Prisma domain models, repos, storage, BullMQ, notification APIs (Milestone B3) |
 | 2.2.1 | 2026-08-04 | Identity & Sessions Completeness — sessions, trusted devices, Security Center APIs |
 | 2.2.0 | 2026-08-03 | Identity & Access — MFA, RBAC, Permissions, SSO, SCIM (Milestone B2) |
@@ -52,6 +53,29 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
 
+
+### v2.4.0 — Infrastructure & Production Readiness (Milestone B4)
+
+**Status:** Minor (Phase B / B016–B020)  
+**Tags:** `v2.4.0`, `MILESTONE_B4_COMPLETE`  
+**Date:** 2026-08-04
+
+#### Added
+
+- Email platform: Console/SMTP/Resend/SendGrid/SES providers, system templates, delivery log, webhooks placeholder ([`EMAIL.md`](./EMAIL.md))
+- Immutable `audit_logs` (+ hash chain, DB immutability triggers), `audit_exports`, retention/export APIs ([`AUDIT.md`](./AUDIT.md))
+- Search platform: `search_documents`, rebuild/incremental BullMQ job, Search API with highlighting ([`SEARCH.md`](./SEARCH.md))
+- Multi-tenancy: `tenant_limits`, `tenant_usage`, `rate_limits`, `feature_flags`; quotas + RPM middleware ([`MULTITENANCY.md`](./MULTITENANCY.md))
+- Ops: `/liveness`, `/readiness`, `/metrics`, `/ops/env`, structured logging, OTel stubs, graceful shutdown ([`OPERATIONS.md`](./OPERATIONS.md))
+- Flags: `USE_REAL_EMAIL`, `USE_REAL_AUDIT`, `USE_REAL_SEARCH` (+ `VITE_` counterparts, default false)
+- Audit Center wires platform audit log panel when `VITE_USE_REAL_AUDIT=true` (no new screens)
+
+#### Changed
+
+- Health check expands dependency matrix (DB, Redis, queue, storage, email) and reports `version: 2.4.0`
+- Roadmap remaps B016–B020 to Infrastructure & Production Readiness (search + ops replace prior org/workflow-only draft)
+
+---
 
 ### v2.3.0 — Data Layer & Notifications (Milestone B3)
 

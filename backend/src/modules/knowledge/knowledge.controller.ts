@@ -62,7 +62,10 @@ export class KnowledgeController {
   }
 
   @Delete(':id')
-  @ApiOperation({ operationId: 'knowledgeDelete', summary: 'Soft-delete Document' })
+  @ApiOperation({
+    operationId: 'knowledgeDelete',
+    summary: 'Soft-delete Document',
+  })
   remove(@Req() req: Request, @Param('id', ParseUUIDPipe) id: string) {
     return this.service.remove(req.organizationId!, req.user!.userId, id);
   }

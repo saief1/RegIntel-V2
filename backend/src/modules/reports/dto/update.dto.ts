@@ -4,7 +4,6 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 import { CreateReportsDto } from './create.dto';
 
 export class UpdateReportsDto extends PartialType(CreateReportsDto) {
-
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
@@ -14,5 +13,4 @@ export class UpdateReportsDto extends PartialType(CreateReportsDto) {
   @IsOptional()
   @IsString()
   resultUrl?: string;
-
 }

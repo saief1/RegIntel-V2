@@ -1,8 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { AttachmentOwnerType, StorageProviderType } from '@prisma/client';
 import { AuditService } from '../../common/audit/audit.service';
 import { IStorageObjectRepository } from '../../common/repositories/storage-object.repository';

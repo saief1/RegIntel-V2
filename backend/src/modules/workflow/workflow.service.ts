@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  IWorkflowRepository,
-} from '../../common/repositories/workflow.repository';
+import { IWorkflowRepository } from '../../common/repositories/workflow.repository';
 import { WORKFLOW_REPOSITORY } from '../../common/repositories/tokens';
 import { CreateWorkflowDto } from './dto/create.dto';
 import { ListWorkflowQueryDto } from './dto/list-query.dto';
@@ -31,8 +29,6 @@ export class WorkflowService {
       cursor: query.cursor,
       filters: {
         status: query.status,
-        
-        
       },
     });
   }

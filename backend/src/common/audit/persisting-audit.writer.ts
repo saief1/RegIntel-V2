@@ -1,7 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Prisma, SecurityEventSeverity } from '@prisma/client';
+import { IAuditLogRepository } from '../repositories/audit-log.repository';
+import { AUDIT_LOG_REPOSITORY } from '../repositories/tokens';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuditEvent, AuditWriter } from './audit.types';
+import { AuditEvent, AuditWriter, categoryForAction } from './audit.types';
 
 const HIGH_ACTIONS = new Set([
   'auth.refresh_reuse',
@@ -20,14 +22,17 @@ const MEDIUM_ACTIONS = new Set([
 ]);
 
 /**
- * Persists security-relevant audit events for Security Center queries and
- * application audit_entries (B3). Full immutable audit store deepens in B017.
+ * Persists security_events, legacy audit_entries, and immutable audit_logs (B017).
  */
 @Injectable()
 export class PersistingAuditWriter implements AuditWriter {
   private readonly logger = new Logger('Audit');
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    @Inject(AUDIT_LOG_REPOSITORY)
+    private readonly auditLogs: IAuditLogRepository,
+  ) {}
 
   async write(event: AuditEvent): Promise<void> {
     this.logger.log(JSON.stringify({ audit: true, ...event }));
@@ -48,6 +53,8 @@ export class PersistingAuditWriter implements AuditWriter {
           metadata: {
             before: event.before ?? null,
             after: event.after ?? null,
+            requestId: event.requestId ?? null,
+            correlationId: event.correlationId ?? null,
           },
           createdAt: new Date(event.timestamp),
         },
@@ -77,12 +84,43 @@ export class PersistingAuditWriter implements AuditWriter {
               : (event.after as Prisma.InputJsonValue),
           ipAddress: event.ipAddress,
           userAgent: event.userAgent,
+          requestId: event.requestId,
           createdAt: new Date(event.timestamp),
         },
       });
     } catch (error) {
       this.logger.warn(
         `Failed to persist audit entry ${event.action}: ${
+          error instanceof Error ? error.message : 'unknown'
+        }`,
+      );
+    }
+
+    try {
+      await this.auditLogs.create({
+        organizationId: event.organizationId,
+        userId: event.userId,
+        action: event.action,
+        resource: event.resource,
+        category: event.category ?? categoryForAction(event.action),
+        before:
+          event.before === undefined
+            ? undefined
+            : (event.before as Prisma.InputJsonValue),
+        after:
+          event.after === undefined
+            ? undefined
+            : (event.after as Prisma.InputJsonValue),
+        ipAddress: event.ipAddress,
+        userAgent: event.userAgent,
+        device: event.device,
+        requestId: event.requestId,
+        correlationId: event.correlationId,
+        createdAt: new Date(event.timestamp),
+      });
+    } catch (error) {
+      this.logger.warn(
+        `Failed to persist audit log ${event.action}: ${
           error instanceof Error ? error.message : 'unknown'
         }`,
       );

@@ -4,7 +4,7 @@
 
 This document is the **Backend Architecture Contract** for Phase B. It is the backend equivalent of the frontend design system: frozen technology choices, conventions, and Milestone B1 exit criteria that agents and humans must follow when implementing **B001+**.
 
-**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM); **v2.2.1** gap-fill adds sessions/Security Center APIs; Milestone **B3** (`v2.3.0`) implements B011–B015 (data layer, repositories, storage, jobs, notifications) against this contract.
+**Status:** ✅ Complete (standards locked). Milestone **B1** (`v2.1.0`) implements B001–B005; Milestone **B2** (`v2.2.0`) implements B006–B010 (MFA, RBAC, Permissions, SSO, SCIM); **v2.2.1** gap-fill adds sessions/Security Center APIs; Milestone **B3** (`v2.3.0`) implements B011–B015 (data layer, repositories, storage, jobs, notifications); Milestone **B4** (`v2.4.0`) implements B016–B020 (email, immutable audit, search, multi-tenancy, ops) against this contract.
 
 **UI policy:** Frontend routes and pages stay as-is. Replace mock providers behind feature flags. No redesigns except where backend integration requires minimal wiring.
 
@@ -466,13 +466,16 @@ Frontend keeps current pages and providers. Cutover is **flag-driven**, not a re
 | `USE_REAL_AUTH` | `false` | Use real auth API vs mock session |
 | `USE_REAL_ORGS` | `false` | Organizations API vs mock tenancy |
 | `USE_REAL_RBAC` | `false` | Real permissions/RBAC API |
-| `USE_REAL_STORAGE` | `false` | Object storage (B021+) |
-| `USE_REAL_KNOWLEDGE` | `false` | Knowledge provider → API (B016+) |
+| `USE_REAL_STORAGE` | `false` | Object storage |
+| `USE_REAL_KNOWLEDGE` | `false` | Knowledge provider → API |
 | `USE_REAL_TASKS` | `false` | Tasks → API |
 | `USE_REAL_REPORTS` | `false` | Reports → API |
 | `USE_REAL_POLICIES` | `false` | Policies → API |
 | `USE_REAL_NOTIFICATIONS` | `false` | Notifications → API |
 | `USE_REAL_CASES` | `false` | Cases → API |
+| `USE_REAL_EMAIL` | `false` | Real email provider vs console (B016) |
+| `USE_REAL_AUDIT` | `false` | Immutable audit_logs + FE Audit Center wire (B017) |
+| `USE_REAL_SEARCH` | `false` | Search index cutover helpers (B018) |
 
 ### How they are read
 

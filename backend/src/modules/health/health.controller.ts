@@ -1,43 +1,61 @@
-import { Controller, Get } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Controller, Get, Header, Res } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { PrismaService } from '../../common/prisma/prisma.service';
-import { JobsService } from '../queue/jobs.service';
+import type { Response } from 'express';
+import { HealthService } from './health.service';
+import { MetricsService } from './metrics.service';
 
 @ApiTags('health')
-@Controller('health')
+@Controller()
 export class HealthController {
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
-    private readonly jobsService: JobsService,
+    private readonly healthService: HealthService,
+    private readonly metrics: MetricsService,
   ) {}
 
-  @Get()
+  @Get('health')
   @ApiOperation({
     operationId: 'healthCheck',
-    summary: 'Liveness and dependency readiness',
+    summary: 'Aggregated health with dependency checks',
   })
-  async check() {
-    const databaseUp = await this.prisma.ping();
-    let redis: 'up' | 'down' | 'unknown' = 'unknown';
-    try {
-      const stats = await this.jobsService.getQueueStats();
-      redis = stats.queues.some((q) => q.mode === 'bullmq') ? 'up' : 'unknown';
-    } catch {
-      redis = 'down';
-    }
+  check() {
+    return this.healthService.health();
+  }
 
-    const status =
-      databaseUp && redis !== 'down' ? 'ok' : databaseUp ? 'degraded' : 'down';
+  @Get('liveness')
+  @ApiOperation({
+    operationId: 'livenessProbe',
+    summary: 'Kubernetes liveness probe',
+  })
+  liveness() {
+    return this.healthService.liveness();
+  }
 
-    return {
-      status,
-      service: 'regintel-api',
-      database: databaseUp ? 'up' : 'down',
-      redis,
-      storageProvider: this.configService.get<string>('storage.provider'),
-      timestamp: new Date().toISOString(),
-    };
+  @Get('readiness')
+  @ApiOperation({
+    operationId: 'readinessProbe',
+    summary: 'Kubernetes readiness probe with dependency checks',
+  })
+  readiness() {
+    return this.healthService.readiness();
+  }
+
+  @Get('metrics')
+  @ApiOperation({
+    operationId: 'prometheusMetrics',
+    summary: 'Prometheus metrics scrape endpoint',
+  })
+  @Header('Content-Type', 'text/plain; version=0.0.4; charset=utf-8')
+  metricsEndpoint(@Res() res: Response) {
+    this.metrics.increment('regintel_metrics_scrapes_total');
+    res.send(this.metrics.renderPrometheus());
+  }
+
+  @Get('ops/env')
+  @ApiOperation({
+    operationId: 'envDiagnostics',
+    summary: 'Non-secret environment diagnostics',
+  })
+  envDiagnostics() {
+    return this.healthService.envDiagnostics();
   }
 }

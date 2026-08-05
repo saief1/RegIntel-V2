@@ -151,6 +151,56 @@ enum AttachmentOwnerType {
   GENERAL
 }
 
+// ─── Milestone B4 platform enums ─────────────────────────────────────────────
+
+enum EmailProviderType {
+  CONSOLE
+  SMTP
+  RESEND
+  SENDGRID
+  SES
+}
+
+enum EmailDeliveryStatus {
+  QUEUED
+  SENDING
+  SENT
+  FAILED
+  BOUNCED
+  DELIVERED
+}
+
+enum AuditExportStatus {
+  PENDING
+  READY
+  FAILED
+}
+
+enum AuditExportFormat {
+  JSON
+  CSV
+}
+
+enum SearchEntityType {
+  POLICY
+  KNOWLEDGE
+  DOCUMENT
+  TASK
+  CASE
+  REPORT
+  COMMENT
+  NOTIFICATION
+  USER
+  ORGANIZATION
+}
+
+enum TenantPlan {
+  FREE
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
 model Organization {
   id                String                   @id @default(uuid()) @db.Uuid
   name              String
@@ -175,7 +225,15 @@ model Organization {
   storageObjects    StorageObject[]
   attachments       Attachment[]
   auditEntries      AuditEntry[]
+  auditLogs         AuditLog[]
+  auditExports      AuditExport[]
   activityEvents    ActivityEvent[]
+  emailDeliveries   EmailDelivery[]
+  emailTemplates    EmailTemplate[]
+  searchDocuments   SearchDocument[]
+  tenantLimit       TenantLimit?
+  tenantUsage       TenantUsage[]
+  featureFlags      FeatureFlag[]
 
   @@map("organizations")
 }
@@ -208,6 +266,7 @@ model User {
   createdTasks       Task[]                   @relation("TaskCreator")
   ownedCases         Case[]                   @relation("CaseOwner")
   auditEntries       AuditEntry[]
+  auditLogs          AuditLog[]
   activityEvents     ActivityEvent[]
 
   @@map("users")
@@ -788,4 +847,181 @@ model ActivityEvent {
   @@index([organizationId, createdAt])
   @@index([entityType, entityId])
   @@map("activity_stream")
+}
+
+/// Immutable append-only audit log (B017). Complements legacy audit_entries.
+model AuditLog {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String?      @map("organization_id") @db.Uuid
+  userId         String?      @map("user_id") @db.Uuid
+  action         String
+  resource       String
+  category       String       @default("general")
+  before         Json?
+  after          Json?
+  ipAddress      String?      @map("ip_address")
+  userAgent      String?      @map("user_agent")
+  device         String?
+  requestId      String?      @map("request_id")
+  correlationId  String?      @map("correlation_id")
+  entryHash      String       @map("entry_hash")
+  prevHash       String?      @map("prev_hash")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([userId, createdAt])
+  @@index([action, createdAt])
+  @@index([category, createdAt])
+  @@index([requestId])
+  @@index([correlationId])
+  @@map("audit_logs")
+}
+
+model AuditExport {
+  id             String            @id @default(uuid()) @db.Uuid
+  organizationId String            @map("organization_id") @db.Uuid
+  requestedById  String?           @map("requested_by_id") @db.Uuid
+  format         AuditExportFormat @default(JSON)
+  status         AuditExportStatus @default(PENDING)
+  filters        Json?
+  rowCount       Int?              @map("row_count")
+  storageKey     String?           @map("storage_key")
+  errorMessage   String?           @map("error_message")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  completedAt    DateTime?         @map("completed_at")
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, createdAt])
+  @@index([status])
+  @@map("audit_exports")
+}
+
+model EmailTemplate {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String?      @map("organization_id") @db.Uuid
+  key            String
+  name           String
+  subject        String
+  htmlBody       String       @map("html_body")
+  textBody       String       @map("text_body")
+  variables      String[]     @default([])
+  active         Boolean      @default(true)
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, key])
+  @@index([key])
+  @@map("email_templates")
+}
+
+model EmailDelivery {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String?             @map("organization_id") @db.Uuid
+  userId         String?             @map("user_id") @db.Uuid
+  toAddress      String              @map("to_address")
+  templateKey    String              @map("template_key")
+  subject        String
+  provider       EmailProviderType   @default(CONSOLE)
+  status         EmailDeliveryStatus @default(QUEUED)
+  attempts       Int                 @default(0)
+  maxAttempts    Int                 @default(5) @map("max_attempts")
+  lastError      String?             @map("last_error")
+  providerMessageId String?          @map("provider_message_id")
+  payload        Json?
+  queuedAt       DateTime            @default(now()) @map("queued_at")
+  sentAt         DateTime?           @map("sent_at")
+  createdAt      DateTime            @default(now()) @map("created_at")
+  updatedAt      DateTime            @updatedAt @map("updated_at")
+  organization   Organization?       @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([status, queuedAt])
+  @@index([templateKey])
+  @@map("email_deliveries")
+}
+
+/// Search index documents (B018). PostgreSQL FTS via body/title; ES-ready abstraction.
+model SearchDocument {
+  id             String           @id @default(uuid()) @db.Uuid
+  organizationId String           @map("organization_id") @db.Uuid
+  entityType     SearchEntityType @map("entity_type")
+  entityId       String           @map("entity_id") @db.Uuid
+  title          String
+  body           String           @default("")
+  metadata       Json?
+  rankBoost      Float            @default(1) @map("rank_boost")
+  indexedAt      DateTime         @default(now()) @map("indexed_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, entityType, entityId])
+  @@index([organizationId, entityType])
+  @@index([organizationId, updatedAt])
+  @@map("search_documents")
+}
+
+model TenantLimit {
+  id                    String       @id @default(uuid()) @db.Uuid
+  organizationId        String       @unique @map("organization_id") @db.Uuid
+  plan                  TenantPlan   @default(STARTER)
+  maxSeats              Int          @default(25) @map("max_seats")
+  maxStorageBytes       BigInt       @default(5368709120) @map("max_storage_bytes")
+  maxApiRequestsPerDay  Int          @default(100000) @map("max_api_requests_per_day")
+  maxEmailsPerDay       Int          @default(1000) @map("max_emails_per_day")
+  rateLimitPerMinute    Int          @default(120) @map("rate_limit_per_minute")
+  features              Json         @default("{}")
+  createdAt             DateTime     @default(now()) @map("created_at")
+  updatedAt             DateTime     @updatedAt @map("updated_at")
+  organization          Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@map("tenant_limits")
+}
+
+model TenantUsage {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  usageDate      DateTime     @map("usage_date") @db.Date
+  seatsUsed      Int          @default(0) @map("seats_used")
+  storageBytes   BigInt       @default(0) @map("storage_bytes")
+  apiRequests    Int          @default(0) @map("api_requests")
+  emailsSent     Int          @default(0) @map("emails_sent")
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, usageDate])
+  @@index([organizationId, usageDate])
+  @@map("tenant_usage")
+}
+
+/// In-DB rate limit counters (Redis preferred when available).
+model RateLimitBucket {
+  id           String   @id @default(uuid()) @db.Uuid
+  bucketKey    String   @unique @map("bucket_key")
+  windowStart  DateTime @map("window_start")
+  count        Int      @default(0)
+  expiresAt    DateTime @map("expires_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([expiresAt])
+  @@map("rate_limits")
+}
+
+model FeatureFlag {
+  id             String        @id @default(uuid()) @db.Uuid
+  organizationId String?       @map("organization_id") @db.Uuid
+  key            String
+  enabled        Boolean       @default(false)
+  description    String?
+  metadata       Json?
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, key])
+  @@index([key])
+  @@map("feature_flags")
 }

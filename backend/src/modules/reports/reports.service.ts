@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  IReportRepository,
-} from '../../common/repositories/report.repository';
+import { IReportRepository } from '../../common/repositories/report.repository';
 import { REPORT_REPOSITORY } from '../../common/repositories/tokens';
 import { CreateReportsDto } from './dto/create.dto';
 import { ListReportsQueryDto } from './dto/list-query.dto';
@@ -31,8 +29,6 @@ export class ReportsService {
       cursor: query.cursor,
       filters: {
         status: query.status,
-        
-        
       },
     });
   }

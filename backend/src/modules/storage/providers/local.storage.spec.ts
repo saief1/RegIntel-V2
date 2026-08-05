@@ -10,8 +10,7 @@ describe('LocalStorageProvider', () => {
   beforeEach(async () => {
     root = await mkdtemp(join(tmpdir(), 'regintel-storage-'));
     provider = new LocalStorageProvider({
-      get: (key: string) =>
-        key === 'storage.localRoot' ? root : undefined,
+      get: (key: string) => (key === 'storage.localRoot' ? root : undefined),
     } as never);
   });
 

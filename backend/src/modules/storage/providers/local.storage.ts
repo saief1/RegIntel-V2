@@ -24,11 +24,7 @@ export class LocalStorageProvider implements StorageProvider {
   }
 
   private resolvePath(ref: StoredObjectRef): string {
-    return join(
-      this.root,
-      ref.objectKey,
-      `v-${ref.versionLabel}`,
-    );
+    return join(this.root, ref.objectKey, `v-${ref.versionLabel}`);
   }
 
   async upload(input: UploadInput): Promise<UploadResult> {

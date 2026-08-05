@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **B3 (v2.3.0)** adds domain CRUD, notifications, storage, and job monitoring on top of identity (B2 / v2.2.1). Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). Flags include auth/orgs/RBAC/MFA/SSO/SCIM plus `VITE_USE_REAL_POLICIES`, `TASKS`, `CASES`, `KNOWLEDGE`, `REPORTS`, `NOTIFICATIONS`, `STORAGE`.
+Milestone **B4 (v2.4.0)** adds email, immutable audit, search, multi-tenancy quotas/rate limits, and ops probes on top of B3. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**). New flags: `VITE_USE_REAL_EMAIL`, `VITE_USE_REAL_AUDIT`, `VITE_USE_REAL_SEARCH`.
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -41,7 +41,11 @@ Milestone **B3 (v2.3.0)** adds domain CRUD, notifications, storage, and job moni
 
 | Method | Path | Description | Status |
 |---|---|---|---|
-| GET | `/api/v1/health` | Liveness + DB / Redis / storage provider | ✅ B1/B3 |
+| GET | `/api/v1/health` | Aggregated health + dependency matrix | ✅ B1/B4 |
+| GET | `/api/v1/liveness` | Process liveness probe | ✅ B4 |
+| GET | `/api/v1/readiness` | Readiness + dependency checks | ✅ B4 |
+| GET | `/api/v1/metrics` | Prometheus metrics | ✅ B4 |
+| GET | `/api/v1/ops/env` | Non-secret env diagnostics | ✅ B4 |
 | POST | `/api/v1/auth/register` | Register (when `ALLOW_REGISTER=true`) | ✅ B1 |
 | POST | `/api/v1/auth/login` | Login; MFA challenge when enrolled | ✅ B1/B2 |
 | POST | `/api/v1/auth/mfa/verify` | Complete MFA login challenge | ✅ B2 |
@@ -86,10 +90,17 @@ Milestone **B3 (v2.3.0)** adds domain CRUD, notifications, storage, and job moni
 | GET/POST | `/api/v1/notifications*` | List/create; preferences; bulk read; read-all; archive | ✅ B3 |
 | GET/POST/DELETE | `/api/v1/storage*` | Upload/download/signed URL/delete/attachments | ✅ B3 |
 | GET | `/api/v1/audit-entries` | Application audit entries | ✅ B3 |
+| GET | `/api/v1/audit-entries/logs` | Immutable audit logs + filters | ✅ B4 |
+| POST | `/api/v1/audit-entries/export` | Export audit logs (JSON/CSV) | ✅ B4 |
+| GET | `/api/v1/audit-entries/exports` | List export jobs | ✅ B4 |
+| GET | `/api/v1/audit-entries/retention` | Retention policy | ✅ B4 |
+| GET/POST | `/api/v1/email/*` | Templates, send, deliveries, webhooks, health | ✅ B4 |
+| GET/POST | `/api/v1/search*` | Query, rebuild, stats | ✅ B4 |
+| GET/PATCH/POST | `/api/v1/tenancy*` | Tenant context, limits, feature flags | ✅ B4 |
 | GET | `/api/v1/jobs/stats` | Queue monitoring (waiting/active/failed + DLQ names) | ✅ B3 |
 | POST | `/api/v1/jobs/audit-cleanup` | Enqueue audit cleanup job | ✅ B3 |
 
-List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. Storage details: [`STORAGE.md`](./STORAGE.md).
+List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. See [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.md), [`MULTITENANCY.md`](./MULTITENANCY.md), [`OPERATIONS.md`](./OPERATIONS.md), [`STORAGE.md`](./STORAGE.md).
 
 ## 5. Error Handling
 
@@ -101,12 +112,13 @@ Locked to **`/api/v1`**. No `/api/v2` until necessary (ADR required).
 
 ## 7. Rate Limiting
 
-Deferred past Milestone B1; document when introduced.
+Org-scoped RPM + daily API budget enforced when `X-Organization-Id` is present (B019). Responses may include `X-RateLimit-Remaining` / `X-RateLimit-Reset`. See [`MULTITENANCY.md`](./MULTITENANCY.md).
 
 ## 8. Revision History
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-04 | Milestone B4 | Email, audit logs/export, search, tenancy, ops probes; rate limiting |
 | 2026-08-04 | Milestone B3 | Domain CRUD, notifications, storage, jobs endpoints |
 | 2026-08-04 | v2.2.1 | Sessions + security center endpoints |
 | 2026-08-03 | Milestone B2 | MFA, RBAC, permissions, SSO, SCIM endpoints |

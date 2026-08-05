@@ -17,7 +17,9 @@ export class UserRepository implements IUserRepository {
   }
 
   findByEmail(email: string) {
-    return this.prisma.user.findUnique({ where: { email: email.toLowerCase() } });
+    return this.prisma.user.findUnique({
+      where: { email: email.toLowerCase() },
+    });
   }
 
   updateProfile(id: string, data: { name?: string }) {

@@ -34,14 +34,30 @@ export interface IPolicyRepository {
   list(query: ListQuery): Promise<PageResult<Policy>>;
   findById(organizationId: string, id: string): Promise<Policy | null>;
   create(input: CreatePolicyInput): Promise<Policy>;
-  update(organizationId: string, id: string, input: UpdatePolicyInput): Promise<Policy | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdatePolicyInput,
+  ): Promise<Policy | null>;
   softDelete(organizationId: string, id: string): Promise<Policy | null>;
-  addVersion(policyId: string, data: { version: number; title: string; content: string; changeNotes?: string | null; createdById?: string | null }): Promise<PolicyVersion>;
+  addVersion(
+    policyId: string,
+    data: {
+      version: number;
+      title: string;
+      content: string;
+      changeNotes?: string | null;
+      createdById?: string | null;
+    },
+  ): Promise<PolicyVersion>;
   listVersions(policyId: string): Promise<PolicyVersion[]>;
 }
 
 @Injectable()
-export class PolicyRepository extends BaseRepository implements IPolicyRepository {
+export class PolicyRepository
+  extends BaseRepository
+  implements IPolicyRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
@@ -51,9 +67,7 @@ export class PolicyRepository extends BaseRepository implements IPolicyRepositor
     const where: Prisma.PolicyWhereInput = {
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
-      ...(query.filters?.status
-        ? { status: query.filters.status as PolicyLifecycleStatus }
-        : {}),
+      ...(query.filters?.status ? { status: query.filters.status } : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.policy.count({ where }),

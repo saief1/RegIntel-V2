@@ -5,9 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { AuditService } from '../../common/audit/audit.service';
-import {
-  IPolicyRepository,
-} from '../../common/repositories/policy.repository';
+import { IPolicyRepository } from '../../common/repositories/policy.repository';
 import { POLICY_REPOSITORY } from '../../common/repositories/tokens';
 import { CreatePoliciesDto } from './dto/create.dto';
 import { ListPoliciesQueryDto } from './dto/list-query.dto';
@@ -31,8 +29,6 @@ export class PoliciesService {
       cursor: query.cursor,
       filters: {
         status: query.status,
-        
-        
       },
     });
   }
@@ -51,7 +47,12 @@ export class PoliciesService {
   async create(organizationId: string, userId: string, dto: CreatePoliciesDto) {
     const row = await this.repo.create({
       organizationId,
-      title: dto.title, description: dto.description, status: dto.status as never, ownerName: dto.ownerName, category: dto.category, tags: dto.tags,
+      title: dto.title,
+      description: dto.description,
+      status: dto.status as never,
+      ownerName: dto.ownerName,
+      category: dto.category,
+      tags: dto.tags,
     });
     await this.auditService.record({
       action: 'policy.create',
@@ -70,7 +71,13 @@ export class PoliciesService {
     dto: UpdatePoliciesDto,
   ) {
     const row = await this.repo.update(organizationId, id, {
-      title: dto.title, description: dto.description, status: dto.status as never, ownerName: dto.ownerName, category: dto.category, tags: dto.tags, expectedVersion: dto.expectedVersion,
+      title: dto.title,
+      description: dto.description,
+      status: dto.status as never,
+      ownerName: dto.ownerName,
+      category: dto.category,
+      tags: dto.tags,
+      expectedVersion: dto.expectedVersion,
     });
     if (!row) {
       throw new ConflictException({

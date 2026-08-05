@@ -34,7 +34,11 @@ export interface ITaskRepository {
   list(query: ListQuery): Promise<PageResult<Task>>;
   findById(organizationId: string, id: string): Promise<Task | null>;
   create(input: CreateTaskInput): Promise<Task>;
-  update(organizationId: string, id: string, input: UpdateTaskInput): Promise<Task | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdateTaskInput,
+  ): Promise<Task | null>;
   softDelete(organizationId: string, id: string): Promise<Task | null>;
 }
 
@@ -49,10 +53,10 @@ export class TaskRepository extends BaseRepository implements ITaskRepository {
     const where: Prisma.TaskWhereInput = {
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
-      ...(query.filters?.status
-        ? { status: query.filters.status as TaskLifecycleStatus }
+      ...(query.filters?.status ? { status: query.filters.status } : {}),
+      ...(query.filters?.caseId
+        ? { caseId: String(query.filters.caseId) }
         : {}),
-      ...(query.filters?.caseId ? { caseId: String(query.filters.caseId) } : {}),
       ...(query.filters?.assigneeId
         ? { assigneeId: String(query.filters.assigneeId) }
         : {}),
@@ -76,7 +80,9 @@ export class TaskRepository extends BaseRepository implements ITaskRepository {
   }
 
   create(input: CreateTaskInput): Promise<Task> {
-    return this.prisma.task.create({ data: { ...input, tags: input.tags ?? [] } });
+    return this.prisma.task.create({
+      data: { ...input, tags: input.tags ?? [] },
+    });
   }
 
   async update(

@@ -4,11 +4,9 @@ import { IsInt, IsOptional, IsString } from 'class-validator';
 import { CreateWorkflowDto } from './create.dto';
 
 export class UpdateWorkflowDto extends PartialType(CreateWorkflowDto) {
-
   @ApiPropertyOptional()
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   expectedVersion?: number;
-
 }

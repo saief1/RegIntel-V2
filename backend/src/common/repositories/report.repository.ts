@@ -27,12 +27,19 @@ export interface IReportRepository {
   list(query: ListQuery): Promise<PageResult<Report>>;
   findById(organizationId: string, id: string): Promise<Report | null>;
   create(input: CreateReportInput): Promise<Report>;
-  update(organizationId: string, id: string, input: UpdateReportInput): Promise<Report | null>;
+  update(
+    organizationId: string,
+    id: string,
+    input: UpdateReportInput,
+  ): Promise<Report | null>;
   softDelete(organizationId: string, id: string): Promise<Report | null>;
 }
 
 @Injectable()
-export class ReportRepository extends BaseRepository implements IReportRepository {
+export class ReportRepository
+  extends BaseRepository
+  implements IReportRepository
+{
   constructor(prisma: PrismaService) {
     super(prisma);
   }
@@ -42,9 +49,7 @@ export class ReportRepository extends BaseRepository implements IReportRepositor
     const where: Prisma.ReportWhereInput = {
       organizationId: query.organizationId,
       ...this.notDeleted(query.includeDeleted),
-      ...(query.filters?.status
-        ? { status: query.filters.status as ReportStatus }
-        : {}),
+      ...(query.filters?.status ? { status: query.filters.status } : {}),
     };
     const [total, data] = await Promise.all([
       this.prisma.report.count({ where }),

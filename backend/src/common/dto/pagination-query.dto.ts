@@ -18,7 +18,9 @@ export class PaginationQueryDto {
   @Max(100)
   pageSize?: number = 20;
 
-  @ApiPropertyOptional({ description: 'Cursor for keyset pagination (createdAt|id)' })
+  @ApiPropertyOptional({
+    description: 'Cursor for keyset pagination (createdAt|id)',
+  })
   @IsOptional()
   @IsString()
   cursor?: string;
@@ -36,5 +38,10 @@ export class PaginationQueryDto {
 
 export type PageResult<T> = {
   data: T[];
-  meta: { page: number; pageSize: number; total: number; nextCursor?: string | null };
+  meta: {
+    page: number;
+    pageSize: number;
+    total: number;
+    nextCursor?: string | null;
+  };
 };

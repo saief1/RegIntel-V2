@@ -275,6 +275,62 @@ export type RealNotification = {
   createdAt: string
 }
 
+export type RealAuditLog = {
+  id: string
+  action: string
+  resource: string
+  category?: string
+  userId?: string | null
+  requestId?: string | null
+  correlationId?: string | null
+  createdAt: string
+  entryHash?: string
+}
+
+/** Real immutable audit APIs — gated by VITE_USE_REAL_AUDIT. */
+export const realAuditApi = {
+  list(accessToken: string, organizationId: string, page = 1, pageSize = 20) {
+    return apiRequest<RealAuditLog[]>(
+      `/audit-entries/logs?page=${page}&pageSize=${pageSize}`,
+      { accessToken, organizationId },
+    )
+  },
+  retention(accessToken: string, organizationId: string) {
+    return apiRequest<{
+      retentionDays: number
+      immutable: boolean
+      store: string
+    }>('/audit-entries/retention', { accessToken, organizationId })
+  },
+}
+
+/** Real search APIs — gated by VITE_USE_REAL_SEARCH. */
+export const realSearchApi = {
+  query(
+    accessToken: string,
+    organizationId: string,
+    q: string,
+    page = 1,
+    pageSize = 20,
+  ) {
+    const params = new URLSearchParams({
+      q,
+      page: String(page),
+      pageSize: String(pageSize),
+    })
+    return apiRequest<
+      Array<{
+        id: string
+        entityType: string
+        entityId: string
+        title: string
+        rank: number
+        highlights: { title?: string; body?: string }
+      }>
+    >(`/search?${params.toString()}`, { accessToken, organizationId })
+  },
+}
+
 /** Real notification APIs — gated by VITE_USE_REAL_NOTIFICATIONS. */
 export const realNotificationsApi = {
   list(accessToken: string, organizationId: string) {

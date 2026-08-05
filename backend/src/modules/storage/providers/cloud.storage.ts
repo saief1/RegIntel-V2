@@ -69,14 +69,14 @@ export function hasS3Credentials(): boolean {
 export function hasAzureCredentials(): boolean {
   return Boolean(
     process.env.AZURE_STORAGE_CONNECTION_STRING ||
-      process.env.AZURE_STORAGE_ACCOUNT,
+    process.env.AZURE_STORAGE_ACCOUNT,
   );
 }
 
 export function hasGcsCredentials(): boolean {
   return Boolean(
     process.env.GCS_BUCKET &&
-      (process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-        process.env.GCS_CLIENT_EMAIL),
+    (process.env.GOOGLE_APPLICATION_CREDENTIALS ||
+      process.env.GCS_CLIENT_EMAIL),
   );
 }

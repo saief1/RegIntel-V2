@@ -10,7 +10,6 @@ import {
 } from 'class-validator';
 
 export class CreateReportsDto {
-
   @ApiProperty()
   @IsString()
   @MinLength(1)
@@ -28,5 +27,4 @@ export class CreateReportsDto {
   @ApiPropertyOptional()
   @IsOptional()
   parameters?: Record<string, unknown>;
-
 }

@@ -9,6 +9,10 @@ export type EmailJobPayload = {
   subject: string;
   body: string;
   notificationId?: string;
+  /** Email delivery row id (B016). */
+  deliveryId?: string;
+  to?: string;
+  templateKey?: string;
 };
 
 export type NotificationDeliveryPayload = {
@@ -50,6 +54,13 @@ export type AuditCleanupPayload = {
   olderThanDays: number;
 };
 
+export type SearchIndexPayload = {
+  organizationId: string;
+  mode: 'incremental' | 'rebuild';
+  entityType?: string;
+  entityId?: string;
+};
+
 /**
  * Queue abstraction. When BullMQ queues are unavailable (e.g. unit tests),
  * jobs are logged and processed in-process via optional handlers.
@@ -61,7 +72,9 @@ export class JobsService {
     [];
 
   constructor(
-    @Optional() @InjectQueue(QUEUE_NAMES.email) private readonly emailQueue?: Queue,
+    @Optional()
+    @InjectQueue(QUEUE_NAMES.email)
+    private readonly emailQueue?: Queue,
     @Optional()
     @InjectQueue(QUEUE_NAMES.reminder)
     private readonly reminderQueue?: Queue,
@@ -83,6 +96,9 @@ export class JobsService {
     @Optional()
     @InjectQueue(QUEUE_NAMES.auditCleanup)
     private readonly auditCleanupQueue?: Queue,
+    @Optional()
+    @InjectQueue(QUEUE_NAMES.searchIndex)
+    private readonly searchIndexQueue?: Queue,
   ) {}
 
   private async add<T>(
@@ -129,15 +145,15 @@ export class JobsService {
   }
 
   enqueueWorkflowAutomation(data: WorkflowAutomationPayload) {
-    return this.add(
-      this.workflowQueue,
-      QUEUE_NAMES.workflowAutomation,
-      data,
-    );
+    return this.add(this.workflowQueue, QUEUE_NAMES.workflowAutomation, data);
   }
 
   enqueueAuditCleanup(data: AuditCleanupPayload) {
     return this.add(this.auditCleanupQueue, QUEUE_NAMES.auditCleanup, data);
+  }
+
+  enqueueSearchIndex(data: SearchIndexPayload) {
+    return this.add(this.searchIndexQueue, QUEUE_NAMES.searchIndex, data);
   }
 
   getInProcessFallback() {
@@ -154,6 +170,7 @@ export class JobsService {
       ['sync-retry', this.syncRetryQueue],
       ['workflow-automation', this.workflowQueue],
       ['audit-cleanup', this.auditCleanupQueue],
+      ['search-index', this.searchIndexQueue],
     ] as const;
 
     const stats = [];
