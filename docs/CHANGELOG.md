@@ -32,6 +32,7 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 
 | Version | Date | Summary |
 |---|---|---|
+| 2.7.0 | 2026-08-05 | RAG Platform — indexing, retrieval, grounded answers, citations, workspace wire (Milestone C2) |
 | 2.6.0 | 2026-08-05 | AI Foundation — providers, embeddings, vectors, prompts, gateway (Milestone C1) |
 | 2.5.0 | 2026-08-05 | Backend GA — deployment, observability, security hardening, CI/CD, certification (Milestone B5) |
 | 2.4.0 | 2026-08-04 | Infrastructure & Production Readiness — email, immutable audit, search, multi-tenancy, ops (Milestone B4) |
@@ -55,6 +56,35 @@ Each entry should be categorized under one of: `Added`, `Changed`, `Deprecated`,
 | 0.7.0 | 2026-08-02 | Execution Platform — AI → Work Action Center |
 
 
+
+### v2.7.0 — RAG Platform (Milestone C2)
+
+**Status:** Minor (Phase C / C006–C010)  
+**Tags:** `v2.7.0`, `RAG_PLATFORM_COMPLETE`  
+**Date:** 2026-08-05
+
+#### Added
+
+- **C006** Regulatory knowledge index — parse→chunk→metadata→embed→vector; incremental/reindex/delete jobs; version awareness; tenant isolation; relationships
+- **C007** Retrieval engine — hybrid keyword + vector cosine, filters, threshold, top-K, freshness, dedupe, related docs, recommended policies
+- **C008** RAG response engine — grounded answers with confidence, latency, tokens; low-confidence uncertainty + manual review
+- **C009** Citations & explainability — inline markers, source cards, evidence chain, export API; FE wires into existing CitationCard
+- **C010** AI Workspace integration — gateway RAG path for workspace modes behind `USE_RAG`
+- Prisma migration `20260806010000_rag_platform_c2`
+- Docs: `RAG.md`, `RETRIEVAL.md`, `CITATIONS.md`, `AI_WORKSPACE.md`
+- Flags: `USE_RAG`, `USE_VECTOR_SEARCH`, `VITE_USE_RAG`, `VITE_USE_VECTOR_SEARCH` (default false)
+- Seed knowledge embeddings for FINTRAC guidance / procedures / policy
+
+#### Changed
+
+- Root/backend `package.json` → `2.7.0`
+- Phase C progress 50%; next band C011–C015
+- Gateway chat uses RagService when `USE_RAG=true`; otherwise C1 path
+
+#### Notes
+
+- No new npm dependencies
+- Do **not** start C011 in this release
 
 ### v2.6.0 — AI Foundation (Milestone C1)
 

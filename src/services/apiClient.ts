@@ -332,6 +332,15 @@ export const realSearchApi = {
 }
 
 /** Real AI gateway APIs — gated by VITE_USE_REAL_AI. */
+export type RealAiCitation = {
+  id: string
+  kind: 'regulation' | 'document' | 'evidence' | 'case'
+  title: string
+  subtitle?: string
+  href: string
+  snippet?: string
+}
+
 export type RealAiMessage = {
   id: string
   role: 'SYSTEM' | 'USER' | 'ASSISTANT' | 'TOOL'
@@ -365,6 +374,23 @@ export type RealAiChatResult = {
   }
   costUsd: number
   latencyMs: number
+  confidence?: number
+  lowConfidence?: boolean
+  reasoningSummary?: string
+  citations?: RealAiCitation[]
+  supportingDocuments?: Array<{
+    marker: string
+    title: string
+    href?: string
+    preview?: string
+    kind?: string
+  }>
+  offerAdditionalSearch?: boolean
+  rag?: {
+    queryId: string
+    chunkCount: number
+    retrieval?: { useVector: boolean; useHybrid: boolean; latencyMs: number }
+  } | null
 }
 
 export const realAiApi = {

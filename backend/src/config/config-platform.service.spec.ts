@@ -33,7 +33,7 @@ describe('ConfigPlatformService', () => {
     service.onModuleInit();
     const diag = service.getStartupDiagnostics();
     expect(diag.configChecksum).toHaveLength(16);
-    expect(diag.version).toBe('2.6.0');
+    expect(diag.version).toBe('2.7.0');
     expect(diag.secrets.warnings.length).toBeGreaterThan(0);
     expect(diag.readyToServe).toBe(true);
   });

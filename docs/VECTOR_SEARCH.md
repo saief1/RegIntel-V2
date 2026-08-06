@@ -35,8 +35,15 @@ Canonical storage is **JSON float arrays** on `embedding_chunks.embedding` so te
 
 `VECTOR_STORE=pgvector|json|pinecone|qdrant`
 
+`USE_VECTOR_SEARCH` (default **false**) — when true, Retrieval Engine (C007) and gateway light-path use vector cosine; when false, keyword-only retrieval still works.
+
+## C2 usage
+
+RAG retrieval (`RetrievalService`) calls `VectorStore.similaritySearch` when the flag is on, then merges with keyword hits. Indexing continues to upsert into the configured store via `EmbeddingsService`.
+
 ## Revision history
 
 | Date | Change |
 |---|---|
+| 2026-08-05 | C2 — `USE_VECTOR_SEARCH` gate for retrieval |
 | 2026-08-05 | C003 Vector Database Layer |

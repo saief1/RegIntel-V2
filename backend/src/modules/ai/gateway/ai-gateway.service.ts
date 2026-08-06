@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { AiMessageRole, AiProviderName } from '@prisma/client';
 import { AI_REPOSITORY } from '../../../common/repositories/tokens';
 import type { IAiRepository } from '../../../common/repositories/ai.repository';
+import { CitationsService } from '../citations/citations.service';
 import { EmbeddingsService } from '../embeddings/embeddings.service';
 import { PromptManager } from '../prompts/prompt.manager';
 import {
@@ -11,6 +12,7 @@ import {
   ChatMessage,
   AiProviderName as ProviderName,
 } from '../providers/ai-provider.types';
+import { RagService } from '../rag/rag.service';
 import { VECTOR_STORE, VectorStore } from '../vector/vector.types';
 
 export type GatewayChatInput = {
@@ -41,6 +43,8 @@ export class AiGatewayService {
     private readonly prompts: PromptManager,
     private readonly embeddings: EmbeddingsService,
     private readonly config: ConfigService,
+    private readonly rag: RagService,
+    private readonly citations: CitationsService,
   ) {}
 
   getMetrics() {
@@ -67,6 +71,9 @@ export class AiGatewayService {
       provider,
       vectorStore: { name: this.vectorStore.name, status: vector },
       useRealAi: this.config.get<boolean>('featureFlags.useRealAi') ?? false,
+      useRag: this.config.get<boolean>('featureFlags.useRag') ?? false,
+      useVectorSearch:
+        this.config.get<boolean>('featureFlags.useVectorSearch') ?? false,
       metrics: this.getMetrics(),
     };
   }
@@ -105,6 +112,7 @@ export class AiGatewayService {
     this.metrics.chatRequests += 1;
     const retries = this.config.get<number>('ai.maxRetries') ?? 2;
     let conversationId = input.conversationId;
+    const useRag = this.config.get<boolean>('featureFlags.useRag') === true;
 
     try {
       if (!conversationId) {
@@ -134,6 +142,10 @@ export class AiGatewayService {
         content: input.message,
       });
 
+      if (useRag) {
+        return this.chatWithRag(input, conversationId, started);
+      }
+
       const historyRows = await this.aiRepo.listMessages(conversationId);
       const historyBudget =
         this.config.get<number>('ai.historyTokenBudget') ?? 2500;
@@ -148,29 +160,33 @@ export class AiGatewayService {
       );
 
       let retrievedContext = '';
-      try {
-        const qEmbed = await this.provider.embed({
-          texts: [input.message],
-          organizationId: input.organizationId,
-          requestId: input.requestId,
-        });
-        const hits = await this.vectorStore.similaritySearch({
-          vector: qEmbed.embeddings[0] ?? [],
-          topK: 5,
-          filter: {
+      const useVectorSearch =
+        this.config.get<boolean>('featureFlags.useVectorSearch') === true;
+      if (useVectorSearch) {
+        try {
+          const qEmbed = await this.provider.embed({
+            texts: [input.message],
             organizationId: input.organizationId,
-            namespace: 'default',
-          },
-          queryText: input.message,
-        });
-        retrievedContext = hits
-          .map(
-            (h, i) =>
-              `[${i + 1}] (${h.entityType}:${h.entityId}) ${h.content.slice(0, 400)}`,
-          )
-          .join('\n');
-      } catch {
-        retrievedContext = '';
+            requestId: input.requestId,
+          });
+          const hits = await this.vectorStore.similaritySearch({
+            vector: qEmbed.embeddings[0] ?? [],
+            topK: 5,
+            filter: {
+              organizationId: input.organizationId,
+              namespace: 'default',
+            },
+            queryText: input.message,
+          });
+          retrievedContext = hits
+            .map(
+              (h, i) =>
+                `[${i + 1}] (${h.entityType}:${h.entityId}) ${h.content.slice(0, 400)}`,
+            )
+            .join('\n');
+        } catch {
+          retrievedContext = '';
+        }
       }
 
       const rendered = await this.prompts.render(
@@ -274,7 +290,6 @@ export class AiGatewayService {
         requestId: input.requestId,
       });
 
-      // Best-effort conversation embedding for future retrieval
       void this.embeddings
         .embedEntity({
           organizationId: input.organizationId,
@@ -300,6 +315,9 @@ export class AiGatewayService {
         costUsd: result.costUsd,
         latencyMs: result.latencyMs,
         prompt: { key: rendered.key, version: rendered.version },
+        confidence: undefined as number | undefined,
+        citations: [] as ReturnType<CitationsService['toWorkspaceCitations']>,
+        rag: null,
       };
     } catch (err) {
       this.metrics.chatErrors += 1;
@@ -315,6 +333,77 @@ export class AiGatewayService {
       });
       throw err;
     }
+  }
+
+  /** C010 — RAG path for all workspace modes when USE_RAG=true. */
+  private async chatWithRag(
+    input: GatewayChatInput,
+    conversationId: string,
+    started: number,
+  ) {
+    const ragResult = await this.rag.ask({
+      organizationId: input.organizationId,
+      userId: input.userId,
+      question: input.message,
+      mode: input.mode ?? 'chat',
+      conversationId,
+      context: input.context,
+      requestId: input.requestId,
+    });
+
+    const workspaceCitations = this.citations.toWorkspaceCitations(
+      ragResult.citations,
+    );
+
+    const assistant = await this.aiRepo.createMessage({
+      conversationId,
+      organizationId: input.organizationId,
+      userId: input.userId,
+      role: AiMessageRole.ASSISTANT,
+      content: ragResult.answer,
+      tokenCount: ragResult.tokenUsage.completionTokens,
+      model: ragResult.model,
+      provider: this.toPrismaProvider(ragResult.provider),
+      latencyMs: ragResult.latencyMs,
+      metadata: {
+        ragQueryId: ragResult.queryId,
+        confidence: ragResult.confidence,
+        lowConfidence: ragResult.lowConfidence,
+        reasoningSummary: ragResult.reasoningSummary,
+        citationIds: ragResult.citations.map((c) => c.id),
+        promptKey: ragResult.prompt.key,
+        promptVersion: ragResult.prompt.version,
+        usage: ragResult.tokenUsage,
+      },
+    });
+
+    this.metrics.totalLatencyMs += Date.now() - started;
+    this.metrics.totalTokens += ragResult.tokenUsage.totalTokens;
+
+    return {
+      conversationId,
+      message: {
+        ...assistant,
+        confidence: ragResult.confidence,
+      },
+      provider: ragResult.provider,
+      model: ragResult.model,
+      usage: ragResult.tokenUsage,
+      costUsd: 0,
+      latencyMs: ragResult.latencyMs,
+      prompt: ragResult.prompt,
+      confidence: ragResult.confidence,
+      lowConfidence: ragResult.lowConfidence,
+      reasoningSummary: ragResult.reasoningSummary,
+      citations: workspaceCitations,
+      supportingDocuments: ragResult.supportingDocuments,
+      offerAdditionalSearch: ragResult.offerAdditionalSearch,
+      rag: {
+        queryId: ragResult.queryId,
+        chunkCount: ragResult.chunkCount,
+        retrieval: ragResult.retrieval,
+      },
+    };
   }
 
   private async withRetries<T>(

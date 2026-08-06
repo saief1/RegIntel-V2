@@ -1,9 +1,11 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AiController } from './ai.controller';
+import { CitationsService } from './citations/citations.service';
 import { EmbeddingsController } from './embeddings.controller';
 import { EmbeddingsService } from './embeddings/embeddings.service';
 import { AiGatewayService } from './gateway/ai-gateway.service';
+import { IndexingService } from './indexing/indexing.service';
 import { PromptManager } from './prompts/prompt.manager';
 import { AI_PROVIDER } from './providers/ai-provider.types';
 import { AnthropicProvider } from './providers/anthropic.provider';
@@ -11,6 +13,9 @@ import { AzureOpenAiProvider } from './providers/azure-openai.provider';
 import { GeminiProvider } from './providers/gemini.provider';
 import { MockAiProvider } from './providers/mock.provider';
 import { OpenAiProvider } from './providers/openai.provider';
+import { RagController } from './rag.controller';
+import { RagService } from './rag/rag.service';
+import { RetrievalService } from './retrieval/retrieval.service';
 import { JsonFallbackVectorStore } from './vector/json-fallback.store';
 import { PgVectorStore } from './vector/pgvector.store';
 import { PineconeVectorStore } from './vector/pinecone.store';
@@ -18,7 +23,7 @@ import { QdrantVectorStore } from './vector/qdrant.store';
 import { VECTOR_STORE } from './vector/vector.types';
 
 @Module({
-  controllers: [AiController, EmbeddingsController],
+  controllers: [AiController, EmbeddingsController, RagController],
   providers: [
     MockAiProvider,
     OpenAiProvider,
@@ -102,8 +107,21 @@ import { VECTOR_STORE } from './vector/vector.types';
     },
     PromptManager,
     EmbeddingsService,
+    IndexingService,
+    RetrievalService,
+    CitationsService,
+    RagService,
     AiGatewayService,
   ],
-  exports: [AiGatewayService, EmbeddingsService, PromptManager, AI_PROVIDER],
+  exports: [
+    AiGatewayService,
+    EmbeddingsService,
+    PromptManager,
+    IndexingService,
+    RetrievalService,
+    RagService,
+    CitationsService,
+    AI_PROVIDER,
+  ],
 })
 export class AiModule {}

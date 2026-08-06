@@ -7,7 +7,8 @@ Architecture for **Phase C — AI Intelligence Platform**, Milestone **C1 (C001�
 ## Status
 
 ✅ **AI Foundation complete** (`v2.6.0` / `AI_FOUNDATION_COMPLETE`).  
-`USE_REAL_AI` / `VITE_USE_REAL_AI` default **false** — mock path remains for tests and demos.
+✅ **RAG Platform complete** (`v2.7.0` / `RAG_PLATFORM_COMPLETE`).  
+Flags default **false**: `USE_REAL_AI`, `USE_RAG`, `USE_VECTOR_SEARCH` (+ `VITE_*` counterparts) — mock path remains for tests and demos.
 
 ## Principles
 
@@ -26,6 +27,10 @@ backend/src/modules/ai/
   vector/        VectorStore + pgvector (JSON fallback) + pinecone/qdrant stubs
   prompts/       PromptManager + builtin templates
   gateway/       AiGatewayService (orchestration, usage, audit)
+  indexing/      Regulatory knowledge index (C006)
+  retrieval/     Hybrid retrieval engine (C007)
+  rag/           RAG response engine (C008)
+  citations/     Citation & explainability (C009)
 ```
 
 ## Provider selection
@@ -43,6 +48,10 @@ backend/src/modules/ai/
 - [`VECTOR_SEARCH.md`](./VECTOR_SEARCH.md)
 - [`PROMPTS.md`](./PROMPTS.md)
 - [`AI_GATEWAY.md`](./AI_GATEWAY.md)
+- [`RAG.md`](./RAG.md)
+- [`RETRIEVAL.md`](./RETRIEVAL.md)
+- [`CITATIONS.md`](./CITATIONS.md)
+- [`AI_WORKSPACE.md`](./AI_WORKSPACE.md)
 - [`API.md`](./API.md)
 
 ## New packages
@@ -53,4 +62,5 @@ None. OpenAI uses native `fetch`. Other providers are stubs/interfaces until key
 
 | Date | Change |
 |---|---|
+| 2026-08-05 | C006–C010 RAG Platform (v2.7.0) |
 | 2026-08-05 | C001–C005 AI Foundation (v2.6.0) |

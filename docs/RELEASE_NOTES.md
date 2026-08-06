@@ -1,5 +1,38 @@
 # Release Notes
 
+## RegIntel v2.7.0 — RAG Platform (Milestone C2)
+
+**Date:** 2026-08-05  
+**Tags:** `v2.7.0`, `RAG_PLATFORM_COMPLETE`  
+**Phase:** C (C006–C010)
+
+### Headline
+
+Regulatory Intelligence RAG: tenant knowledge indexing, hybrid retrieval, grounded answers with citations and confidence — connected to the existing AI Workspace behind feature flags. No frontend redesign.
+
+### Highlights
+
+- **C006 Index** — regulations/policies/controls/procedures/guidance/reports/evidence/tasks/cases/documents pipeline
+- **C007 Retrieval** — semantic + keyword hybrid, filters, ranking, related docs, recommended policies
+- **C008 RAG** — question→retrieve→prompt→LLM with confidence / latency / tokens
+- **C009 Citations** — inline markers, source cards, evidence chain, export
+- **C010 Workspace** — Chat/Research/Analysis/Compare/Drafting/Brief/Board/Assistants via gateway when `USE_RAG=true`
+- Seeded mock embeddings so retrieval works without API keys
+
+### Upgrade notes
+
+- Root and backend `package.json` → `2.7.0`
+- Apply Prisma migration `20260806010000_rag_platform_c2`
+- New env (defaults false): `USE_RAG`, `USE_VECTOR_SEARCH`, `VITE_USE_RAG`, `VITE_USE_VECTOR_SEARCH`
+- Re-seed (or run `POST /ai/index/jobs` with `full: true`) for demo knowledge vectors
+- **No new npm packages**
+
+### Next
+
+**C011–C015** — Agents / memory (v2.8.0). Do **not** start C011 in this release.
+
+---
+
 ## RegIntel v2.6.0 — AI Foundation (Milestone C1)
 
 **Date:** 2026-08-05  

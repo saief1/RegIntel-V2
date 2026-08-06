@@ -124,6 +124,14 @@ class EnvironmentVariables {
   @IsOptional()
   USE_REAL_AI?: string;
 
+  @IsBooleanString()
+  @IsOptional()
+  USE_RAG?: string;
+
+  @IsBooleanString()
+  @IsOptional()
+  USE_VECTOR_SEARCH?: string;
+
   @IsString()
   @IsOptional()
   AI_PROVIDER?: string;

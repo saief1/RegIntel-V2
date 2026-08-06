@@ -81,6 +81,8 @@ export type AppConfig = {
     useRealAudit: boolean;
     useRealSearch: boolean;
     useRealAi: boolean;
+    useRag: boolean;
+    useVectorSearch: boolean;
   };
 };
 
@@ -178,5 +180,7 @@ export default (): AppConfig => ({
     useRealAudit: flag('USE_REAL_AUDIT'),
     useRealSearch: flag('USE_REAL_SEARCH'),
     useRealAi: flag('USE_REAL_AI'),
+    useRag: flag('USE_RAG'),
+    useVectorSearch: flag('USE_VECTOR_SEARCH'),
   },
 });

@@ -17,7 +17,7 @@ This document is the human index for RegIntel's API surface. **Authoritative con
 
 ## 1. Overview
 
-Milestone **C1 (v2.6.0)** adds the AI gateway under `/api/v1/ai/*` (providers, embeddings, vectors, prompts). Backend GA (v2.5.0) capabilities remain. Frontend still defaults to mock providers; enable per-domain with `VITE_USE_REAL_*` (all default **false**), including `VITE_USE_REAL_AI`. See [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md).
+Milestone **C2 (v2.7.0)** adds RAG under `/api/v1/ai/*` (index, retrieve, rag/ask, citations) on top of C1 gateway/embeddings/vectors. Flags `USE_REAL_AI` / `USE_RAG` / `USE_VECTOR_SEARCH` (+ `VITE_*`) default **false**. See [`RAG.md`](./RAG.md) and [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md).
 
 - Local API: `http://localhost:3000/api/v1`
 - Swagger UI: `http://localhost:3000/api/docs`
@@ -117,6 +117,19 @@ Milestone **C1 (v2.6.0)** adds the AI gateway under `/api/v1/ai/*` (providers, e
 | POST | `/api/v1/ai/embeddings/rebuild` | Rebuild namespace metadata | ✅ C1 |
 | POST | `/api/v1/ai/vectors/search` | Similarity / hybrid search | ✅ C1 |
 | POST | `/api/v1/ai/vectors/reindex` | Re-index metadata touch | ✅ C1 |
+| POST | `/api/v1/ai/index` | Index a document (parse→chunk→embed) | ✅ C2 |
+| POST | `/api/v1/ai/index/jobs` | Index / reindex / delete job | ✅ C2 |
+| GET | `/api/v1/ai/index/jobs` | List indexing jobs | ✅ C2 |
+| GET | `/api/v1/ai/index/jobs/:id` | Get indexing job | ✅ C2 |
+| POST | `/api/v1/ai/retrieve` | Hybrid / semantic retrieval | ✅ C2 |
+| POST | `/api/v1/ai/rag/ask` | Grounded RAG answer | ✅ C2 |
+| GET | `/api/v1/ai/rag/queries/:id` | Persisted RAG query + results | ✅ C2 |
+| GET | `/api/v1/ai/citations/query/:queryId` | List citations | ✅ C2 |
+| GET | `/api/v1/ai/citations/:id/source` | Citation source card | ✅ C2 |
+| GET | `/api/v1/ai/citations/export/:queryId` | Export citations | ✅ C2 |
+| POST | `/api/v1/ai/search-sessions` | Create search session | ✅ C2 |
+| POST | `/api/v1/ai/knowledge-relationships` | Upsert knowledge relationship | ✅ C2 |
+| GET | `/api/v1/ai/retrieval/metrics` | Tenant retrieval metrics | ✅ C2 |
 
 List endpoints support `page`, `pageSize`, `sortBy`, `sortOrder`, and optional filters. Writes emit audit events. See [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md), [`AI_GATEWAY.md`](./AI_GATEWAY.md), [`EMAIL.md`](./EMAIL.md), [`AUDIT.md`](./AUDIT.md), [`SEARCH.md`](./SEARCH.md), [`MULTITENANCY.md`](./MULTITENANCY.md), [`OPERATIONS.md`](./OPERATIONS.md), [`STORAGE.md`](./STORAGE.md).
 
@@ -136,6 +149,7 @@ Org-scoped RPM + daily API budget enforced when `X-Organization-Id` is present (
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone C2 | RAG index/retrieve/ask/citations endpoints |
 | 2026-08-05 | Milestone C1 | `/api/v1/ai/*` gateway, embeddings, vectors, prompts |
 | 2026-08-05 | Milestone B5 | Ops metadata/dashboard, security hardening, global rate limit |
 | 2026-08-04 | Milestone B4 | Email, audit logs/export, search, tenancy, ops probes; rate limiting |

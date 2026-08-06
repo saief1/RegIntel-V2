@@ -7,7 +7,7 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
 | Phase B – Backend Platform | ✅ Complete | 100% (B000–B025 ✅ + v2.2.1; Backend GA v2.5.0) |
-| Phase C – AI Intelligence Layer | 🔄 In Progress | 25% (C001–C005 ✅ → v2.6.0) |
+| Phase C – AI Intelligence Layer | 🔄 In Progress | 50% (C001–C010 ✅ → v2.7.0) |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
 | Phase F – Pilot Customers | ⏳ Planned | 0% |
@@ -15,8 +15,9 @@ Mirror of the Product Board in [`ROADMAP.md`](./ROADMAP.md). **ROADMAP.md is aut
 
 ## Current step
 
-**Phase C** — next **C006–C010** (Retrieval / RAG → v2.7.0). Do **not** start C006 in this release.
+**Phase C** — next **C011–C015** (agents / memory → v2.8.0). Do **not** start C011 in this release.
 
+Milestone C2 complete: **v2.7.0** / `RAG_PLATFORM_COMPLETE` (C006–C010 RAG Platform).  
 Milestone C1 complete: **v2.6.0** / `AI_FOUNDATION_COMPLETE` (C001–C005 AI Foundation).  
 Milestone B5 complete: **v2.5.0** / `BACKEND_GA_COMPLETE` (B021–B025 Backend GA).  
 Milestone B4 complete: **v2.4.0** / `MILESTONE_B4_COMPLETE` (B016–B020 Infrastructure & Production Readiness).  
@@ -25,9 +26,9 @@ Milestone B2 complete: **v2.2.0** / `B2_COMPLETE` (B006–B010).
 Sessions gap-fill: **v2.2.1** / `B2_SESSIONS_COMPLETE`.  
 Milestone B1: **v2.1.0** / `MILESTONE_B1_COMPLETE`.  
 Architecture Contract: [`BACKEND_ARCHITECTURE.md`](./BACKEND_ARCHITECTURE.md) ✅.  
-AI Architecture: [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md).
+AI Architecture: [`AI_ARCHITECTURE.md`](./AI_ARCHITECTURE.md) · [`RAG.md`](./RAG.md).
 
-UI frozen except integration wiring. Domain FE providers remain mock-default (`VITE_USE_REAL_*` false), including `VITE_USE_REAL_AI`.
+UI frozen except integration wiring. Domain FE providers remain mock-default (`VITE_USE_REAL_*` false), including `VITE_USE_REAL_AI` / `VITE_USE_RAG` / `VITE_USE_VECTOR_SEARCH`.
 
 ## Version targets
 
@@ -41,7 +42,7 @@ UI frozen except integration wiring. Domain FE providers remain mock-default (`V
 | v2.4.0 | Infrastructure & Production Readiness (B016–B020) ✅ |
 | v2.5.0 | Backend GA (B021–B025) ✅ |
 | v2.6.0 | AI Foundation (C001–C005) ✅ |
-| v2.7.0 | AI Retrieval / RAG (C006–C010) |
+| v2.7.0 | AI Retrieval / RAG (C006–C010) ✅ |
 | v2.8.0 | AI Memory / agents track (C011–C015) |
 | v2.9.0 | AI Autonomous / safety (C016–C020) |
 | v3.0.0 | Commercial GA + Phase D band |
@@ -61,7 +62,7 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B021–B025 Backend GA → v2.5.0 ✅
 → Phase C AI Intelligence Layer (C001–C020)
     → C001–C005 AI Foundation → v2.6.0 ✅
-    → C006–C010 Retrieval / RAG → v2.7.0
+    → C006–C010 Retrieval / RAG → v2.7.0 ✅
     → C011–C015 Agents / memory → v2.8.0
     → C016–C020 Audit & safety → v2.9.0
 → Phase D Wealth Management Production (D001–D020) → v3.0 band
@@ -75,6 +76,6 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
 | Band | IDs | Theme | Status |
 |---|---|---|---|
 | C1 Foundation | C001–C005 | Providers, embeddings, vectors, prompts, gateway | ✅ v2.6.0 |
-| C2 Retrieval | C006–C010 | RAG, indexing, citations | ⏳ v2.7.0 |
+| C2 Retrieval | C006–C010 | RAG, indexing, citations | ✅ v2.7.0 |
 | C3 Agents/Memory | C011–C015 | Agent runtime, tools, HITL, memory | ⏳ v2.8.0 |
 | C4 Safety | C016–C020 | Audit, redaction, guardrails | ⏳ v2.9.0 |

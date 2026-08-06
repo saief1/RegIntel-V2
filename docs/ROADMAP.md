@@ -31,7 +31,8 @@ Ticket IDs in this document (and any linked phase checklists) are the planning s
 
 Ships as a production-ready **frontend platform**: shell, design system, routed module surfaces (Sprints 1–19), mock data, and enterprise UX patterns. It is **not** a finished SaaS — real auth, persistence, live integrations, AI orchestration, multi-tenancy, and billing remain Phases B–F / v3.0.
 
-**Current step:** **Phase C** next band **C006–C010** (RAG / retrieval).  
+**Current step:** **Phase C** next band **C011–C015** (agents / memory). Do **not** start C011 in the v2.7.0 release tag itself beyond planning.  
+Milestone **C2** (C006–C010) complete — **v2.7.0** / `RAG_PLATFORM_COMPLETE` (RAG Platform).  
 Milestone **C1** (C001–C005) complete — **v2.6.0** / `AI_FOUNDATION_COMPLETE` (AI Foundation).  
 Milestone **B5** (B021–B025) complete — **v2.5.0** / `BACKEND_GA_COMPLETE` (Backend GA).  
 Milestone **B4** (B016–B020) complete — **v2.4.0** / `MILESTONE_B4_COMPLETE` (Infrastructure & Production Readiness).  
@@ -49,7 +50,7 @@ Milestone **B1** (B001–B005) complete — **v2.1.0**. Architecture Contract �
 | Frontend Platform GA (v2.0.0) | ✅ Complete | 100% |
 | Phase A – Stabilization | ✅ Complete | 100% |
 | Phase B – Backend Platform | ✅ Complete | 100% (B000–B025 ✅ + v2.2.1; Backend GA v2.5.0) |
-| Phase C – AI Intelligence Layer | 🔄 In Progress | 25% (C001–C005 ✅ → v2.6.0) |
+| Phase C – AI Intelligence Layer | 🔄 In Progress | 50% (C001–C010 ✅ → v2.7.0) |
 | Phase D – Wealth Management Production | ⏳ Planned | 0% |
 | Phase E – Enterprise Integrations | ⏳ Planned | 0% |
 | Phase F – Pilot Customers | ⏳ Planned | 0% |
@@ -69,7 +70,7 @@ Update this board when a phase starts or completes. Optionally mirror status in 
 | **v2.4.0** | Infrastructure & Production Readiness (B016–B020) ✅ |
 | **v2.5.0** | Backend GA (B021–B025, Phase B exit) ✅ |
 | **v2.6.0** | AI Foundation (C001–C005) ✅ |
-| **v2.7.0** | AI Retrieval / RAG (C006–C010) |
+| **v2.7.0** | AI Retrieval / RAG (C006–C010) ✅ |
 | **v2.8.0** | AI Memory (C011–C015 agents band starts; memory track) |
 | **v2.9.0** | AI Autonomous + Wealth Management Beta (C016–C020 / Phase D) |
 | **v3.0.0** | Commercial GA / Phase D+ (after Phases E–F) |
@@ -91,7 +92,7 @@ RegIntel v2.x Frontend Platform GA (v2.0.0)
     → B021–B025 Backend GA → v2.5.0 ✅ (deploy, observability, security, CI/CD, certification)
 → Phase C AI Intelligence Layer (C001–C020)
     → C001–C005 AI Foundation → v2.6.0 ✅
-    → C006–C010 Retrieval / RAG → v2.7.0
+    → C006–C010 Retrieval / RAG → v2.7.0 ✅
     → C011–C015 Agents / memory track → v2.8.0
     → C016–C020 Audit & safety / autonomous → v2.9.0
 → Phase D Wealth Management Production (D001–D020) → v3.0 band
@@ -207,11 +208,11 @@ FE mocks behind `USE_REAL_*=false` may remain — backend services are real.
 | IDs | Theme | Version | Status |
 |---|---|---|---|
 | **C001–C005** | AI Foundation — providers, embeddings, vectors, prompts, gateway | **v2.6.0** | ✅ |
-| **C006–C010** | Retrieval / RAG — tenant indexing, citations to real sources | **v2.7.0** | ⏳ Next |
-| **C011–C015** | Agents + memory track — runtime, tools, HITL | **v2.8.0** | ⏳ |
+| **C006–C010** | Retrieval / RAG — tenant indexing, citations to real sources | **v2.7.0** | ✅ |
+| **C011–C015** | Agents + memory track — runtime, tools, HITL | **v2.8.0** | ⏳ Next |
 | **C016–C020** | Audit & safety / autonomous — redaction, guardrails, playbooks | **v2.9.0** | ⏳ |
 
-Then Phase D (Wealth) toward **v3.0**. Do **not** start C006 in the v2.6.0 release.
+Then Phase D (Wealth) toward **v3.0**. Do **not** start C011 in the v2.7.0 release.
 
 ## 8. Phase D — Wealth Management Production (D001–D020)
 
@@ -261,6 +262,7 @@ Target after Phase F exit: multi-tenant SaaS with real auth, AI, wealth producti
 
 | Date | Author | Change |
 |---|---|---|
+| 2026-08-05 | Milestone C2 | C006–C010 RAG Platform → v2.7.0 / `RAG_PLATFORM_COMPLETE`; next → C011–C015 |
 | 2026-08-05 | Milestone C1 | C001–C005 AI Foundation → v2.6.0; Phase C ladder v2.6→v2.7 RAG→v2.8 memory→v2.9 autonomous→v3.0 |
 | 2026-08-05 | Milestone B5 | B021–B025 Backend GA → v2.5.0 (deploy, observability, security, CI/CD, certification) |
 | 2026-08-04 | Milestone B4 | B016–B020 Infrastructure & Production Readiness → v2.4.0 (email, audit, search, multi-tenancy, ops) |

@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { createHash } from 'crypto';
+import { EmbeddingEntityType, PrismaClient } from '@prisma/client';
 import { argon2id, hash } from 'argon2';
 import {
   PERMISSION_CATALOG,
@@ -8,6 +9,173 @@ import {
 } from '../src/modules/rbac/rbac.constants';
 
 const prisma = new PrismaClient();
+
+const MOCK_DIM = 64;
+
+function hashToUnit(seed: string, i: number): number {
+  let h = 2166136261;
+  const s = `${seed}:${i}`;
+  for (let j = 0; j < s.length; j += 1) {
+    h ^= s.charCodeAt(j);
+    h = Math.imul(h, 16777619);
+  }
+  return ((h >>> 0) % 10000) / 10000 - 0.5;
+}
+
+function mockEmbedding(text: string): number[] {
+  const vec = Array.from({ length: MOCK_DIM }, (_, i) =>
+    hashToUnit(text.slice(0, 64), i),
+  );
+  const norm = Math.sqrt(vec.reduce((sum, v) => sum + v * v, 0)) || 1;
+  return vec.map((v) => v / norm);
+}
+
+function contentHash(text: string): string {
+  return createHash('sha256').update(text).digest('hex');
+}
+
+/** Deterministic mock embeddings so RAG retrieval works without API keys. */
+async function seedRagKnowledge(
+  organizationId: string,
+  policyId?: string,
+) {
+  const existing = await prisma.embeddingDocument.count({
+    where: { organizationId, namespace: 'default' },
+  });
+  if (existing > 0) return;
+
+  const docs = await prisma.knowledgeDocument.findMany({
+    where: { organizationId, deletedAt: null },
+  });
+
+  for (const d of docs) {
+    const entityType: EmbeddingEntityType =
+      d.collection === 'controls'
+        ? 'CONTROL'
+        : d.collection === 'procedures'
+          ? 'PROCEDURE'
+          : d.collection === 'guidance' || d.collection === 'regulations'
+            ? 'GUIDANCE'
+            : 'DOCUMENT';
+    const content = [d.title, d.summary ?? '', d.body ?? ''].join('\n\n');
+    const hash = contentHash(content);
+    const embDoc = await prisma.embeddingDocument.create({
+      data: {
+        organizationId,
+        entityType,
+        entityId: d.id,
+        namespace: 'default',
+        title: d.title,
+        contentHash: hash,
+        contentVersion: 1,
+        sourceVersion: String(d.version),
+        chunkCount: 1,
+        metadata: {
+          collection: d.collection,
+          docType: entityType.toLowerCase(),
+          tags: d.tags,
+        },
+      },
+    });
+    await prisma.embeddingChunk.create({
+      data: {
+        organizationId,
+        documentId: embDoc.id,
+        entityType,
+        entityId: d.id,
+        namespace: 'default',
+        chunkIndex: 0,
+        content,
+        embedding: mockEmbedding(content),
+        tokenCount: Math.ceil(content.length / 4),
+        contentHash: hash,
+        metadata: { title: d.title, docType: entityType.toLowerCase() },
+      },
+    });
+  }
+
+  if (policyId) {
+    const policy = await prisma.policy.findFirst({
+      where: { id: policyId, organizationId },
+      include: { versions: { orderBy: { version: 'desc' }, take: 1 } },
+    });
+    if (policy) {
+      const content = [
+        policy.title,
+        policy.description ?? '',
+        policy.versions[0]?.content ?? '',
+        'Information security controls, access reviews, and incident escalation.',
+      ].join('\n\n');
+      const hash = contentHash(content);
+      const embDoc = await prisma.embeddingDocument.create({
+        data: {
+          organizationId,
+          entityType: 'POLICY',
+          entityId: policy.id,
+          namespace: 'default',
+          title: policy.title,
+          contentHash: hash,
+          contentVersion: 1,
+          sourceVersion: String(policy.versions[0]?.version ?? 1),
+          chunkCount: 1,
+          metadata: { docType: 'policy', category: policy.category },
+        },
+      });
+      await prisma.embeddingChunk.create({
+        data: {
+          organizationId,
+          documentId: embDoc.id,
+          entityType: 'POLICY',
+          entityId: policy.id,
+          namespace: 'default',
+          chunkIndex: 0,
+          content,
+          embedding: mockEmbedding(content),
+          tokenCount: Math.ceil(content.length / 4),
+          contentHash: hash,
+          metadata: { title: policy.title, docType: 'policy' },
+        },
+      });
+
+      const guidance = docs.find((d) => d.collection === 'guidance');
+      if (guidance) {
+        await prisma.knowledgeRelationship.create({
+          data: {
+            organizationId,
+            fromEntityType: 'POLICY',
+            fromEntityId: policy.id,
+            toEntityType: 'GUIDANCE',
+            toEntityId: guidance.id,
+            relationType: 'REFERENCES',
+            weight: 1,
+          },
+        });
+      }
+    }
+  }
+
+  await prisma.vectorMetadata.upsert({
+    where: {
+      organizationId_namespace: {
+        organizationId,
+        namespace: 'default',
+      },
+    },
+    create: {
+      organizationId,
+      namespace: 'default',
+      storeProvider: 'pgvector',
+      dimensions: MOCK_DIM,
+      chunkCount: await prisma.embeddingChunk.count({ where: { organizationId } }),
+      lastReindexAt: new Date(),
+    },
+    update: {
+      chunkCount: await prisma.embeddingChunk.count({ where: { organizationId } }),
+      lastReindexAt: new Date(),
+      dimensions: MOCK_DIM,
+    },
+  });
+}
 
 async function seedRbac() {
   for (const permission of PERMISSION_CATALOG) {
@@ -225,6 +393,11 @@ async function main() {
         createdById: user.id,
       },
     });
+  } else {
+    const existingPolicy = await prisma.policy.findFirst({
+      where: { organizationId: organization.id, deletedAt: null },
+    });
+    policyId = existingPolicy?.id;
   }
 
   const caseCount = await prisma.case.count({
@@ -278,21 +451,55 @@ async function main() {
     taskId = existingTask?.id;
   }
 
-  const docCount = await prisma.knowledgeDocument.count({
-    where: { organizationId: organization.id },
-  });
-  if (docCount === 0) {
-    await prisma.knowledgeDocument.create({
-      data: {
+  const ragSeedDocs = [
+    {
+      title: 'Control Library Overview',
+      summary: 'Seeded knowledge document.',
+      body: 'Demo knowledge content for B3 APIs. Access control, logging, and change management baselines.',
+      collection: 'controls',
+      tags: ['knowledge', 'controls'],
+    },
+    {
+      title: 'FINTRAC Travel Rule Guidance Digest',
+      summary: 'Seeded regulation guidance for RAG retrieval demos.',
+      body: [
+        'FINTRAC travel rule expectations for virtual asset service providers.',
+        'Required originator and beneficiary information must accompany qualifying transfers.',
+        'Firms should retain evidence of incomplete-transfer escalation and sanctions screening.',
+        'Cross-border transfers above thresholds require enhanced recordkeeping.',
+      ].join('\n\n'),
+      collection: 'guidance',
+      tags: ['fintrac', 'travel-rule', 'aml'],
+    },
+    {
+      title: 'AML Monitoring Procedure',
+      summary: 'Seeded procedure for case and policy assistants.',
+      body: [
+        'Procedure for escalating unusual transaction alerts.',
+        'Analysts must document rationale, attach supporting evidence, and notify the MLRO within 24 hours for high-risk hits.',
+        'Related control: transaction monitoring threshold review.',
+      ].join('\n\n'),
+      collection: 'procedures',
+      tags: ['aml', 'procedure'],
+    },
+  ];
+  for (const doc of ragSeedDocs) {
+    const found = await prisma.knowledgeDocument.findFirst({
+      where: {
         organizationId: organization.id,
-        title: 'Control Library Overview',
-        summary: 'Seeded knowledge document.',
-        body: 'Demo knowledge content for B3 APIs.',
-        collection: 'controls',
-        tags: ['knowledge'],
+        title: doc.title,
+        deletedAt: null,
       },
     });
+    if (!found) {
+      await prisma.knowledgeDocument.create({
+        data: { organizationId: organization.id, ...doc },
+      });
+    }
   }
+
+  // ── Milestone C2 seed knowledge embeddings (mock vectors, tenant-isolated) ──
+  await seedRagKnowledge(organization.id, policyId);
 
   const reportCount = await prisma.report.count({
     where: { organizationId: organization.id },

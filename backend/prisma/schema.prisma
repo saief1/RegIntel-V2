@@ -238,10 +238,18 @@ model Organization {
   aiPrompts         AiPrompt[]
   embeddingDocuments EmbeddingDocument[]
   embeddingChunks   EmbeddingChunk[]
+  embeddingDocumentVersions EmbeddingDocumentVersion[]
   vectorMetadata    VectorMetadata[]
   aiUsage           AiUsage[]
   aiCosts           AiCost[]
   aiProviderLogs    AiProviderLog[]
+  ragQueries        RagQuery[]
+  retrievalLogs     RetrievalLog[]
+  citations         Citation[]
+  knowledgeRelationships KnowledgeRelationship[]
+  searchSessions    SearchSession[]
+  retrievalMetrics  RetrievalMetric[]
+  indexingJobs      IndexingJob[]
 
   @@map("organizations")
 }
@@ -279,6 +287,9 @@ model User {
   aiConversations    AiConversation[]
   aiMessages         AiMessage[]
   aiProviderLogs     AiProviderLog[]
+  ragQueries         RagQuery[]
+  searchSessions     SearchSession[]
+  citations          Citation[]
 
   @@map("users")
 }
@@ -1061,6 +1072,13 @@ enum EmbeddingEntityType {
   TASK
   CONVERSATION
   MESSAGE
+  CONTROL
+  PROCEDURE
+  GUIDANCE
+  REPORT
+  EVIDENCE
+  CASE
+  UPLOADED_DOCUMENT
 }
 
 enum PromptKind {
@@ -1077,6 +1095,33 @@ enum AiUsageKind {
   EMBEDDING
   REBUILD
   SEARCH
+  RAG
+  RETRIEVAL
+  INDEX
+}
+
+enum IndexingJobStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+enum IndexingJobKind {
+  INDEX
+  REINDEX
+  DELETE
+  INCREMENTAL
+}
+
+enum KnowledgeRelationType {
+  RELATED
+  IMPLEMENTS
+  REFERENCES
+  SUPERSEDES
+  SUPPORTS
+  DERIVED_FROM
 }
 
 model AiConversation {
@@ -1163,18 +1208,45 @@ model EmbeddingDocument {
   entityType     EmbeddingEntityType @map("entity_type")
   entityId       String              @map("entity_id")
   namespace      String              @default("default")
+  workspaceId    String?             @map("workspace_id")
   title          String              @default("")
   contentHash    String              @map("content_hash")
+  /// Monotonic content version for re-index / version awareness.
+  contentVersion Int                 @default(1) @map("content_version")
+  sourceVersion  String?             @map("source_version")
   metadata       Json?
   chunkCount     Int                 @default(0) @map("chunk_count")
   indexedAt      DateTime            @default(now()) @map("indexed_at")
   updatedAt      DateTime            @updatedAt @map("updated_at")
   organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   chunks         EmbeddingChunk[]
+  versions       EmbeddingDocumentVersion[]
 
   @@unique([organizationId, namespace, entityType, entityId])
   @@index([organizationId, namespace, entityType])
+  @@index([organizationId, workspaceId])
   @@map("embedding_documents")
+}
+
+/// Historical snapshot of an indexed document version (chunk payloads in JSON).
+model EmbeddingDocumentVersion {
+  id             String              @id @default(uuid()) @db.Uuid
+  organizationId String              @map("organization_id") @db.Uuid
+  documentId     String              @map("document_id") @db.Uuid
+  contentVersion Int                 @map("content_version")
+  contentHash    String              @map("content_hash")
+  sourceVersion  String?             @map("source_version")
+  title          String              @default("")
+  chunkCount     Int                 @default(0) @map("chunk_count")
+  chunksSnapshot Json?               @map("chunks_snapshot")
+  metadata       Json?
+  createdAt      DateTime            @default(now()) @map("created_at")
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  document       EmbeddingDocument   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+
+  @@unique([documentId, contentVersion])
+  @@index([organizationId, documentId])
+  @@map("embedding_document_versions")
 }
 
 model EmbeddingChunk {
@@ -1281,4 +1353,199 @@ model AiProviderLog {
   @@index([organizationId, createdAt])
   @@index([provider, createdAt])
   @@map("ai_provider_logs")
+}
+
+/// C006–C010 RAG platform tables
+
+model IndexingJob {
+  id             String            @id @default(uuid()) @db.Uuid
+  organizationId String            @map("organization_id") @db.Uuid
+  kind           IndexingJobKind   @default(INDEX)
+  status         IndexingJobStatus @default(PENDING)
+  entityType     EmbeddingEntityType? @map("entity_type")
+  entityId       String?           @map("entity_id")
+  namespace      String            @default("default")
+  workspaceId    String?           @map("workspace_id")
+  progress       Int               @default(0)
+  total          Int               @default(0)
+  errorMessage   String?           @map("error_message")
+  metadata       Json?
+  startedAt      DateTime?         @map("started_at")
+  completedAt    DateTime?         @map("completed_at")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@index([organizationId, status, createdAt])
+  @@index([organizationId, kind])
+  @@map("indexing_jobs")
+}
+
+model SearchSession {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  userId         String?      @map("user_id") @db.Uuid
+  workspaceId    String?      @map("workspace_id")
+  title          String       @default("Search session")
+  mode           String       @default("research")
+  metadata       Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  queries        RagQuery[]
+
+  @@index([organizationId, userId, updatedAt])
+  @@map("search_sessions")
+}
+
+model RagQuery {
+  id             String       @id @default(uuid()) @db.Uuid
+  organizationId String       @map("organization_id") @db.Uuid
+  userId         String?      @map("user_id") @db.Uuid
+  sessionId      String?      @map("session_id") @db.Uuid
+  conversationId String?      @map("conversation_id") @db.Uuid
+  question       String
+  mode           String       @default("chat")
+  workspaceId    String?      @map("workspace_id")
+  filters        Json?
+  topK           Int          @default(8)
+  similarityThreshold Float   @default(0.15) @map("similarity_threshold")
+  confidence     Float?
+  latencyMs      Int?         @map("latency_ms")
+  chunkCount     Int          @default(0) @map("chunk_count")
+  tokenUsage     Json?        @map("token_usage")
+  answer         String?
+  reasoningSummary String?    @map("reasoning_summary")
+  lowConfidence  Boolean      @default(false) @map("low_confidence")
+  metadata       Json?
+  createdAt      DateTime     @default(now()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user           User?        @relation(fields: [userId], references: [id], onDelete: SetNull)
+  session        SearchSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  results        RagResult[]
+  citations      Citation[]
+  retrievalLogs  RetrievalLog[]
+
+  @@index([organizationId, createdAt])
+  @@index([organizationId, userId, createdAt])
+  @@index([sessionId])
+  @@map("rag_queries")
+}
+
+model RagResult {
+  id             String   @id @default(uuid()) @db.Uuid
+  queryId        String   @map("query_id") @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  chunkId        String?  @map("chunk_id") @db.Uuid
+  entityType     EmbeddingEntityType @map("entity_type")
+  entityId       String   @map("entity_id")
+  title          String   @default("")
+  contentPreview String   @map("content_preview")
+  score          Float
+  rank           Int
+  contentVersion Int?     @map("content_version")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  query          RagQuery @relation(fields: [queryId], references: [id], onDelete: Cascade)
+
+  @@index([queryId, rank])
+  @@index([organizationId, entityType])
+  @@map("rag_results")
+}
+
+model RetrievalLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  queryId        String?  @map("query_id") @db.Uuid
+  operation      String
+  useVector      Boolean  @default(false) @map("use_vector")
+  useHybrid      Boolean  @default(true) @map("use_hybrid")
+  topK           Int      @default(8)
+  hitCount       Int      @default(0) @map("hit_count")
+  latencyMs      Int?     @map("latency_ms")
+  filters        Json?
+  scores         Json?
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  query          RagQuery? @relation(fields: [queryId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([queryId])
+  @@map("retrieval_logs")
+}
+
+model Citation {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  queryId        String?  @map("query_id") @db.Uuid
+  userId         String?  @map("user_id") @db.Uuid
+  messageId      String?  @map("message_id") @db.Uuid
+  marker         String
+  kind           String
+  title          String
+  subtitle       String?
+  href           String?
+  snippet        String?
+  entityType     EmbeddingEntityType? @map("entity_type")
+  entityId       String?  @map("entity_id")
+  chunkId        String?  @map("chunk_id") @db.Uuid
+  chunkIndex     Int?     @map("chunk_index")
+  highlightStart Int?     @map("highlight_start")
+  highlightEnd   Int?     @map("highlight_end")
+  contentVersion Int?     @map("content_version")
+  score          Float?
+  confidence     Float?
+  evidenceChain  Json?    @map("evidence_chain")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  query          RagQuery? @relation(fields: [queryId], references: [id], onDelete: SetNull)
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([organizationId, createdAt])
+  @@index([queryId])
+  @@index([messageId])
+  @@map("citations")
+}
+
+model KnowledgeRelationship {
+  id             String                @id @default(uuid()) @db.Uuid
+  organizationId String                @map("organization_id") @db.Uuid
+  fromEntityType EmbeddingEntityType   @map("from_entity_type")
+  fromEntityId   String                @map("from_entity_id")
+  toEntityType   EmbeddingEntityType   @map("to_entity_type")
+  toEntityId     String                @map("to_entity_id")
+  relationType   KnowledgeRelationType @map("relation_type")
+  weight         Float                 @default(1)
+  metadata       Json?
+  createdAt      DateTime              @default(now()) @map("created_at")
+  updatedAt      DateTime              @updatedAt @map("updated_at")
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, fromEntityType, fromEntityId, toEntityType, toEntityId, relationType])
+  @@index([organizationId, fromEntityType, fromEntityId])
+  @@index([organizationId, toEntityType, toEntityId])
+  @@map("knowledge_relationships")
+}
+
+model RetrievalMetric {
+  id             String   @id @default(uuid()) @db.Uuid
+  organizationId String   @map("organization_id") @db.Uuid
+  periodStart    DateTime @map("period_start")
+  periodEnd      DateTime @map("period_end")
+  queryCount     Int      @default(0) @map("query_count")
+  avgLatencyMs   Float    @default(0) @map("avg_latency_ms")
+  avgConfidence  Float    @default(0) @map("avg_confidence")
+  avgHitCount    Float    @default(0) @map("avg_hit_count")
+  lowConfidenceCount Int  @default(0) @map("low_confidence_count")
+  metadata       Json?
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([organizationId, periodStart, periodEnd])
+  @@index([organizationId, periodStart])
+  @@map("retrieval_metrics")
 }

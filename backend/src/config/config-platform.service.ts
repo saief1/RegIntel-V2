@@ -160,6 +160,9 @@ export class ConfigPlatformService implements OnModuleInit {
         useRealEmail: this.config.get('featureFlags.useRealEmail'),
         useRealAudit: this.config.get('featureFlags.useRealAudit'),
         useRealSearch: this.config.get('featureFlags.useRealSearch'),
+        useRealAi: this.config.get('featureFlags.useRealAi'),
+        useRag: this.config.get('featureFlags.useRag'),
+        useVectorSearch: this.config.get('featureFlags.useVectorSearch'),
       },
       readyToServe: secrets.ok && databaseUrlConfigured && redisUrlConfigured,
     };

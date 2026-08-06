@@ -22,6 +22,8 @@ describe('AiGatewayService metrics', () => {
         get: (key: string) =>
           key === 'featureFlags.useRealAi' ? false : undefined,
       } as never,
+      { isEnabled: () => false, ask: () => Promise.resolve({}) } as never,
+      { toWorkspaceCitations: () => [] } as never,
     );
     const metrics = gateway.getMetrics();
     expect(metrics.chatRequests).toBe(0);

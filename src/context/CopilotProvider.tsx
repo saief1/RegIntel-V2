@@ -150,12 +150,22 @@ export function CopilotProvider({ children }: { children: ReactNode }) {
             title: userContent.slice(0, 64),
           })
           .then((result) => {
+            const useRagCitations =
+              (featureFlags.useRag || featureFlags.useRealAi) &&
+              settings.autoReferences &&
+              Array.isArray(result.citations)
             const assistant = {
               id: result.message.id,
               role: mapApiRole(result.message.role),
               content: result.message.content,
               createdAt: result.message.createdAt,
-              confidence: 0.82,
+              confidence:
+                typeof result.confidence === 'number'
+                  ? result.confidence
+                  : typeof result.message.confidence === 'number'
+                    ? result.message.confidence
+                    : 0.82,
+              citations: useRagCitations ? result.citations : undefined,
             }
             setConversations((current) =>
               current.map((item) =>
@@ -172,6 +182,23 @@ export function CopilotProvider({ children }: { children: ReactNode }) {
                         },
                         assistant,
                       ],
+                      citationIds: useRagCitations
+                        ? [
+                            ...new Set([
+                              ...item.citationIds,
+                              ...(result.citations ?? []).map((c) => c.id),
+                            ]),
+                          ]
+                        : item.citationIds,
+                      confidence: assistant.confidence,
+                      followUps:
+                        result.offerAdditionalSearch && settings.autoSuggestions
+                          ? [
+                              'Run an additional search across policies.',
+                              'Show related regulations.',
+                              'What evidence is still missing?',
+                            ]
+                          : item.followUps,
                     }
                   : item,
               ),
